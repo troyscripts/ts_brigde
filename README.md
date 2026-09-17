@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.1(BETA)** · FiveM · Eerste integratie: ts_hostage 1.1.6
+**Versie 0.0.2(BETA)** · FiveM · ts_hostage 1.1.7 en ts_keycard 1.1.4
 
 Centrale ondersteuningsresource voor Troy Scripts. Lees INSTALLATIE.md voor installatie,
 configuratie, teststappen en terugzetten.
@@ -9,12 +9,12 @@ Deze beta ondersteunt ESX-jobcontrole, ox_lib-meldingen, ox_target, politiemeldi
 locatie en waypoint, Discord-webhooks en screenshot-basic. De gijzelingsregels,
 handen-omhoog-functie en animaties blijven in ts_hostage.
 
-Voor de latere keycard-aansluiting zijn inventory-, ESX-speler/rechten-, cash/bank- en
+Voor de keycard-aansluiting zijn inventory-, ESX-speler/rechten-, cash/bank- en
 societyfuncties toegevoegd. Zie **KEYCARD-BANKING-BILLING.md** voor de volledige API.
 Persoonlijke bankmutaties gebruiken Apex Banking. Society-mutaties gebruiken alleen
 esx_addonaccount. Facturen aanmaken en opvragen gebruikt Apex Billing. Automatische
 factuurbetaling is nog niet aangesloten; zie de concrete Apex-beperking in die handleiding. QBCore en Qbox zijn niet geïmplementeerd.
-Deze uitbreiding wijzigt ts_keycard, ts_hostage en de versienummers niet.
+De bijbehorende scriptupdates vereisen deze bridgebuild. Start ts_bridge vóór beide scripts.
 Er is geen Fiveguard-adapter toegevoegd; geen anticheatinstellingen worden gewijzigd.
 
 ## Bestanden
@@ -98,7 +98,7 @@ De aanroepende serverresource blijft verantwoordelijk voor autorisatie van de ac
 
 ## Validatie
 
-Dertien Lua-testscripts in beide resources controleren samen de bestaande gijzelingscontroles,
+De meegeleverde Lua-testscripts in beide resources controleren samen de bestaande gijzelingscontroles,
 jobselectie, waypoint, webhooktransport, screenshots, betalingen, rechten, billingcontract en targetcleanup met gesimuleerde API's.
 Voer tests uit vanuit de map van de betreffende resource met Lua 5.4, bijvoorbeeld
 `lua tests/client_spec.lua`. De hostage-integratietests verwachten ts_bridge ernaast.
@@ -109,3 +109,13 @@ Live controle blijft nodig; zie INSTALLATIE.md.
 okokBanking is als ESX-bankaccountadapter toegevoegd. okokBilling heeft een voorbereide
 providerkeuze, maar vereist nog jouw resourcebestanden voor de daadwerkelijke serverkoppeling.
 Zie **OKOK.md**. Apex blijft standaard ingesteld; society-geld blijft bij esx_addonaccount.
+
+## Status-API en locales
+
+GetStatus() is aan beide kanten beschikbaar: `{api=1, version, side, features}`.
+De server geeft tevens framework/resources/banking terug; de client de targetresource.
+De aangesloten scripts controleren deze gegevens en minimaal bridgeversie 0.0.2.
+Herstart afhankelijke scripts na een bridgeherstart; ze blijven na uitval niet automatisch actief.
+
+TSBridgeConfig.Locale = 'nl' is standaard. Teksten staan in locales/nl.lua en Nederlandse
+fallback is ingebouwd. Configuratievelden voor teksten blijven expliciet instelbaar.
