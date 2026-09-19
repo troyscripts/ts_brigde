@@ -1,21 +1,13 @@
-VALIDATIE — ts_bridge 0.0.3, aanvullende verbeteringen
-Lua 5.4: syntaxcontrole alle Lua-bestanden geslaagd.
-Alle 12 bridge-testscripts geslaagd:
-client_spec, shared_ui_spec, apex_spec, okok_spec (bestaande regressietest),
-billing_spec, keycard_client_spec, keycard_server_spec,
-config_validation_spec, server_notify_spec, recovery_spec,
-update_check_spec, webhook_lanes_spec.
+VALIDATIE ts_keycard 1.1.5 + ts_bridge 0.0.4
+Lua 5.4-syntax en keycard JavaScript-syntax gecontroleerd.
+Keycard: bridge_check, payment, main, revocation, locales en new_settings tests geslaagd.
+Bridge: gedeelde GitHub-checker, meldingen, configvalidatie, providerherstel,
+Apex Banking/Billing en bestaande compatibiliteit getest met gesimuleerde providers.
 
-Aanvullend met bestaande ts_hostage 1.1.8:
-server_spec, webhooks_spec, bridge_spec en config_spec geslaagd.
+Getest: configschema/fallback, melding-ID en wachttijd, aparte intrekkingswaarschuwing,
+TXT/JSON-updatecontrole, versie van aanroepende resource, dubbele aanvraag, timeout,
+HTTP-fouten, stop/herstart en veilige downloadlink. Bestaande uitgifte, rechten,
+terugbetaling, onzeker betaalresultaat, intrekking en hooks blijven slagen.
 
-Nieuwe cases: ongeldige types/providers/limieten, configuratiefouten zonder geheimen,
-exports blokkeren bij ongeldige config, serverlimieten per eigenaar/speler/ID,
-herstel targets/NPC/radial en stoppen eigenaar, onafhankelijke webhookbestemmingen,
-HTTP 429, totale capaciteit met screenshots, behoud logtekst en volle embeds,
-GitHub-versies, ongeldige/te grote JSON, timeout, HTTP-fouten en veilige links.
-
-Mocktests gebruiken echte resourcecode met gesimuleerde natives/providers/netwerk.
-Geen live FiveM-, ox_lib-UI-, Apex-transactie- of publieke GitHub-repositorytest.
-De aangeleverde GitHub-URL kon niet live worden opgehaald in deze omgeving.
-Alleen de bestaande okok-regressietest gedraaid; okok niet uitgebreid.
+Dit zijn lokale mocktests; geen live FiveM/Apex/inventory/deur- of GitHub-publicatietest.
+De minimumversie- en API-controle is met de bridge-statuscode uitgevoerd.

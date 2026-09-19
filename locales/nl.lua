@@ -1,6 +1,15 @@
 -- Hoofdlocale. Pas alleen de teksten aan; behoud placeholders (%s, %d, %.1f) en sleutels.
 Locales = Locales or {}
 Locales['nl'] = {
+    ['updates_invalid_settings'] = 'Updatecontrole: ongeldige repository, branch of versiebestand.',
+    ['updates_invalid_local'] = 'Updatecontrole: ongeldige lokale versie in fxmanifest.lua.',
+    ['updates_timeout'] = 'Updatecontrole: GitHub reageert niet op tijd; het script blijft werken.',
+    ['updates_http'] = 'Updatecontrole mislukt (HTTP %s); controleer repository, branch en versiebestand. Het script blijft werken.',
+    ['updates_invalid_remote'] = 'Updatecontrole: ongeldig of te groot antwoord; verwacht een geldige stabiele versie.',
+    ['updates_available'] = 'Update beschikbaar! Geinstalleerd: %s | Nieuwste: %s',
+    ['updates_current'] = 'Versie %s is up-to-date.',
+    ['updates_local_newer'] = 'Lokale versie %s is nieuwer dan GitHub (%s).',
+    ['updates_request_failed'] = 'Updatecontrole kon niet starten; het script blijft werken.',
     ['update_check_troyscripts'] = '^5[TroyScripts]^7 ',
     ['update_check_updatecontrole_overgeslagen_gebruik_versie_in_fxmanifest_lua'] = 'Updatecontrole overgeslagen: gebruik versie X.Y.Z in fxmanifest.lua.',
     ['update_check_updatecontrole_github_reageert_niet_op_tijd_het'] = 'Updatecontrole: GitHub reageert niet op tijd. Het script blijft werken.',

@@ -1,57 +1,51 @@
-# Installatie — ts_bridge 0.0.3 (stabiel)
+# Installatie — ts_bridge 0.0.4 (stabiel)
 
-De resourcemap moet **ts_bridge** heten; niet ts_brigde-main of ts_bridge-main.
+De FiveM-resourcemap heet **ts_bridge**. De GitHub-repository heet **ts_brigde**.
 
-1. Maak backups van ts_bridge, ts_hostage en hun configuratiebestanden.
-2. Stop afhankelijke scripts, waaronder ts_hostage en eventueel ts_keycard. Stop daarna ts_bridge.
-3. Vervang ts_bridge door de inhoud van ts_bridge-0.0.3.zip.
-4. Bewaar je eigen server_config.lua: het nieuwe UpdateCheck-blok is optioneel; zonder dit blok gelden de meegeleverde standaardwaarden.
-   Neem eigen waarden over in config.lua en voeg TSBridgeConfig.Version = '0.0.3'
-   toe binnen de bestaande TSBridgeConfig-tabel. Deze release voegt alleen dit veld toe.
-5. Installeer ook de bijbehorende bijgewerkte ts_hostage 1.1.8 als je de nieuwe
-   gedeelde functies wilt gebruiken. Behoud de configversie 1.1.8; als je nog van
-   hostage 1.1.7 komt, volg ook zijn UPDATE-INSTALLATIE.md.
-6. Start je bestaande providers en daarna ox_lib, ts_bridge en de afhankelijke scripts.
+1. Maak een backup van resources en configuraties.
+2. Stop afhankelijke scripts, waaronder ts_keycard en ts_hostage, en daarna ts_bridge.
+3. Vervang alle bridge-programmabestanden met ts_bridge-0.0.4.zip, inclusief het
+   manifest en server/updates.lua. Behoud je eigen config.lua en server_config.lua.
+4. Configschema blijft 0.0.3. Heb je nog geen TSBridgeConfig.Version, voeg dan
+   Version = '0.0.3' binnen de TSBridgeConfig-tabel toe en controleer de bestaande velden.
+5. Installeer ts_keycard 1.1.5 en neem zijn nieuwe configvelden over volgens diens
+   UPDATE-INSTALLATIE.md. De bestaande ts_hostage 1.1.8 kan blijven staan.
+6. Start providers, daarna de bridge en vervolgens afhankelijke scripts.
 
 ```cfg
 ensure ox_lib
-# Hier jouw bestaande framework/inventory/target/banking-providers.
+# Bestaande framework-, inventory-, target- en bankingproviders vooraf starten.
 ensure ts_bridge
-ensure ts_hostage
-# Indien geïnstalleerd:
 ensure ts_keycard
+ensure ts_hostage
 ```
 
-Behoud de bestaande providerinstellingen, webhookroutes en eigen sleutels.
-Geen databasewijziging. De keycard-resource wordt niet in deze download meegeleverd.
-De bestaande API 1 blijft bruikbaar voor keycard; de configuratie daarvan verandert niet.
+Start alleen de scripts die geïnstalleerd zijn. Behoud de bestaande Apex Banking/Billing-
+instellingen, society-aliases en webhookroutes. Deze update verandert geen database.
 
-Controleer in de serverconsole versie 0.0.3 en de configstatus. Ontbreekt Config.Version,
-dan volgt een waarschuwing; de bestaande bridge-instellingen blijven bruikbaar.
-Test daarna met twee spelers de E/target/radial-bediening van hostage, first person,
-meldingslimiet, loslaten/omleggen en politie-/webhookmeldingen.
-Na een volledige bridgeherstart ook de afhankelijke resources herstarten. Target- en radialregistraties worden bij providerstart hersteld zolang de bridge blijft draaien.
+Controleer versie 0.0.4, configschema 0.0.3 en ts_bridge_check in de serverconsole.
+De diagnose controleert configuratie en providerstatus zonder testbetalingen te doen.
+Bij onbruikbare configuratie worden operationele exports geblokkeerd. Herstel de
+vermelde velden en herstart; alleen het configversienummer aanpassen is onvoldoende.
 
-Terugzetten: stop afhankelijke scripts, zet beide resources terug uit dezelfde backup,
-en start eerst de oude bridge. De nieuwe hostage-aansluiting vereist bridge 0.0.3.
+Test met twee spelers kaartuitgifte, saldo/society, intrekking en de bestaande
+hostage-bediening. Target- en radialregistraties herstellen bij providerstart zolang
+de bridge en eigenaar blijven draaien. Na volledige bridge-uitval de afhankelijke
+scripts opnieuw starten. Geen automatische hervatting van lopende sessies.
 
-## Aanvulling binnen dezelfde versie
+## GitHub
 
-Vervang ook bij een al geïnstalleerde 0.0.3 alle programmabestanden, inclusief
-fxmanifest.lua, config_validation.lua en de nieuwe serverbestanden. Behoud je eigen
-config.lua en server_config.lua wanneer die al correct zijn; configversie blijft 0.0.3.
-Het optionele UpdateCheck-blok staat in de meegeleverde server_config.lua.
-Gebruik ts_bridge_check om inhoud en providers te controleren. Foutieve velden eerst
-herstellen: alleen het versienummer verhogen lost een ongeldige configuratie niet op.
-
-Voor GitHub: upload version.json naast fxmanifest.lua naar de hoofdmap van de
+Bridge: plaats version.json met 0.0.4 naast fxmanifest.lua in de hoofdmap van de
 standaardbranch van https://github.com/troyscripts/ts_brigde.
-De repositorynaam bevat brigde, de FiveM-mapnaam blijft ts_bridge.
-De updatecontrole toont geen verschil tussen twee builds die beide 0.0.3 heten.
-De eerder meegeleverde ts_hostage 1.1.8 kan blijven staan; voor deze aanvulling is
-geen nieuwe hostage-download nodig.
+Keycard: plaats version.txt met 1.1.5 in main van https://github.com/troyscripts/ts_keycard.
+De controle vergelijkt versienummers en toont een downloadlink; installeert niets.
+Publicatie op GitHub wordt niet automatisch uitgevoerd door het downloaden van deze ZIP.
 
-Controleer live: opstart/configmelding, ts_bridge_check, een normale webhook en
-screenshotfalen, targetopties na ox_target-herstart en radialmenu na providerstart.
-Test providerherstarts buiten een actieve gijzeling. De GitHub-controle moet na
-publicatie aangeven dat 0.0.3 actueel is.
+Het bestaande UpdateCheck-blok van de bridge kan blijven staan. Zonder dat blok
+wordt de standaardrepository gebruikt. De configschema-versie blijft 0.0.3 omdat
+geen nieuwe verplichte instellingen zijn toegevoegd.
+
+## Terugzetten
+
+Stop afhankelijke scripts en zet bridge én de bijpassende scriptversies terug uit
+backup. Keycard 1.1.5 vereist minimaal bridge 0.0.4 en de nieuwe CheckForUpdates-export.

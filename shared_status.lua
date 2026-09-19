@@ -5,7 +5,7 @@ local names = server and {
     'GetSocietyBalance', 'AddSocietyMoney', 'RemoveSocietyMoney', 'GetItemSlots',
     'GetInventorySlot', 'GetEmptySlot', 'CanCarryItem', 'AddItem', 'RemoveItem',
     'SetItemMetadata', 'GetInventories', 'RegisterInventoryHook', 'RemoveInventoryHook',
-    'GetDiagnostics', 'GetWebhookStatus', 'CheckConfigVersion', 'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
+    'CheckForUpdates', 'GetDiagnostics', 'GetWebhookStatus', 'CheckConfigVersion', 'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
     'CreateInvoice', 'GetInvoice', 'GetBillingStatus', 'RegisterBillingProvider'
 } or {
     'CheckConfigVersion', 'RegisterRadialMenu', 'RemoveRadialMenu', 'Notify', 'IsDead', 'GetTargetResource', 'AddGlobalPlayer', 'AddGlobalVehicle',

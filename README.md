@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.3 — stabiel** · FiveM · ts_hostage 1.1.8 en ts_keycard 1.1.4
+**Versie 0.0.4 — stabiel** · FiveM · ts_hostage 1.1.8 en ts_keycard 1.1.5
 
 Centrale ondersteuningsresource voor Troy Scripts. Lees INSTALLATIE.md voor installatie,
 configuratie, teststappen en terugzetten.
@@ -236,3 +236,31 @@ manifestversie als version.json bij. Publiceren op GitHub is niet in deze downlo
 Technische API-bron: [GitHub repository contents](https://docs.github.com/en/rest/repos/contents#get-repository-content).
 De openbare repository kon vanuit deze omgeving niet live worden opgehaald;
 versievergelijking en foutafhandeling zijn met gesimuleerde HTTP-antwoorden getest.
+
+## Nieuw in 0.0.4: gedeelde GitHub-updatecontrole
+
+De serverexport `CheckForUpdates(settings)` controleert de versie van de aanroepende
+resource. De bridge gebruikt dezelfde code voor zijn eigen versiecheck. API 1 blijft
+behouden en bestaande exports blijven werken. De configschema-versie blijft **0.0.3**:
+config.lua en server_config.lua hoeven voor deze stap niet te worden vervangen.
+
+```lua
+exports.ts_bridge:CheckForUpdates({
+    Enabled = true,
+    Repository = 'troyscripts/ts_keycard',
+    File = 'version.txt', -- version.txt of version.json; standaard version.json
+    Branch = 'main' -- optioneel; zonder Branch gebruikt GitHub de standaardbranch
+})
+```
+
+De bridge leest de lokale versie uit het manifest van de aanroeper. Per resource
+wordt eenmaal per start gecontroleerd; dubbele aanroepen starten geen tweede aanvraag.
+De export retourneert true bij plannen, false bij uitschakelen, ongeldige instellingen
+of een al geplande controle. GitHub wordt na drie seconden benaderd met een time-out
+van vijftien seconden. Resource-stop maakt oude callbacks ongeldig. Geen automatische
+installatie; alleen stabiele X.Y.Z-versies en een veilige repository-downloadlink.
+JSON bevat version en optioneel download; een tekstbestand bevat alleen het versienummer.
+
+Keycard 1.1.5 gebruikt deze nieuwe export en vereist daarom minimaal bridge 0.0.4.
+Hostage 1.1.8 blijft compatibel en houdt voorlopig zijn bestaande eigen updatechecker.
+Kaartspecifieke rechten, uitgifte en intrekking blijven in keycard.

@@ -59,4 +59,4 @@ exports('AlertJobs', function(jobs, data, coords, seconds)
     end
     return recipients
 end)
-print(TSL('main_troy_scripts_ts_bridge_beta_gestart'))
+print(('[ts_bridge] %s gestart'):format(GetResourceMetadata(GetCurrentResourceName(), 'version', 0) or '?'))

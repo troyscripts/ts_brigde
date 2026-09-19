@@ -1,5 +1,15 @@
 # Changelog — ts_bridge
 
+## 0.0.4 — Gedeelde GitHub-updatecontrole
+- Nieuwe serverexport CheckForUpdates voor de aanroepende resource.
+- version.txt en version.json, optionele branch, numerieke versievergelijking.
+- Eén controle per resourcestart, timeout, beperkte antwoordgrootte en veilige downloadlink.
+- Oude callbacks na resource-stop genegeerd; herstart kan opnieuw controleren.
+- Eigen bridge-updatecontrole gebruikt dezelfde gedeelde implementatie.
+- Keycard 1.1.5 aangesloten; eerdere script-API's blijven compatibel.
+- Configschema blijft 0.0.3; geen vervanging van bestaande bridgeconfig nodig.
+
+
 ## Aanvulling binnen 0.0.3 — geen versieverhoging
 - Configinhoud valideren; onbruikbare configuratie blokkeert operationele exports.
 - Server-Notify ondersteunt cooldown per resource, speler en melding-ID.
