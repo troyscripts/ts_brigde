@@ -1,3 +1,15 @@
+Controle versie 0.0.5
+
+Lua 5.4-syntaxis en lokale integratie met echte bridgecamera, antipunch-client en
+hostage-adapter gecontroleerd. Beide vrijgavevolgordes, oorspronkelijke first
+person, herstelvertraging/snelle hervatting, configmodi, pedwissel, overlijden,
+voertuigcamera en resource-stop getest. Combatblokkering en herladen behouden;
+alleen de melee-noodrem wordt tijdens een hostage-context gepauzeerd.
+Ook configvalidatie, dependencychecks en bestaande centrale updatecheck getest.
+Geen live FiveM-test, controller- of echte animatietest uitgevoerd.
+
+Historische testresultaten:
+
 VALIDATIE ts_keycard 1.1.5 + ts_bridge 0.0.4
 Lua 5.4-syntax en keycard JavaScript-syntax gecontroleerd.
 Keycard: bridge_check, payment, main, revocation, locales en new_settings tests geslaagd.

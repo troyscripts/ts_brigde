@@ -8,6 +8,7 @@ local names = server and {
     'CheckForUpdates', 'GetDiagnostics', 'GetWebhookStatus', 'CheckConfigVersion', 'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
     'CreateInvoice', 'GetInvoice', 'GetBillingStatus', 'RegisterBillingProvider'
 } or {
+    'RequestFirstPerson', 'ReleaseFirstPerson', 'SetCombatContext', 'GetCombatContext',
     'CheckConfigVersion', 'RegisterRadialMenu', 'RemoveRadialMenu', 'Notify', 'IsDead', 'GetTargetResource', 'AddGlobalPlayer', 'AddGlobalVehicle',
     'RemoveGlobalPlayer', 'RemoveGlobalVehicle', 'AddLocalEntity', 'RemoveLocalEntity',
     'UseItem', 'ProgressCircle', 'InputDialog', 'AlertDialog', 'GetStatus'

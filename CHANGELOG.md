@@ -1,5 +1,17 @@
 # Changelog — ts_bridge
 
+## 0.0.5 — Gedeelde camera en combatcontexten
+
+- RequestFirstPerson/ReleaseFirstPerson: aanvragen per resource en aparte ped-/voertuigcamera.
+- Herstel pas na de laatste vrijgave; eigen first person, vertraging en snelle hervatting behouden.
+- Aanvragen en contexten opruimen bij stop, dood of pedwissel.
+- SetCombatContext/GetCombatContext voor gerichte camera- en melee-noodrempauzes.
+- Nieuwe clientfuncties vermeld in GetStatus; bestaande server-API blijft behouden.
+- Manifest en version.json naar 0.0.5 voor de GitHub-updatecontrole.
+- Configschema blijft 0.0.3; bestaande config.lua en server_config.lua behouden.
+- Antipunch 1.8.2 en hostage 1.1.9 gebruiken de nieuwe functies.
+- Lokale integratie-/config-/updatecontroles uitgevoerd; geen live FiveM-test.
+
 ## 0.0.4 — Gedeelde GitHub-updatecontrole
 - Nieuwe serverexport CheckForUpdates voor de aanroepende resource.
 - version.txt en version.json, optionele branch, numerieke versievergelijking.

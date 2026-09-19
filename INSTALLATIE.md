@@ -1,51 +1,42 @@
-# Installatie — ts_bridge 0.0.4 (stabiel)
+# Update ts_bridge 0.0.4 → 0.0.5
 
-De FiveM-resourcemap heet **ts_bridge**. De GitHub-repository heet **ts_brigde**.
+Dit pakket bevat alleen gewijzigde/nieuwe bestanden voor een bestaande 0.0.4-installatie.
+De resourcemap heet ts_bridge. De bestaande GitHub-repository heet ts_brigde.
 
-1. Maak een backup van resources en configuraties.
-2. Stop afhankelijke scripts, waaronder ts_keycard en ts_hostage, en daarna ts_bridge.
-3. Vervang alle bridge-programmabestanden met ts_bridge-0.0.4.zip, inclusief het
-   manifest en server/updates.lua. Behoud je eigen config.lua en server_config.lua.
-4. Configschema blijft 0.0.3. Heb je nog geen TSBridgeConfig.Version, voeg dan
-   Version = '0.0.3' binnen de TSBridgeConfig-tabel toe en controleer de bestaande velden.
-5. Installeer ts_keycard 1.1.5 en neem zijn nieuwe configvelden over volgens diens
-   UPDATE-INSTALLATIE.md. De bestaande ts_hostage 1.1.8 kan blijven staan.
-6. Start providers, daarna de bridge en vervolgens afhankelijke scripts.
+1. Maak een backup en beëindig actieve gijzelingen.
+2. Stop ts_hostage, ts_antipunch en overige afhankelijke scripts (zoals ts_keycard).
+   Stop daarna ts_bridge.
+3. Kopieer de map ts_bridge uit dit pakket over de bestaande map. Laat overige
+   bestanden staan; verwijder niets. Behoud config.lua en server_config.lua.
+4. Installeer antipunch 1.8.2 en hostage 1.1.9, inclusief hun nieuwe configvelden.
+5. Start ox_lib/providers indien nodig, daarna ts_bridge en de gestopte scripts.
 
 ```cfg
 ensure ox_lib
 # Bestaande framework-, inventory-, target- en bankingproviders vooraf starten.
 ensure ts_bridge
-ensure ts_keycard
+ensure ts_antipunch
 ensure ts_hostage
+ensure ts_keycard
 ```
 
-Start alleen de scripts die geïnstalleerd zijn. Behoud de bestaande Apex Banking/Billing-
-instellingen, society-aliases en webhookroutes. Deze update verandert geen database.
+Start alleen geïnstalleerde scripts. Keycard 1.1.5 blijft compatibel.
+Bridgeconfigschema blijft 0.0.3; de scriptversie wordt 0.0.5. Geen databasewijziging.
+Na een bridgeherstart moeten afhankelijke scripts opnieuw starten.
 
-Controleer versie 0.0.4, configschema 0.0.3 en ts_bridge_check in de serverconsole.
-De diagnose controleert configuratie en providerstatus zonder testbetalingen te doen.
-Bij onbruikbare configuratie worden operationele exports geblokkeerd. Herstel de
-vermelde velden en herstart; alleen het configversienummer aanpassen is onvoldoende.
+Controleer de consoleversies en test richten/gijzelen/loslaten in beide volgordes.
+Test ook herladen, melee, voertuigcamera en resource-stop met twee spelers.
+De oude camera mag pas terugkomen als geen script meer first person aanvraagt.
+De update is lokaal gesimuleerd getest, niet op een live FiveM-server.
 
-Test met twee spelers kaartuitgifte, saldo/society, intrekking en de bestaande
-hostage-bediening. Target- en radialregistraties herstellen bij providerstart zolang
-de bridge en eigenaar blijven draaien. Na volledige bridge-uitval de afhankelijke
-scripts opnieuw starten. Geen automatische hervatting van lopende sessies.
+## GitHub-updatecontrole
 
-## GitHub
-
-Bridge: plaats version.json met 0.0.4 naast fxmanifest.lua in de hoofdmap van de
-standaardbranch van https://github.com/troyscripts/ts_brigde.
-Keycard: plaats version.txt met 1.1.5 in main van https://github.com/troyscripts/ts_keycard.
-De controle vergelijkt versienummers en toont een downloadlink; installeert niets.
-Publicatie op GitHub wordt niet automatisch uitgevoerd door het downloaden van deze ZIP.
-
-Het bestaande UpdateCheck-blok van de bridge kan blijven staan. Zonder dat blok
-wordt de standaardrepository gebruikt. De configschema-versie blijft 0.0.3 omdat
-geen nieuwe verplichte instellingen zijn toegevoegd.
+Upload alle gewijzigde resourcebestanden, inclusief fxmanifest.lua en version.json
+met 0.0.5, naar troyscripts/ts_brigde. Zo kan een oudere installatie bij een volgende
+start de hogere versie melden. Alleen het versienummer uploaden is onvoldoende:
+de bijbehorende code moet mee. De ZIP publiceert niets automatisch op GitHub.
 
 ## Terugzetten
 
-Stop afhankelijke scripts en zet bridge én de bijpassende scriptversies terug uit
-backup. Keycard 1.1.5 vereist minimaal bridge 0.0.4 en de nieuwe CheckForUpdates-export.
+Stop afhankelijke scripts en zet bridge én bijpassende antipunch/hostage terug uit
+backup. Antipunch 1.8.2 en hostage 1.1.9 vereisen minimaal bridge 0.0.5.

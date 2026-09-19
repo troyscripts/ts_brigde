@@ -1,6 +1,73 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.4 — stabiel** · FiveM · ts_hostage 1.1.8 en ts_keycard 1.1.5
+**Versie 0.0.5** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.5
+
+## Nieuw in 0.0.5: gedeelde camera en combatcontexten
+
+De bridge beheert aanvragen van antipunch 1.8.2 en hostage 1.1.9. First person
+blijft actief totdat de laatste deelnemer loslaat. De ped- en voertuigcamera
+hebben ieder eigen aanvragen en een oorspronkelijke stand. De worker draait
+iedere frame zolang aanvragen/contexten of een herstelvertraging actief zijn.
+Er is geen cameraloop nodig als deze niet worden gebruikt.
+
+Het updatepakket bevat alleen gewijzigde/nieuwe bestanden voor bridge 0.0.4.
+Zie INSTALLATIE.md. Scriptversie en version.json zijn 0.0.5; configschema blijft
+0.0.3. Bestaande config.lua/server_config.lua en de server-API blijven behouden.
+Keycard 1.1.5 blijft compatibel. De oudere release-uitleg hieronder beschrijft
+voorgaande uitbreidingen; de huidige installatie-informatie staat hier en in
+INSTALLATIE.md.
+
+### Nieuwe client-API
+
+```lua
+exports.ts_bridge:RequestFirstPerson('aim', {
+    scope = 'ped', -- 'ped' of 'vehicle'
+    restore = true,
+    restoreDelayMs = 50, -- geheel getal 0 t/m 60000
+    defaultCamera = 1 -- 0, 1, 2 of 4
+})
+-- Aanvragen bij statuswisseling; de bridge blijft zelf iedere frame forceren.
+exports.ts_bridge:ReleaseFirstPerson('aim')
+
+-- Gerichte integratie met antipunch. Schiet-/slagblokkeringen blijven actief.
+exports.ts_bridge:SetCombatContext('animation', {
+    suspendCamera = false,
+    suspendMeleeCancel = true
+})
+exports.ts_bridge:SetCombatContext('animation', nil)
+local context = exports.ts_bridge:GetCombatContext()
+```
+
+RequestFirstPerson, ReleaseFirstPerson en SetCombatContext geven true bij
+acceptatie en false bij ongeldige parameters/ontbrekende aanroeper. Een ontbrekende,
+dode of fataal gewonde ped krijgt geen camera-aanvraag. Keys zijn strings van 1
+t/m 100 tekens. Dezelfde key vervangt de eigen aanvraag binnen dezelfde scope.
+Een ander script kan jouw aanvraag of context niet verwijderen.
+
+ReleaseFirstPerson verwijdert beide scopes van de eigen key. Een tweede argument
+true vraagt onmiddellijk herstel; andere deelnemers behouden hun aanvraag.
+Herstel gebeurt alleen wanneer de bridge zelf de camera wijzigde en deze nog in
+first person staat. Vooraf zelf gekozen first person blijft behouden. De vertraging
+van de laatste vrijgave geldt; opnieuw aanvragen annuleert het geplande herstel.
+
+Als minstens één vrijgegeven deelnemer herstel vroeg, wordt de oorspronkelijke
+stand na de laatste aanvraag hersteld. Anders blijft first person staan. De bridge
+forceert voertuigaanvragen alleen in voertuigen en ped-aanvragen alleen te voet.
+
+Resource-stop verwijdert alleen aanvragen/contexten van die resource. Overlijden,
+pedwissel en bridge-stop ruimen alles op met herstel van actieve eigen
+camerawijzigingen. Afnemers gebruiken daarnaast IsDead voor de geconfigureerde
+ambulance-statekeys. Na bridgeherstart moeten de afnemers opnieuw starten.
+
+GetCombatContext geeft de samengevoegde booleans suspendCamera en
+suspendMeleeCancel. Bij wijziging volgt het lokale event
+ts_bridge:combatContextChanged. Antipunch respecteert die pauzes als
+Config.RespectCombatContexts = true. Hostage pauzeert alleen de melee-noodrem.
+Er zijn geen net-events voor deze API toegevoegd; het is clientbesturing, geen
+serverbeveiliging. Directe camerawijzigingen van andere scripts kunnen nog botsen.
+
+De integratie is lokaal met gesimuleerde FiveM-functies getest; geen live FiveM-test.
+
 
 Centrale ondersteuningsresource voor Troy Scripts. Lees INSTALLATIE.md voor installatie,
 configuratie, teststappen en terugzetten.
@@ -114,7 +181,7 @@ Zie **OKOK.md**. Apex blijft standaard ingesteld; society-geld blijft bij esx_ad
 
 GetStatus() is aan beide kanten beschikbaar: `{api=1, version, side, features}`.
 De server geeft tevens framework/resources/banking terug; de client de targetresource.
-De aangesloten scripts controleren deze gegevens; de bijgewerkte ts_hostage 1.1.8 vereist minimaal 0.0.3.
+De aangesloten scripts controleren deze gegevens; ts_antipunch 1.8.2 en ts_hostage 1.1.9 vereisen minimaal 0.0.5.
 Herstart afhankelijke scripts na een bridgeherstart; ze blijven na uitval niet automatisch actief.
 
 TSBridgeConfig.Locale = 'nl' is standaard. Teksten staan in locales/nl.lua en Nederlandse
