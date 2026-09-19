@@ -1,5 +1,6 @@
 -- Dit bestand wordt NOOIT naar clients gestuurd.
 TSBridgeServer = {
+    UpdateCheck = { Enabled = true, Repository = 'troyscripts/ts_brigde' }, -- controle, geen automatische installatie
     Banking = { Provider = 'apex', Resource = 'apex_banking' }, -- 'apex', 'esx' of 'okok' (Resource = 'okokBanking')
     Billing = { Provider = 'apex', Resource = 'apex_billing' }, -- 'apex', 'custom', 'none'; 'okok' vereist nog versiegebonden adapter
 

@@ -1,6 +1,6 @@
 # Voorbereiding keycard, banking en billing
 
-Bridge **0.0.2(BETA)** hoort bij ts_keycard **1.1.4** en ts_hostage **1.1.7**.
+Bridge **0.0.3** hoort bij ts_keycard **1.1.4** en ts_hostage **1.1.8**.
 Keycard is nu aangesloten; Apex/okok-resources zelf zijn niet aangepast.
 
 ## Gekozen koppelingen
@@ -30,7 +30,7 @@ Apex gebruikt in ESX-modus esx_addonaccount voor society-ontvangsten, maar vraag
 GetSharedAccount als export op. Onze eigen societyadapter gebruikt het callback-event.
 De aangeleverde Apex-betaalroutine controleert bovendien de retourwaarde van de
 society-bijschrijving niet voordat de factuur op betaald wordt gezet. Dat wordt niet
-opgelost door alleen ts_bridge te wijzigen. Daarom bevat deze beta geen PayInvoice-export
+opgelost door alleen ts_bridge te wijzigen. Daarom bevat deze versie geen PayInvoice-export
 en geen automatische kaartuitgifte na factuurbetaling. Betaling via de bestaande Apex-UI
 blijft door Apex zelf afgehandeld; daar is nu niets aan veranderd.
 

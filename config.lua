@@ -1,4 +1,5 @@
 TSBridgeConfig = {
+    Version = '0.0.3', -- configschema; alleen wijzigen na overnemen van nieuwe velden
     Locale = 'nl', -- Hoofdtaal; teksten staan in locales/nl.lua
     NotificationTitle = TSL('config_troy_scripts'),
     NotificationDuration = 5000,

@@ -1,8 +1,8 @@
 -- Elke resource heeft eigen locales; Nederlands is de vaste fallback.
 Locales = Locales or {}
 function TSL(key, ...)
-    local cfg = TSBridgeConfig or {}
-    local selected = Locales[cfg.Locale or 'nl'] or {}
+    local cfg = type(TSBridgeConfig) == 'table' and TSBridgeConfig or {}
+    local selected = Locales[type(cfg.Locale) == 'string' and cfg.Locale or 'nl'] or {}
     local fallback = Locales.nl or {}
     local value = selected[key] or fallback[key] or key
     if type(value) ~= 'string' then value = fallback[key] or key end

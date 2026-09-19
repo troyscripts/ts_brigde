@@ -1,4 +1,4 @@
-# okok-ondersteuning — 0.0.2(BETA)
+# okok-ondersteuning — 0.0.3
 
 Apex blijft standaard geselecteerd. De scriptintegraties gebruiken dezelfde bankproviderkeuze.
 Apex- en okok-resourcebestanden zelf zijn niet gewijzigd.

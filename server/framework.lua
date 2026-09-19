@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- Interne helpers; mutaties uitsluitend via serverexports, nooit via net-events.
 TSBridge = TSBridge or {}
 local B = TSBridge

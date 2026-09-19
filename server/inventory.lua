@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 local B = TSBridge
 local function call(method, ...)
     if GetResourceState(TSBridgeServer.InventoryResource) ~= 'started' then return false, 'inventory_unavailable' end

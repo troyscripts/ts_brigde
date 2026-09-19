@@ -1,77 +1,57 @@
-# Installatie — ts_bridge 0.0.2(BETA), ts_hostage 1.1.7, ts_keycard 1.1.4
+# Installatie — ts_bridge 0.0.3 (stabiel)
 
-**Beide scripts vereisen de nieuwe ts_bridge 0.0.2(BETA).** Plaats alle resources onder
-hun vaste mapnamen. De bridgecontrole kijkt naar versie, API 1 en de benodigde functies;
-een oude 0.0.1-build is niet voldoende.
+De resourcemap moet **ts_bridge** heten; niet ts_brigde-main of ts_bridge-main.
 
-1. Bewaar backups van de drie resources en hun configuratie.
-2. Stop eerst ts_hostage en ts_keycard; stop daarna ts_bridge.
-3. Vervang bestanden met de meegeleverde drie zipbestanden.
-4. Neem je instellingen over in de NIEUWE configuratiebestanden; behoud de nieuwe locale- en bridgebestanden.
-5. Start dependencies, bridge en scripts in onderstaande volgorde. Geen dubbele ensure-regels toevoegen.
+1. Maak backups van ts_bridge, ts_hostage en hun configuratiebestanden.
+2. Stop afhankelijke scripts, waaronder ts_hostage en eventueel ts_keycard. Stop daarna ts_bridge.
+3. Vervang ts_bridge door de inhoud van ts_bridge-0.0.3.zip.
+4. Bewaar je eigen server_config.lua: het nieuwe UpdateCheck-blok is optioneel; zonder dit blok gelden de meegeleverde standaardwaarden.
+   Neem eigen waarden over in config.lua en voeg TSBridgeConfig.Version = '0.0.3'
+   toe binnen de bestaande TSBridgeConfig-tabel. Deze release voegt alleen dit veld toe.
+5. Installeer ook de bijbehorende bijgewerkte ts_hostage 1.1.8 als je de nieuwe
+   gedeelde functies wilt gebruiken. Behoud de configversie 1.1.8; als je nog van
+   hostage 1.1.7 komt, volg ook zijn UPDATE-INSTALLATIE.md.
+6. Start je bestaande providers en daarna ox_lib, ts_bridge en de afhankelijke scripts.
 
 ```cfg
 ensure ox_lib
-ensure es_extended
-ensure esx_addonaccount
-ensure ox_inventory
-ensure ox_target
-# Bij Apex-bankbetalingen:
-ensure apex_banking
-# Alleen voor facturen via de bridge-API:
-ensure apex_billing
-# Alleen voor hostage-screenshots:
-ensure screenshot-basic
+# Hier jouw bestaande framework/inventory/target/banking-providers.
 ensure ts_bridge
 ensure ts_hostage
+# Indien geïnstalleerd:
 ensure ts_keycard
 ```
 
-Start oxmysql en eventuele dependencies van jouw providers zoals voorheen. ox_target
-is voor keycard nodig; hostage kan ook alleen via toetsen. screenshot-basic en Apex Billing
-zijn geen vereiste voor gewone keycard-uitgifte. Bankproviderkeuze staat in de bridge;
-keycard betaalt standaard contant, tenzij Config.PaymentAccount = 'bank'.
+Behoud de bestaande providerinstellingen, webhookroutes en eigen sleutels.
+Geen databasewijziging. De keycard-resource wordt niet in deze download meegeleverd.
+De bestaande API 1 blijft bruikbaar voor keycard; de configuratie daarvan verandert niet.
 
-## Controle
+Controleer in de serverconsole versie 0.0.3 en de configstatus. Ontbreekt Config.Version,
+dan volgt een waarschuwing; de bestaande bridge-instellingen blijven bruikbaar.
+Test daarna met twee spelers de E/target/radial-bediening van hostage, first person,
+meldingslimiet, loslaten/omleggen en politie-/webhookmeldingen.
+Na een volledige bridgeherstart ook de afhankelijke resources herstarten. Target- en radialregistraties worden bij providerstart hersteld zolang de bridge blijft draaien.
 
-- Controleer geslaagde bridgecontrole op client en server. Bij een ontbrekende/onbruikbare
-  bridge wordt gameplay niet geactiveerd en stopt de server de betreffende resource.
-- De guard wacht maximaal 5 seconden op de API. Keycard controleert ook ESX, inventory,
-  society en zo nodig bank; clientcontrole vereist de targetprovider.
-- Console: ts_bridge_check; voor politiemeldingen ts_hostage_policecheck <online speler-ID>.
-- Stop de bridge tijdens een test: hostage ruimt zijn gijzeling op, keycard sluit zijn
-  venster en verwijdert de NPC. Herstart na herstel eerst ts_bridge en daarna beide scripts.
+Terugzetten: stop afhankelijke scripts, zet beide resources terug uit dezelfde backup,
+en start eerst de oude bridge. De nieuwe hostage-aansluiting vereist bridge 0.0.3.
 
-## Instellingen en taal
+## Aanvulling binnen dezelfde versie
 
-- Meldingen, menu's en foutteksten: iedere resource heeft locales/nl.lua.
-- Nederlands staat standaard aan en is fallback voor ontbrekende talen/sleutels.
-- Selectie: Config.Locale in de scripts; TSBridgeConfig.Locale in de bridge.
-- Nieuwe talen: zie locales/LEESMIJ.md. Behoud opmaakvariabelen en Lua-syntax.
-- Hostage-webhooks en politie-instellingen blijven in ts_hostage/server_config.lua;
-  centrale webhookroutes en screenshotlimieten staan in ts_bridge/server_config.lua.
-- Keycard-prijs/rangen/locatie blijven in ts_keycard/config.lua. SocietyAccount verwijst
-  naar de bridge-alias police (standaard society_police, oude spelling als fallback).
-- Society-geld gaat uitsluitend via esx_addonaccount. Er wordt niets dubbel naar een
-  Apex- of okok-businessrekening geboekt.
+Vervang ook bij een al geïnstalleerde 0.0.3 alle programmabestanden, inclusief
+fxmanifest.lua, config_validation.lua en de nieuwe serverbestanden. Behoud je eigen
+config.lua en server_config.lua wanneer die al correct zijn; configversie blijft 0.0.3.
+Het optionele UpdateCheck-blok staat in de meegeleverde server_config.lua.
+Gebruik ts_bridge_check om inhoud en providers te controleren. Foutieve velden eerst
+herstellen: alleen het versienummer verhogen lost een ongeldige configuratie niet op.
 
-## Betalingen en beperkingen
+Voor GitHub: upload version.json naast fxmanifest.lua naar de hoofdmap van de
+standaardbranch van https://github.com/troyscripts/ts_brigde.
+De repositorynaam bevat brigde, de FiveM-mapnaam blijft ts_bridge.
+De updatecontrole toont geen verschil tussen twee builds die beide 0.0.3 heten.
+De eerder meegeleverde ts_hostage 1.1.8 kan blijven staan; voor deze aanvulling is
+geen nieuwe hostage-download nodig.
 
-Keycard biedt directe cash/bankbetaling en bevestigde societybijschrijving, met herstel
-bij bekende fouten. Onzekere resultaten melden een referentie voor handmatige controle;
-niet opnieuw klikken of blind terugbetalen. Een serverstop kan geen lopende betaling
-atomair maken: stop scripts wanneer er geen uitgifte in behandeling is.
-
-Er is geen factuurbetaling gekoppeld aan kaartuitgifte. De Apex-betaalbeperking en de nog
-ontbrekende okokBilling-adapter blijven gelden; zie KEYCARD-BANKING-BILLING.md en OKOK.md.
-
-De scriptupdate heeft geen eigen SQL-migratie nodig. Keycard-KVPs blijven behouden onder
-dezelfde resourcenaam. Maak geen dubbele itemdefinitie aan. VLR-deurtoegang en de resources
-Apex/okok zelf zijn niet aangepast. Publiceren op GitHub is niet uitgevoerd.
-
-## Teststatus
-
-Lua-syntax, mocks voor bridgecontrole, locales, betalingen, rechten en bestaande hostage-
-functies zijn gecontroleerd. Live testen met jouw FiveM/providers blijft nodig. Zie de
-README/LEESMIJ van ieder script en de meegeleverde tests. Bewaar de drie mappen naast
-elkaar om de integratietests vanuit hun eigen resourcemap met Lua 5.4 uit te voeren.
+Controleer live: opstart/configmelding, ts_bridge_check, een normale webhook en
+screenshotfalen, targetopties na ox_target-herstart en radialmenu na providerstart.
+Test providerherstarts buiten een actieve gijzeling. De GitHub-controle moet na
+publicatie aangeven dat 0.0.3 actueel is.

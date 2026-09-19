@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 local B = TSBridge
 local locks = {}
 local function failed(code, uncertain, before, after)

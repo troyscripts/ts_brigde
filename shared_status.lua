@@ -5,14 +5,18 @@ local names = server and {
     'GetSocietyBalance', 'AddSocietyMoney', 'RemoveSocietyMoney', 'GetItemSlots',
     'GetInventorySlot', 'GetEmptySlot', 'CanCarryItem', 'AddItem', 'RemoveItem',
     'SetItemMetadata', 'GetInventories', 'RegisterInventoryHook', 'RemoveInventoryHook',
-    'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
+    'GetDiagnostics', 'GetWebhookStatus', 'CheckConfigVersion', 'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
     'CreateInvoice', 'GetInvoice', 'GetBillingStatus', 'RegisterBillingProvider'
 } or {
-    'Notify', 'IsDead', 'GetTargetResource', 'AddGlobalPlayer', 'AddGlobalVehicle',
+    'CheckConfigVersion', 'RegisterRadialMenu', 'RemoveRadialMenu', 'Notify', 'IsDead', 'GetTargetResource', 'AddGlobalPlayer', 'AddGlobalVehicle',
     'RemoveGlobalPlayer', 'RemoveGlobalVehicle', 'AddLocalEntity', 'RemoveLocalEntity',
     'UseItem', 'ProgressCircle', 'InputDialog', 'AlertDialog', 'GetStatus'
 }
 exports('GetStatus', function()
+    if TSBridgeValidation and not TSBridgeValidation.valid then
+        return { api = 1, version = GetResourceMetadata(GetCurrentResourceName(), 'version', 0),
+            side = server and 'server' or 'client', features = {}, ready = false, configErrors = TSBridgeValidation.errors }
+    end
     local features = {}
     for _, name in ipairs(names) do features[name] = true end
     local result = { api = 1, version = GetResourceMetadata(GetCurrentResourceName(), 'version', 0),

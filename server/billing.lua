@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- Generiek factuurcontract. Geen verzonnen exports voor een specifiek billingproduct.
 local provider
 local function failure(code, uncertain)
@@ -70,16 +71,22 @@ exports('CreateInvoice', function(invoice)
     end
     return result -- ok=true betekent aangemaakt, niet betaald.
 end)
-exports('GetBillingStatus', function()
+local function billingStatus()
     local name = TSBridgeServer.Billing.Resource
-    local needsAdapter = TSBridgeServer.Billing.Provider == 'okok' and provider == nil
+    local mode = TSBridgeServer.Billing.Provider
+    local needsAdapter = (mode == 'okok' or mode == 'custom') and provider == nil
+    local reason = mode == 'none' and 'billing_disabled'
+        or (needsAdapter and 'billing_adapter_required')
+        or (GetResourceState(name) ~= 'started' and 'billing_resource_not_started') or nil
     return { resource = name, provider = TSBridgeServer.Billing.Provider,
-        reason = needsAdapter and 'billing_adapter_required' or nil,
+        reason = reason,
         ready = GetResourceState(name) == 'started' and (TSBridgeServer.Billing.Provider == 'apex'
             or ((TSBridgeServer.Billing.Provider == 'custom' or TSBridgeServer.Billing.Provider == 'okok')
                 and provider ~= nil and provider.owner == name)) }
 
-end)
+end
+TSBridge.BillingStatus = billingStatus
+exports('GetBillingStatus', billingStatus)
 AddEventHandler('onResourceStop', function(name)
     if provider and provider.owner == name then provider = nil end
 end)

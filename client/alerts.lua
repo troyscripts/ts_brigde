@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- De server stuurt uitsluitend politieagenten de positie bij de start.
 local pendingLocation, expiresAt
 

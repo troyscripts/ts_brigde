@@ -1,3 +1,4 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 local function getJob(id)
     if TSBridgeServer.Framework == 'standalone' then return nil end
     if TSBridgeServer.Framework ~= 'esx' then return nil, TSL('main_onbekend_framework') end
@@ -15,12 +16,32 @@ local function getJob(id)
     return job
 end
 exports('GetJob', getJob)
-exports('Notify', function(id, data)
+local noticeTimes = {}
+exports('Notify', function(id, data, cooldownMs)
     id = tonumber(id)
-    if not id or id <= 0 or not GetPlayerName(id) then return false end
-    TriggerClientEvent('ts_bridge:notify', id, data)
+    if not id or id % 1 ~= 0 or id <= 0 or not GetPlayerName(id) then return false end
+    if type(data) == 'string' then data = { description = data } end
+    if type(data) ~= 'table' then return false end
+    local copy = {}; for k, v in pairs(data) do copy[k] = v end
+    local cooldown = tonumber(cooldownMs) or 0
+    if cooldown ~= cooldown or math.abs(cooldown) == math.huge or cooldown < 0 then return false end
+    if cooldown > 0 then
+        local owner = GetInvokingResource() or GetCurrentResourceName()
+        noticeTimes[owner] = noticeTimes[owner] or {}
+        local players = noticeTimes[owner]
+        players[id] = players[id] or {}
+        local key, now = tostring(copy.id or 'default'), GetGameTimer()
+        if players[id][key] and now - players[id][key] < cooldown then return false end
+        players[id][key] = now
+        copy.id = owner .. ':' .. key
+    end
+    TriggerClientEvent('ts_bridge:notify', id, copy)
     return true
 end)
+AddEventHandler('playerDropped', function()
+    for _, players in pairs(noticeTimes) do players[source] = nil end
+end)
+AddEventHandler('onResourceStop', function(name) noticeTimes[name] = nil end)
 exports('AlertJobs', function(jobs, data, coords, seconds)
     if type(jobs) ~= 'table' or type(data) ~= 'table' or type(coords) ~= 'table' then return 0 end
     for _, key in ipairs({ 'x', 'y', 'z' }) do
@@ -38,11 +59,4 @@ exports('AlertJobs', function(jobs, data, coords, seconds)
     end
     return recipients
 end)
-RegisterCommand('ts_bridge_check', function(src)
-    if src ~= 0 then return end
-    print(TSL('main_troy_scripts_ts_bridge_beta_framework') .. TSBridgeServer.Framework)
-    for _, name in ipairs({ 'ox_lib', TSBridgeServer.ESXResource, TSBridgeConfig.TargetResource, TSBridgeServer.ScreenshotResource, TSBridgeServer.InventoryResource, TSBridgeServer.SocietyResource, TSBridgeServer.Banking.Resource, TSBridgeServer.Billing.Resource }) do
-        print((TSL('main_ts_bridge')):format(name, GetResourceState(name)))
-    end
-end, false)
 print(TSL('main_troy_scripts_ts_bridge_beta_gestart'))

@@ -1,5 +1,6 @@
+if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- Alleen server-exports; geen client-triggerbare upload- of webhookevents.
-local queue, processing, pendingPhotos = {}, false, 0
+local lanes, queued, pendingPhotos = {}, 0, 0
 local function warning(message) print(TSL('webhooks_ts_bridge_webhook') .. message .. '^7') end
 local function urlValid(url)
     return type(url) == 'string' and (
@@ -43,9 +44,10 @@ local function bodyFor(item)
     return body, 'multipart/form-data; boundary=' .. boundary
 end
 local pump
-pump = function()
-    if processing or #queue == 0 then return end
-    processing = true
+pump = function(lane)
+    local queue = lane.queue
+    if lane.processing or #queue == 0 then return end
+    lane.processing = true
     local item = queue[1]
     local body, contentType = bodyFor(item)
     local responded = false
@@ -58,13 +60,17 @@ pump = function()
             local seconds = ok and type(data) == 'table' and tonumber(data.retry_after) or 2
             if not seconds or seconds ~= seconds then seconds = 2 end
             SetTimeout(math.floor(math.max(1, math.min(seconds, 60)) * 1000), function()
-                processing = false; pump()
+                lane.processing = false; pump(lane)
             end)
             return
         end
         if status < 200 or status >= 300 then warning(TSL('webhooks_versturen_mislukt_http') .. tostring(status) .. TSL('webhooks_controleer_de_server_side_webhookinstellingen_url_wordt')) end
         table.remove(queue, 1)
-        SetTimeout(1000, function() processing = false; pump() end)
+        queued = queued - 1
+        SetTimeout(1000, function()
+            lane.processing = false
+            if #queue == 0 then lanes[item.url] = nil else pump(lane) end
+        end)
     end
     local ok = pcall(PerformHttpRequest, item.url, function(status, response) done(tonumber(status) or 0, response) end,
         'POST', body, { ['Content-Type'] = contentType }, { followLocation = false })
@@ -73,9 +79,12 @@ pump = function()
     SetTimeout(30000, function() done(0, '') end)
 end
 local function enqueue(url, payload, image)
-    if #queue >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false end
-    queue[#queue + 1] = { url = url, payload = payload, image = image, retries = 0 }
-    pump()
+    if queued + pendingPhotos >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false end
+    local lane = lanes[url]
+    if not lane then lane = { queue = {}, processing = false }; lanes[url] = lane end
+    lane.queue[#lane.queue + 1] = { url = url, payload = payload, image = image, retries = 0 }
+    queued = queued + 1
+    pump(lane)
     return true
 end
 
@@ -90,7 +99,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if type(payload) ~= 'table' or type(payload.embeds) ~= 'table' or type(payload.embeds[1]) ~= 'table' then
         return false, TSL('webhooks_embed_ontbreekt')
     end
-    if #queue + pendingPhotos >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false, TSL('webhooks_wachtrij_vol') end
+    if queued + pendingPhotos >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false, TSL('webhooks_wachtrij_vol') end
     -- Eigen kopie: async screenshotcallbacks mogen de invoer van de aanroeper niet wijzigen.
     local ok, copied = pcall(function() return json.decode(json.encode(payload)) end)
     if not ok or type(copied) ~= 'table' then return false, TSL('webhooks_ongeldige_payload') end
@@ -99,9 +108,20 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     options = type(options) == 'table' and options or {}
     local embed = payload.embeds[1]
     local id = tonumber(options.playerId)
+    local function photoFailure(reason)
+        local value = TSL('webhooks_screenshot_niet_beschikbaar') .. reason .. TSL('webhooks_actie_wel_geregistreerd')
+        embed.fields = type(embed.fields) == 'table' and embed.fields or {}
+        if #embed.fields < 25 then
+            embed.fields[#embed.fields + 1] = { name = 'Screenshot', value = value:sub(1, 1024), inline = false }
+        else
+            -- Preserve a full embed; use message content only when there is room.
+            local content = payload.content or ''
+            if #content + #value + 1 <= 2000 then payload.content = content .. '\n' .. value end
+        end
+    end
     if not options.screenshot then return enqueue(url, payload) end
     local function unavailable(reason)
-        embed.description = TSL('webhooks_screenshot_niet_beschikbaar') .. reason .. TSL('webhooks_actie_wel_geregistreerd')
+        photoFailure(reason)
         warning(owner .. ': ' .. reason)
         return enqueue(url, payload)
     end
@@ -118,7 +138,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
             embed.image = { url = 'attachment://screenshot.jpg' }
             payload.attachments = { { id = 0, filename = 'screenshot.jpg' } }
         else
-            embed.description = TSL('webhooks_screenshot_niet_beschikbaar_actie_wel_geregistreerd')
+            photoFailure(reason or TSL('webhooks_screenshot_mislukt'))
             warning(owner .. ': ' .. (reason or TSL('webhooks_screenshot_mislukt')))
         end
         enqueue(url, payload, image)
@@ -135,3 +155,14 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if not requested then complete(nil, TSL('webhooks_screenshotexport_kon_niet_worden_aangeroepen')) end
     return true
 end)
+
+TSBridgeWebhookStatus = function()
+    local destinations, active = 0, 0
+    for _, lane in pairs(lanes) do
+        destinations = destinations + 1
+        if lane.processing then active = active + 1 end
+    end
+    return { queued = queued, pendingPhotos = pendingPhotos, destinations = destinations, active = active,
+        capacity = TSBridgeServer.MaxQueue }
+end
+exports('GetWebhookStatus', TSBridgeWebhookStatus)
