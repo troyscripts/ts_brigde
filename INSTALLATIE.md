@@ -1,3 +1,11 @@
+# Actuele installatie: ts_bridge 0.0.6
+
+Lees UPDATE-LOCATIES.md voor de update vanaf 0.0.5, de nieuwe configvelden en de
+gezamenlijke stop/startvolgorde. Dit pakket bevat alleen gewijzigde bestanden.
+Configschema is 0.0.6; server_config.lua blijft staan.
+
+De onderstaande eerdere instructies gelden uitsluitend voor de migratie naar 0.0.5.
+
 # Update ts_bridge 0.0.4 → 0.0.5
 
 Dit pakket bevat alleen gewijzigde/nieuwe bestanden voor een bestaande 0.0.4-installatie.

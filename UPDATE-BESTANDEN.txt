@@ -1,12 +1,19 @@
-Alleen gewijzigde en nieuwe bestanden voor ts_bridge 0.0.5.
-Kopieer over de bestaande gelijknamige resourcemap; laat overige bestanden staan.
-Geen bestanden verwijderen. Lees de installatiehandleiding in dit pakket.
+Update ts_bridge 0.0.5 naar 0.0.6. Alleen gewijzigde/nieuwe bestanden.
+Kopieer over de bestaande installatie; laat overige bestanden staan.
+Geen bestanden verwijderen. Neem eigen instellingen over in de nieuwe config.
 
 CHANGELOG.md
 INSTALLATIE.md
 README.md
-TESTRESULTATEN.txt
-client/camera.lua
+TESTRESULTATEN-LOCATIES.txt
+UPDATE-LOCATIES.md
+client/alerts.lua
+config.lua
+config_validation.lua
+config_version.lua
 fxmanifest.lua
-shared_status.lua
+locales/nl.lua
 version.json
+web/alerts.css
+web/alerts.html
+web/alerts.js

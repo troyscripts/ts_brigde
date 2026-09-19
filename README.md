@@ -1,6 +1,21 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.5** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.5
+**Versie 0.0.6** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.5
+
+## Nieuw in 0.0.6: locaties, postcodes en persoonlijk negeren
+
+Zie **UPDATE-LOCATIES.md** voor de actuele update-instructies en instellingen.
+Meldingen via AlertJobs tonen optioneel een kaartgebied en dichtstbijzijnde postcode.
+G zet een waypoint naar de exacte incidentlocatie; Backspace verwijdert alleen op
+je eigen client de melding, tijdelijke blip en G-bestemming. Bestaande routes en
+meldingen van collega's blijven intact. Het nieuwe paneel neemt geen invoerfocus.
+
+Scriptversie en configschema zijn nu 0.0.6: de config bevat nieuwe velden.
+server_config.lua blijft ongewijzigd. Hostage/antipunch/keycard hoeven niet bijgewerkt
+te worden voor deze functie. De kaartupdate ts_gemertmap 1.0.6 levert de locaties.
+Bij afwezige kaartgegevens blijft een fallbackmelding werken.
+De onderstaande eerdere releasehoofdstukken beschrijven de voorgaande functies.
+
 
 ## Nieuw in 0.0.5: gedeelde camera en combatcontexten
 

@@ -70,3 +70,10 @@ Locales['nl'] = {
     ['webhooks_ongeldig_of_te_groot_jpeg_antwoord'] = 'ongeldig of te groot JPEG-antwoord',
     ['webhooks_screenshotexport_kon_niet_worden_aangeroepen'] = 'screenshotexport kon niet worden aangeroepen',
 }
+
+Locales.nl.alerts_postcode = 'Dichtstbijzijnde postcode: %s'
+Locales.nl.alerts_accept = 'Locatie instellen'
+Locales.nl.alerts_dismiss = 'Negeren'
+Locales.nl.alerts_dismiss_binding = 'Troy Scripts: politiemelding alleen voor jezelf negeren'
+Locales.nl.alerts_remaining = 'seconden resterend'
+Locales.nl.alerts_blip = 'Politiemelding'

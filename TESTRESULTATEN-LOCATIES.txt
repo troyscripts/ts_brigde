@@ -1,0 +1,16 @@
+Lokale verificatie van de locatie-/negeerupdate
+
+PASS: Lua 5.4-syntaxis van de resources.
+PASS: twee gesimuleerde agenten; individueel negeren en onafhankelijk aannemen.
+PASS: G na negeren, verlopen melding, vervangen melding en G/Backspace in dezelfde frame.
+PASS: bestaande route behouden bij ontvangst/negeren; uitsluitend G zet een waypoint.
+PASS: tijdelijke blip opruimen en NUI-handshake (geen herleving van genegeerde melding).
+PASS: afwezige/foutieve kaartprovider, postcode-afstandsgrens en optionele locatievelden.
+PASS: echte 946-postcodedataset, nearest-search, voorloopnullen, eigen gebiedsnaam en /poscode.
+PASS: GitHub-checker zonder link, uitgeschakeld, hogere/gelijke/lagere versie, HTTP-fouten en timeout.
+PASS: nieuwe configvelden en ongeldige getallen; oude config kan ingebouwde defaults gebruiken.
+PASS: JavaScript-syntaxis en DOM-simulatie van tonen, verbergen, letterlijke tekst en verlopen.
+
+Niet uitgevoerd: live FiveM met twee spelers en visuele game-test. Chromium was hier
+niet beschikbaar voor een browserpreview. Test na installatie ook je eigen keybindings,
+HUD-overlap en rijbediening tijdens een achtervolging.

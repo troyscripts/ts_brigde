@@ -1,5 +1,17 @@
 # Changelog — ts_bridge
 
+## 0.0.6
+
+- Kaartgebied en dichtstbijzijnde postcode bij de incidentlocatie via optionele ts_gemertmap-export.
+- Afzonderlijk instelbare gebiedsnaam, postcode, straatnaam en postcode-afstandsgrens.
+- Afsluitbaar NUI-paneel zonder muisfocus of rijblokkering, met G/Backspace en resterende tijd.
+- Individueel negeren wist uitsluitend de eigen melding, tijdelijke blip en G-bestemming.
+- Ontvangst/negeren/verlopen laten bestaande routes en meldingen van collega's intact.
+- Nieuwste melding vervangt de vorige; verlopen of vervangen meldingen kunnen geen waypoint zetten.
+- Configschema naar 0.0.6 vanwege nieuwe instellingen; server_config.lua ongewijzigd.
+- Manifest/version.json naar 0.0.6. Bestaande camera- en server-API behouden.
+
+
 ## 0.0.5 — Gedeelde camera en combatcontexten
 
 - RequestFirstPerson/ReleaseFirstPerson: aanvragen per resource en aparte ped-/voertuigcamera.

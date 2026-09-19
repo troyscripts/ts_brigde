@@ -17,6 +17,22 @@ local function validate(shared, server)
     V.errors = {}
     if type(shared) ~= 'table' then issue('TSBridgeConfig') else
         for _, key in ipairs({ 'Locale', 'NotificationTitle', 'WaypointKey', 'InventoryResource', 'TargetResource' }) do text(shared, key, 'TSBridgeConfig') end
+        -- Nieuwe velden zijn optioneel bij migratie; de configversie waarschuwt.
+        if shared.AlertDismissKey ~= nil then text(shared, 'AlertDismissKey', 'TSBridgeConfig') end
+        if shared.AlertBlip ~= nil and type(shared.AlertBlip) ~= 'boolean' then issue('TSBridgeConfig.AlertBlip') end
+        if shared.AlertLocation ~= nil then
+            local loc = shared.AlertLocation
+            if type(loc) ~= 'table' then issue('TSBridgeConfig.AlertLocation') else
+                text(loc, 'MapResource', 'TSBridgeConfig.AlertLocation')
+                for _, key in ipairs({'ShowArea', 'ShowPostcode', 'ShowStreet'}) do
+                    if type(loc[key]) ~= 'boolean' then issue('TSBridgeConfig.AlertLocation.' .. key) end
+                end
+                local distance = loc.MaxPostcodeDistance
+                if type(distance) ~= 'number' or distance ~= distance or distance < 0 or distance == math.huge then
+                    issue('TSBridgeConfig.AlertLocation.MaxPostcodeDistance')
+                end
+            end
+        end
         integer(shared, 'NotificationDuration', 'TSBridgeConfig', 1, 300000)
         if type(shared.DeadStateKeys) ~= 'table' then issue('TSBridgeConfig.DeadStateKeys')
         else for k,v in pairs(shared.DeadStateKeys) do
