@@ -1,5 +1,13 @@
 # Changelog — ts_bridge
 
+## 0.0.8
+
+- Screenshotopname lokaal met requestScreenshot; JPEG-overdracht via een begrensd latent FiveM-event in plaats van HTTP-upload naar het gameserverendpoint.
+- Server accepteert uitsluitend een eenmalig antwoord van de aangevraagde speler; JPEG- en groottelimieten blijven gelden.
+- Opruiming bij timeout/disconnect en gerichte foutmeldingen; tekstlogging blijft beschikbaar.
+- Discord-webhooks blijven uitsluitend server-side. Configuratie en configschema ongewijzigd.
+- Gesimuleerde tests; live controle op de FiveM-server blijft nodig.
+
 ## 0.0.7
 
 - Alias `ambulance` toegevoegd voor de gedeelde rekening `society_ambulance`.

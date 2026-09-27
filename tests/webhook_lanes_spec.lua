@@ -5,6 +5,16 @@ local function copy(x) if type(x)~='table' then return x end;local t={};for k,v 
 json={encode=function(t) counter=counter+1;local key='json'..counter;jsonObjects[key]=copy(t);return key end,
  decode=function(k) if k=='rate' then return {retry_after=2} end;return copy(jsonObjects[k]) end}
 exports=setmetatable({['screenshot-basic']={requestClientScreenshot=function(_,id,opts,cb) photo=cb end}}, {__call=function(_,n,f)api[n]=f end})
+local events, handlers, capture = {}, {}, nil
+function RegisterNetEvent(name, cb) events[name] = cb end
+function AddEventHandler(name, cb) handlers[name] = cb end
+function TriggerClientEvent(name, id, token)
+    capture = { player = id, token = token }
+    photo = function(err, data)
+        source = id
+        events['ts_bridge:screenshot:result'](token, data, err or nil)
+    end
+end
 function GetInvokingResource() return owner end
 function GetGameTimer() return 10000 end
 function GetPlayerName() return 'Test' end
@@ -42,3 +52,32 @@ local full=copy(payload);full.embeds[1].fields={};for i=1,25 do full.embeds[1].f
 screenshotState='stopped';assert(api.SendWebhook('start',a,full,{screenshot=true,playerId=1}))
 assert(#requests[3].payload.embeds[1].fields==25 and requests[3].payload.content:find('Screenshot'))
 print('PASS: independent webhook lanes, same-destination order/backoff, capacity reservations, description preservation, full embed fallback, late callback')
+
+-- Transport: source binding, invalid image, duplicate/late replies, disconnect cleanup.
+TSBridgeServer.MaxQueue=32;screenshotState='started';requests={};timers={}
+dofile('server/webhooks.lua')
+assert(api.SendWebhook('start',a,payload,{screenshot=true,playerId=1}))
+local token=capture.token
+source=2;events['ts_bridge:screenshot:result'](token,'data:image/jpeg;base64,/9j/')
+assert(#requests==0 and api.GetWebhookStatus().pendingPhotos==1)
+source=1;events['ts_bridge:screenshot:result']('unknown','data:image/jpeg;base64,/9j/')
+assert(#requests==0)
+events['ts_bridge:screenshot:result'](token,'data:image/jpeg;base64,/9j/')
+assert(#requests==1 and requests[1].body:find('filename="screenshot.jpg"',1,true))
+assert(requests[1].body:find(string.char(255,216,255),1,true))
+events['ts_bridge:screenshot:result'](token,'data:image/jpeg;base64,/9j/')
+assert(#requests==1 and api.GetWebhookStatus().pendingPhotos==0)
+requests[1].cb(204,'');timers[#timers].f()
+assert(api.SendWebhook('start',a,payload,{screenshot=true,playerId=1}))
+events['ts_bridge:screenshot:result'](capture.token,'invalid')
+assert(#requests==2 and requests[2].payload.embeds[1].fields[2].name=='Screenshot')
+requests[2].cb(204,'');timers[#timers].f()
+assert(api.SendWebhook('start',a,payload,{screenshot=true,playerId=1}))
+handlers.playerDropped()
+assert(#requests==3 and api.GetWebhookStatus().pendingPhotos==0)
+requests[3].cb(204,'');timers[#timers].f()
+TSBridgeServer.MaxImageBytes=1
+assert(api.SendWebhook('start',a,payload,{screenshot=true,playerId=1}))
+events['ts_bridge:screenshot:result'](capture.token,'data:image/jpeg;base64,/9j/')
+assert(#requests==4 and requests[4].payload.embeds[1].fields[2].name=='Screenshot')
+print('PASS: bound one-shot responses, JPEG multipart, invalid/oversized data, disconnect cleanup')

@@ -1,6 +1,17 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.7** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 0.0.8** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Nieuw in 0.0.8: screenshottransport
+
+Screenshots worden lokaal opgenomen via `requestScreenshot` en met een begrensd
+latent FiveM-event naar de server gestuurd. De HTTP-upload naar het gameserverendpoint
+vervalt. Discord-webhooks blijven server-side. Alleen aangevraagde antwoorden van
+de juiste speler worden verwerkt; time-outs en ongeldige foto's geven een tekstlog.
+Bij gelijktijdige opnames voor dezelfde speler kan een tekstlog met melding 'bezig'
+volgen. Dit voorkomt dat screenshot-basic een nog lopende opname overschrijft.
+De lokale screenshot-basic NUI-callback moet nog steeds werken. Een fout daarin
+vereist controle van screenshot-basic zelf. Geen live FiveM-test uitgevoerd.
 
 ## Nieuw in 0.0.7: ambulancerekening
 

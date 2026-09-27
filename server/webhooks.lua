@@ -1,5 +1,5 @@
 if TSBridgeValidation and not TSBridgeValidation.valid then return end
--- Alleen server-exports; geen client-triggerbare upload- of webhookevents.
+-- Alleen serverresources starten logs; clients kunnen uitsluitend een aangevraagde foto beantwoorden.
 local lanes, queued, pendingPhotos = {}, 0, 0
 local function warning(message) print(TSL('webhooks_ts_bridge_webhook') .. message .. '^7') end
 local function urlValid(url)
@@ -32,6 +32,41 @@ local function decodeJpeg(uri)
     if #bytes > TSBridgeServer.MaxImageBytes or bytes:sub(1, 3) ~= '\255\216\255' then return nil end
     return bytes
 end
+-- Een antwoord is eenmalig en gebonden aan de speler van de serveraanvraag.
+local photoRequests, photoSequence = {}, 0
+local photoEpoch = tostring(os.time()) .. ':' .. tostring(GetGameTimer())
+RegisterNetEvent('ts_bridge:screenshot:result', function(token, data, failure)
+    if type(token) ~= 'string' then return end
+    local request = photoRequests[token]
+    if not request or request.player ~= source then return end
+    photoRequests[token] = nil
+    local reasons = {
+        unavailable = 'screenshotresource niet gestart op de client',
+        busy = 'screenshotopname op de client is nog bezig',
+        timeout = 'lokale screenshotopname geeft geen antwoord; controleer screenshot-basic en de F8-console',
+        capture = 'lokale screenshotexport mislukt',
+        invalid = 'ongeldig of te groot JPEG-antwoord van de client'
+    }
+    if failure ~= nil then
+        request.complete(nil, reasons[failure] or 'screenshotclient meldt een fout')
+        return
+    end
+    local image = decodeJpeg(data)
+    request.complete(image, image and nil or TSL('webhooks_ongeldig_of_te_groot_jpeg_antwoord'))
+end)
+AddEventHandler('playerDropped', function()
+    local player = source
+    local dropped = {}
+    for token, request in pairs(photoRequests) do
+        if request.player == player then dropped[#dropped + 1] = token end
+    end
+    for _, token in ipairs(dropped) do
+        local request = photoRequests[token]
+        photoRequests[token] = nil
+        request.complete(nil, TSL('webhooks_speler_niet_online'))
+    end
+end)
+
 local function bodyFor(item)
     if not item.image then return json.encode(item.payload), 'application/json' end
     -- Boundary mag niet voorkomen in de afbeelding.
@@ -130,9 +165,12 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if not id or id <= 0 or not GetPlayerName(id) then return unavailable(TSL('webhooks_speler_niet_online')) end
     pendingPhotos = pendingPhotos + 1
     local completed = false
+    photoSequence = photoSequence + 1
+    local token = photoEpoch .. ":" .. tostring(photoSequence)
     local function complete(image, reason)
         if completed then return end
         completed = true
+        photoRequests[token] = nil
         pendingPhotos = pendingPhotos - 1
         if image then
             embed.image = { url = 'attachment://screenshot.jpg' }
@@ -143,16 +181,15 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
         end
         enqueue(url, payload, image)
     end
-    SetTimeout(TSBridgeServer.ScreenshotTimeoutMs, function() complete(nil, TSL('webhooks_screenshot_time_out')) end)
-    local requested = pcall(function()
-        exports[TSBridgeServer.ScreenshotResource]:requestClientScreenshot(id, { encoding = 'jpg', quality = 0.65 }, function(err, data)
-            if completed then return end
-            if err then complete(nil, TSL('webhooks_screenshotprovider_meldt_een_fout')); return end
-            local image = decodeJpeg(data)
-            complete(image, image and nil or TSL('webhooks_ongeldig_of_te_groot_jpeg_antwoord'))
-        end)
+    photoRequests[token] = { player = id, complete = complete }
+    SetTimeout(TSBridgeServer.ScreenshotTimeoutMs, function()
+        complete(nil, 'screenshot time-out: geen volledig clientantwoord ontvangen via FiveM')
     end)
-    if not requested then complete(nil, TSL('webhooks_screenshotexport_kon_niet_worden_aangeroepen')) end
+    -- Geen NUI HTTP-upload naar het serverendpoint en geen webhook-URL naar clients.
+    local requested = pcall(TriggerClientEvent, 'ts_bridge:screenshot:capture', id,
+        token, TSBridgeServer.ScreenshotResource, TSBridgeServer.MaxImageBytes,
+        TSBridgeServer.ScreenshotTimeoutMs)
+    if not requested then complete(nil, 'screenshotaanvraag kon niet naar de client worden gestuurd') end
     return true
 end)
 
