@@ -1,6 +1,13 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.6** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.5
+**Versie 0.0.7** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Nieuw in 0.0.7: ambulancerekening
+
+De serverconfig bevat de alias `ambulance = { 'society_ambulance' }` voor
+betaalde ambulancekaarten uit ts_keycard 1.1.7. Controleer of die gedeelde
+rekening in ESX bestaat. De gedeelde `config.lua` en de configschemaversie
+blijven 0.0.6; bestaande bridge-exports blijven hetzelfde.
 
 ## Nieuw in 0.0.6: locaties, postcodes en persoonlijk negeren
 

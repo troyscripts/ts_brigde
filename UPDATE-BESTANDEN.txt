@@ -1,19 +1,10 @@
-Update ts_bridge 0.0.5 naar 0.0.6. Alleen gewijzigde/nieuwe bestanden.
-Kopieer over de bestaande installatie; laat overige bestanden staan.
-Geen bestanden verwijderen. Neem eigen instellingen over in de nieuwe config.
+Update ts_bridge 0.0.6 naar 0.0.7. Alleen gewijzigde/nieuwe bestanden.
+Neem eigen instellingen over in server_config.lua.
 
 CHANGELOG.md
-INSTALLATIE.md
 README.md
-TESTRESULTATEN-LOCATIES.txt
-UPDATE-LOCATIES.md
-client/alerts.lua
-config.lua
-config_validation.lua
-config_version.lua
+UPDATE-0.0.7.md
+UPDATE-BESTANDEN.txt
+server_config.lua
 fxmanifest.lua
-locales/nl.lua
 version.json
-web/alerts.css
-web/alerts.html
-web/alerts.js

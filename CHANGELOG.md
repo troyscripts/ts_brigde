@@ -1,5 +1,11 @@
 # Changelog — ts_bridge
 
+## 0.0.7
+
+- Alias `ambulance` toegevoegd voor de gedeelde rekening `society_ambulance`.
+- Compatibel met betaalde ambulancekaartuitgifte in ts_keycard 1.1.7.
+- Script- en GitHub-versie verhoogd; gedeelde `config.lua` en configschema blijven 0.0.6.
+
 ## 0.0.6
 
 - Kaartgebied en dichtstbijzijnde postcode bij de incidentlocatie via optionele ts_gemertmap-export.

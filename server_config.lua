@@ -12,7 +12,8 @@ TSBridgeServer = {
     SocietyResource = 'esx_addonaccount', -- gebruikt het ESX getSharedAccount-event
     SocietyAccounts = {
         -- Standaardrekening eerst; oude spelling uitsluitend als fallback.
-        police = { 'society_police', 'socity_police' }
+        police = { 'society_police', 'socity_police' },
+        ambulance = { 'society_ambulance' }
     },
     ScreenshotResource = 'screenshot-basic', -- screenshot-basic-compatibele export
     Screenshots = true,
