@@ -1,3 +1,12 @@
+## 0.0.9 — Discord-bevestiging en screenshotdiagnose
+
+- Discord-webhooks vragen nu met wait=true om bevestiging van het opgeslagen bericht.
+- Expliciet afgewezen fotoberichten (HTTP 400/413/415/422) worden eenmaal zonder foto aangeboden; originele loginhoud blijft behouden.
+- Geen automatische herhaling bij onzekere netwerkuitkomsten of time-outs, om dubbele logs te voorkomen.
+- ts_bridge_check toont de laatste screenshotstatus en het laatste Discord-resultaat, ook wanneer de wachtrij leeg is.
+- HTTP-status, Discord-foutcode en foutvelden worden gelogd zonder webhook-URL, screenshotdata of berichtinhoud.
+- Configuratie en configversie blijven ongewijzigd. Geen FiveManage-sleutel nodig.
+
 # Changelog — ts_bridge
 
 ## 0.0.8

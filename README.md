@@ -1,6 +1,15 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.8** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 0.0.9** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Nieuw in 0.0.9: Discord-bevestiging en diagnose
+
+Discord-verzending gebruikt `wait=true`. Bij een expliciete afwijzing van een
+fotobericht (HTTP 400/413/415/422) volgt eenmaal een tekstbericht zonder foto.
+`ts_bridge_check` toont nu ook het laatste screenshotresultaat, de laatste
+Discord-uitkomst en de laatste Discord-fout, ook bij een lege wachtrij.
+De precieze oorzaak van een uploadfout moet uit de nieuwe diagnose blijken.
+Zie `UPDATE-0.0.9.md` voor installatie. Configuratie blijft ongewijzigd.
 
 ## Nieuw in 0.0.8: screenshottransport
 

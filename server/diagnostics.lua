@@ -29,5 +29,10 @@ RegisterCommand('ts_bridge_check', function(src)
     print(('[ts_bridge] billing %s: %s (%s)'):format(d.billing.provider or '?', tostring(d.billing.ready), d.billing.reason or 'geen adapterfout'))
     if d.webhooks then print(('[ts_bridge] logs: %d/%d | screenshots: %d | bestemmingen: %d'):format(
         d.webhooks.queued, d.webhooks.capacity, d.webhooks.pendingPhotos, d.webhooks.destinations)) end
+    if d.webhooks then
+        print('[ts_bridge] Laatste screenshot: ' .. (d.webhooks.lastPhoto or 'onbekend'))
+        print('[ts_bridge] Laatste Discord-resultaat: ' .. (d.webhooks.lastDelivery or 'onbekend'))
+        print('[ts_bridge] Laatste Discord-fout: ' .. (d.webhooks.lastFailure or 'geen'))
+    end
     print(('[ts_bridge] GitHub geconfigureerd: %s'):format(tostring(d.updateCheckConfigured)))
 end, false)

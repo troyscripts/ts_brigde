@@ -1,6 +1,35 @@
 if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- Alleen serverresources starten logs; clients kunnen uitsluitend een aangevraagde foto beantwoorden.
 local lanes, queued, pendingPhotos = {}, 0, 0
+local lastPhoto, lastDelivery = 'geen aanvraag sinds start', 'geen verzending sinds start'
+local lastFailure = 'geen fout sinds start'
+local function photoStatus(message)
+    lastPhoto = os.date('!%H:%M:%S') .. ' UTC | ' .. message
+end
+local function deliveryStatus(message)
+    lastDelivery = os.date('!%H:%M:%S') .. ' UTC | ' .. message
+end
+-- Alleen foutcodes en veldnamen tonen; nooit URLs, payloads of transportfoutteksten.
+local function discordResult(response)
+    local ok, data = pcall(json.decode, response or '')
+    if not ok or type(data) ~= 'table' then return nil, 'geen leesbaar Discord-antwoord' end
+    local parts = {}
+    if type(data.code) == 'number' then parts[#parts + 1] = 'Discord-code ' .. tostring(data.code) end
+    local function fields(node, path, depth)
+        if type(node) ~= 'table' or depth > 6 or #parts >= 8 then return end
+        for key, value in pairs(node) do
+            if #parts >= 8 then break end
+            if key == '_errors' then
+                parts[#parts + 1] = 'veld ' .. path
+            elseif type(key) == 'string' or type(key) == 'number' then
+                local safe = tostring(key):gsub('[^%w_]', ''):sub(1, 40)
+                fields(value, path .. '.' .. safe, depth + 1)
+            end
+        end
+    end
+    fields(data.errors, 'payload', 0)
+    return data, #parts > 0 and table.concat(parts, '; ') or 'geen foutcode'
+end
 local function warning(message) print(TSL('webhooks_ts_bridge_webhook') .. message .. '^7') end
 local function urlValid(url)
     return type(url) == 'string' and (
@@ -89,6 +118,10 @@ pump = function(lane)
     local function done(status, response)
         if responded then return end
         responded = true
+        local result, detail = discordResult(response)
+        local kind = item.image and 'foto' or 'tekst'
+        deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' | ' .. detail)
+        if status < 200 or status >= 300 then lastFailure = lastDelivery end
         if status == 429 and item.retries < 3 then
             item.retries = item.retries + 1
             local ok, data = pcall(json.decode, response or '')
@@ -99,7 +132,31 @@ pump = function(lane)
             end)
             return
         end
-        if status < 200 or status >= 300 then warning(TSL('webhooks_versturen_mislukt_http') .. tostring(status) .. TSL('webhooks_controleer_de_server_side_webhookinstellingen_url_wordt')) end
+        if item.image and (status == 400 or status == 413 or status == 415 or status == 422) then
+            warning('Discord weigert fotobericht: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; tekstfallback volgt')
+            item.image = nil
+            item.payload.attachments = nil
+            local embed = item.payload.embeds[1]
+            embed.image = nil
+            embed.fields = type(embed.fields) == 'table' and embed.fields or {}
+            if #embed.fields < 25 then
+                embed.fields[#embed.fields + 1] = { name = 'Screenshot',
+                    value = 'Fotobericht afgewezen door Discord (HTTP ' .. tostring(status) .. '). Actie zonder foto geregistreerd.', inline = false }
+            end
+            item.retries = 0
+            SetTimeout(1000, function() lane.processing = false; pump(lane) end)
+            return
+        end
+        if status >= 200 and status < 300 and type(result) == 'table'
+            and type(result.id) == 'string' and result.id:match('^%d+$') then
+            deliveryStatus(kind .. ': bevestigd door Discord | bericht ' .. result.id)
+            if item.image then print('[ts_bridge] Discord-foto bevestigd | bericht ' .. result.id) end
+        elseif status >= 200 and status < 300 then
+            deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' zonder berichtbevestiging')
+            warning('Discord gaf HTTP ' .. tostring(status) .. ' zonder berichtbevestiging; geen herhaling om dubbele logs te voorkomen')
+        else
+            warning('Versturen ' .. kind .. ' mislukt: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; webhook-URL wordt niet getoond')
+        end
         table.remove(queue, 1)
         queued = queued - 1
         SetTimeout(1000, function()
@@ -107,7 +164,8 @@ pump = function(lane)
             if #queue == 0 then lanes[item.url] = nil else pump(lane) end
         end)
     end
-    local ok = pcall(PerformHttpRequest, item.url, function(status, response) done(tonumber(status) or 0, response) end,
+    deliveryStatus((item.image and 'foto' or 'tekst') .. ': HTTP-aanvraag gestart')
+    local ok = pcall(PerformHttpRequest, item.url .. '?wait=true', function(status, response) done(tonumber(status) or 0, response) end,
         'POST', body, { ['Content-Type'] = contentType }, { followLocation = false })
     if not ok then done(0, '') end
     -- Geen automatische POST-herhaling bij time-outs: voorkomt dubbele Discord-logs.
@@ -163,6 +221,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if not TSBridgeServer.Screenshots then return unavailable(TSL('webhooks_screenshots_uitgeschakeld_in_ts_bridge')) end
     if GetResourceState(TSBridgeServer.ScreenshotResource) ~= 'started' then return unavailable(TSL('webhooks_screenshotresource_niet_gestart')) end
     if not id or id <= 0 or not GetPlayerName(id) then return unavailable(TSL('webhooks_speler_niet_online')) end
+    photoStatus('aangevraagd bij speler ' .. tostring(id))
     pendingPhotos = pendingPhotos + 1
     local completed = false
     photoSequence = photoSequence + 1
@@ -172,6 +231,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
         completed = true
         photoRequests[token] = nil
         pendingPhotos = pendingPhotos - 1
+        photoStatus(image and ('ontvangen: ' .. tostring(#image) .. ' bytes') or ('mislukt: ' .. tostring(reason)))
         if image then
             embed.image = { url = 'attachment://screenshot.jpg' }
             payload.attachments = { { id = 0, filename = 'screenshot.jpg' } }
@@ -200,6 +260,6 @@ TSBridgeWebhookStatus = function()
         if lane.processing then active = active + 1 end
     end
     return { queued = queued, pendingPhotos = pendingPhotos, destinations = destinations, active = active,
-        capacity = TSBridgeServer.MaxQueue }
+        capacity = TSBridgeServer.MaxQueue, lastPhoto = lastPhoto, lastDelivery = lastDelivery, lastFailure = lastFailure }
 end
 exports('GetWebhookStatus', TSBridgeWebhookStatus)
