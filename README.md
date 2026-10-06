@@ -1,6 +1,15 @@
 # Troy Scripts — ts_bridge
 
-**Versie 0.0.9** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 1.0.0** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Nieuw in 1.0.0: binaire foto-upload
+
+Foto's gaan server-side via de ingebouwde Node.js-runtime met een Buffer en
+expliciete Content-Length naar Discord. Dit vermijdt de Lua HTTP-uploadroute
+die nulbytes in JPEG-data kan afkappen. Geen externe pakketten, uploadprovider
+of API-sleutel nodig. Screenshotopname, wachtrij en tekstfallback blijven bestaan.
+Foutdetails uit FiveM's errorData worden nu ook uitgelezen.
+Zie UPDATE-1.0.0.md voor installatie over 0.0.9. Config blijft ongewijzigd.
 
 ## Nieuw in 0.0.9: Discord-bevestiging en diagnose
 

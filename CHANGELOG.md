@@ -1,3 +1,13 @@
+## 1.0.0 — binaire Discord-foto-upload
+
+- Nieuwe server/screenshot_upload.js gebruikt ingebouwde Node https en Buffer met expliciete Content-Length voor JPEG-uploads.
+- Alleen base64-tekst gaat tussen Lua en JavaScript; de webhook blijft server-side.
+- Wachtrij, berichtbevestiging, rate-limitafhandeling en tekstfallback blijven behouden.
+- Geen automatische herhaling bij onzekere netwerkuitkomsten.
+- Herstelt uitlezen van errorData bij mislukte Lua HTTP-aanvragen, inclusief HTTP-prefix en retry_after.
+- Geen configwijziging of configversieverhoging, geen extra resource of npm-installatie.
+- Gecontroleerd met Lua-tests en een multipart-rondtest die alle 256 bytewaarden, nulbytes en UTF-8-tekst exact terugleest. Live FiveM/Discord-test nog nodig.
+
 ## 0.0.9 — Discord-bevestiging en screenshotdiagnose
 
 - Discord-webhooks vragen nu met wait=true om bevestiging van het opgeslagen bericht.

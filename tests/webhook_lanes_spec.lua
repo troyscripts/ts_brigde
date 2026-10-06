@@ -21,6 +21,10 @@ function GetPlayerName() return 'Test' end
 function GetResourceState() return screenshotState end
 function SetTimeout(ms,f) timers[#timers+1]={ms=ms,f=f} end
 function PerformHttpRequest(url,cb,method,body,headers)requests[#requests+1]={url=url,cb=cb,body=body,payload=copy(jsonObjects[body])}end
+function GetCurrentResourceName() return 'ts_bridge' end
+exports.ts_bridge = { UploadDiscordPhoto = function(_,url,payloadJson,dataUri,cb)
+    requests[#requests+1]={url=url .. '?wait=true',cb=cb,imageData=dataUri,payload=copy(jsonObjects[payloadJson])}
+end }
 local a,b='https://discord.com/api/webhooks/1/a','https://discord.com/api/webhooks/2/b'
 local payload={embeds={{title='Event',description='Original RP text',fields={{name='Player',value='Test'}}}}}
 dofile('server/webhooks.lua')
@@ -63,8 +67,8 @@ assert(#requests==0 and api.GetWebhookStatus().pendingPhotos==1)
 source=1;events['ts_bridge:screenshot:result']('unknown','data:image/jpeg;base64,/9j/')
 assert(#requests==0)
 events['ts_bridge:screenshot:result'](token,'data:image/jpeg;base64,/9j/')
-assert(#requests==1 and requests[1].body:find('filename="screenshot.jpg"',1,true))
-assert(requests[1].body:find(string.char(255,216,255),1,true))
+assert(#requests==1 and requests[1].imageData=='data:image/jpeg;base64,/9j/')
+assert(requests[1].payload.embeds[1].image.url=='attachment://screenshot.jpg')
 events['ts_bridge:screenshot:result'](token,'data:image/jpeg;base64,/9j/')
 assert(#requests==1 and api.GetWebhookStatus().pendingPhotos==0)
 requests[1].cb(204,'');timers[#timers].f()
@@ -114,3 +118,16 @@ requests[1].cb(413,'');timers[#timers].f()
 requests[2].cb(400,'');timers[#timers].f()
 assert(#requests==2 and api.GetWebhookStatus().queued==0)
 print('PASS: confirmed delivery, multipart rejection fallback, input preservation, no retry on uncertain outcome, bounded fallback')
+
+requests={};timers={};dofile('server/webhooks.lua')
+assert(api.SendWebhook('start',a,payload))
+local failure=json.encode({code=50035,errors={content={_errors={{code='INVALID'}}}}})
+requests[1].cb(400,nil,{},'HTTP 400: ' .. failure)
+assert(api.GetWebhookStatus().lastFailure:find('50035'))
+assert(api.GetWebhookStatus().lastFailure:find('payload.content'))
+requests={};timers={};dofile('server/webhooks.lua')
+assert(api.SendWebhook('start',a,payload,{screenshot=true,playerId=1}))
+photo(false,'data:image/jpeg;base64,/9j/')
+requests[1].cb(200,json.encode({id='123'}));timers[#timers].f()
+assert(api.GetWebhookStatus().lastDelivery:find('foto: bevestigd'))
+print('PASS: server-side uploader routing, errorData decoding, confirmed photo')

@@ -11,6 +11,7 @@ local function deliveryStatus(message)
 end
 -- Alleen foutcodes en veldnamen tonen; nooit URLs, payloads of transportfoutteksten.
 local function discordResult(response)
+    if type(response) == 'string' then response = response:gsub('^HTTP %d+:%s*', '') end
     local ok, data = pcall(json.decode, response or '')
     if not ok or type(data) ~= 'table' then return nil, 'geen leesbaar Discord-antwoord' end
     local parts = {}
@@ -81,7 +82,7 @@ RegisterNetEvent('ts_bridge:screenshot:result', function(token, data, failure)
         return
     end
     local image = decodeJpeg(data)
-    request.complete(image, image and nil or TSL('webhooks_ongeldig_of_te_groot_jpeg_antwoord'))
+    request.complete(image, image and nil or TSL('webhooks_ongeldig_of_te_groot_jpeg_antwoord'), image and data or nil)
 end)
 AddEventHandler('playerDropped', function()
     local player = source
@@ -96,45 +97,34 @@ AddEventHandler('playerDropped', function()
     end
 end)
 
-local function bodyFor(item)
-    if not item.image then return json.encode(item.payload), 'application/json' end
-    -- Boundary mag niet voorkomen in de afbeelding.
-    local boundary = 'tsBridgeBoundary' .. tostring(GetGameTimer())
-    while item.image:find(boundary, 1, true) do boundary = boundary .. 'x' end
-    local body = '--' .. boundary .. '\r\nContent-Disposition: form-data; name="payload_json"\r\nContent-Type: application/json\r\n\r\n'
-        .. json.encode(item.payload) .. '\r\n--' .. boundary
-        .. '\r\nContent-Disposition: form-data; name="files[0]"; filename="screenshot.jpg"\r\nContent-Type: image/jpeg\r\n\r\n'
-        .. item.image .. '\r\n--' .. boundary .. '--\r\n'
-    return body, 'multipart/form-data; boundary=' .. boundary
-end
 local pump
 pump = function(lane)
     local queue = lane.queue
     if lane.processing or #queue == 0 then return end
     lane.processing = true
     local item = queue[1]
-    local body, contentType = bodyFor(item)
     local responded = false
     local function done(status, response)
         if responded then return end
         responded = true
         local result, detail = discordResult(response)
+        if status == -1 then detail = 'lokale foto-uploader niet beschikbaar of invoer afgewezen' end
         local kind = item.image and 'foto' or 'tekst'
         deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' | ' .. detail)
         if status < 200 or status >= 300 then lastFailure = lastDelivery end
         if status == 429 and item.retries < 3 then
             item.retries = item.retries + 1
-            local ok, data = pcall(json.decode, response or '')
-            local seconds = ok and type(data) == 'table' and tonumber(data.retry_after) or 2
+            local seconds = type(result) == 'table' and tonumber(result.retry_after) or 2
             if not seconds or seconds ~= seconds then seconds = 2 end
             SetTimeout(math.floor(math.max(1, math.min(seconds, 60)) * 1000), function()
                 lane.processing = false; pump(lane)
             end)
             return
         end
-        if item.image and (status == 400 or status == 413 or status == 415 or status == 422) then
+        if item.image and (status == -1 or status == 400 or status == 413 or status == 415 or status == 422) then
             warning('Discord weigert fotobericht: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; tekstfallback volgt')
             item.image = nil
+            item.imageData = nil
             item.payload.attachments = nil
             local embed = item.payload.embeds[1]
             embed.image = nil
@@ -165,17 +155,27 @@ pump = function(lane)
         end)
     end
     deliveryStatus((item.image and 'foto' or 'tekst') .. ': HTTP-aanvraag gestart')
-    local ok = pcall(PerformHttpRequest, item.url .. '?wait=true', function(status, response) done(tonumber(status) or 0, response) end,
-        'POST', body, { ['Content-Type'] = contentType }, { followLocation = false })
-    if not ok then done(0, '') end
+    local ok
+    if item.image then
+        ok = pcall(function()
+            exports[GetCurrentResourceName()]:UploadDiscordPhoto(item.url, json.encode(item.payload), item.imageData,
+                function(status, response) done(tonumber(status) or 0, response) end)
+        end)
+        if not ok then done(-1, '') end
+    else
+        ok = pcall(PerformHttpRequest, item.url .. '?wait=true', function(status, response, headers, errorData)
+            done(tonumber(status) or 0, response or errorData)
+        end, 'POST', json.encode(item.payload), { ['Content-Type'] = 'application/json' }, { followLocation = false })
+        if not ok then done(0, '') end
+    end
     -- Geen automatische POST-herhaling bij time-outs: voorkomt dubbele Discord-logs.
     SetTimeout(30000, function() done(0, '') end)
 end
-local function enqueue(url, payload, image)
+local function enqueue(url, payload, image, imageData)
     if queued + pendingPhotos >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false end
     local lane = lanes[url]
     if not lane then lane = { queue = {}, processing = false }; lanes[url] = lane end
-    lane.queue[#lane.queue + 1] = { url = url, payload = payload, image = image, retries = 0 }
+    lane.queue[#lane.queue + 1] = { url = url, payload = payload, image = image, imageData = imageData, retries = 0 }
     queued = queued + 1
     pump(lane)
     return true
@@ -226,7 +226,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     local completed = false
     photoSequence = photoSequence + 1
     local token = photoEpoch .. ":" .. tostring(photoSequence)
-    local function complete(image, reason)
+    local function complete(image, reason, imageData)
         if completed then return end
         completed = true
         photoRequests[token] = nil
@@ -239,7 +239,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
             photoFailure(reason or TSL('webhooks_screenshot_mislukt'))
             warning(owner .. ': ' .. (reason or TSL('webhooks_screenshot_mislukt')))
         end
-        enqueue(url, payload, image)
+        enqueue(url, payload, image, imageData)
     end
     photoRequests[token] = { player = id, complete = complete }
     SetTimeout(TSBridgeServer.ScreenshotTimeoutMs, function()
