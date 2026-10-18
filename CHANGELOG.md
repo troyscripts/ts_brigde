@@ -1,3 +1,10 @@
+# 1.0.1
+
+- Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewbVehicleKeys.
+- GetInventory/GetInventoryItems en inventarisstopmelding toegevoegd.
+- Nieuwe vehicle_config.lua; bestaande configschema 0.0.6 behouden.
+- Zie VOERTUIGEN.md en ../VERWIJDERD.md.
+
 ## 1.0.0 — binaire Discord-foto-upload
 
 - Nieuwe server/screenshot_upload.js gebruikt ingebouwde Node https en Buffer met expliciete Content-Length voor JPEG-uploads.

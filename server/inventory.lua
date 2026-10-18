@@ -8,6 +8,7 @@ end
 -- Read-exports behouden de providerresultaten; transportfouten worden nil + foutcode.
 for name, method in pairs({
     GetItemSlots = 'Search', GetInventorySlot = 'GetSlot', GetEmptySlot = 'GetEmptySlot',
+    GetInventory = 'GetInventory', GetInventoryItems = 'GetInventoryItems',
     GetItemCount = 'GetItemCount', GetInventories = 'GetInventories'
 }) do
     exports(name, function(...)
@@ -67,7 +68,7 @@ exports('RemoveInventoryHook', function(token)
     return ok
 end)
 AddEventHandler('onResourceStop', function(name)
-    if name == TSBridgeServer.InventoryResource then hooks = {}; return end
+    if name == TSBridgeServer.InventoryResource then hooks = {}; TriggerEvent('ts_bridge:inventoryStopped'); return end
     for token, hook in pairs(hooks) do
         if name == hook.owner or name == GetCurrentResourceName() then
             call('removeHooks', hook.providerId)
