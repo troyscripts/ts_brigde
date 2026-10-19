@@ -1,9 +1,15 @@
+# 1.0.2
+
+- Webhook voor kentekenbewijsuitgifte met servergegenereerde PNG en FiveM-modelafbeelding.
+- Aparte created/replacement-webhookroutes; bestaande registration-route blijft fallback.
+- Bestaande configuraties behouden; zie WEBHOOKS-KENTEKENBEWIJS.md.
+
 # 1.0.1
 
 - Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewbVehicleKeys.
 - GetInventory/GetInventoryItems en inventarisstopmelding toegevoegd.
 - Nieuwe vehicle_config.lua; bestaande configschema 0.0.6 behouden.
-- Zie VOERTUIGEN.md en ../VERWIJDERD.md.
+- Zie VOERTUIGEN.md en VERWIJDERD.md.
 
 ## 1.0.0 — binaire Discord-foto-upload
 

@@ -1,3 +1,4 @@
+function AddEventHandler() end
 local event, callback, timers, replies, state = nil, nil, {}, {}, 'started'
 function RegisterNetEvent(_,cb) event=cb end
 function GetResourceState() return state end

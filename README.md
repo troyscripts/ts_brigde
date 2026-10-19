@@ -1,10 +1,10 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.1** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 1.0.2** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
 
 ## Nieuw in 1.0.1
 
-Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewb. Zie VOERTUIGEN.md en ../INSTALLATIE.md. Bestaande configschema blijft 0.0.6; nieuwe selectie staat in vehicle_config.lua.
+Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewb. Zie VOERTUIGEN.md en INSTALLATIE.md. Bestaande configschema blijft 0.0.6; nieuwe selectie staat in vehicle_config.lua.
 
 ## Nieuw in 1.0.0: binaire foto-upload
 
@@ -386,3 +386,7 @@ JSON bevat version en optioneel download; een tekstbestand bevat alleen het vers
 Keycard 1.1.5 gebruikt deze nieuwe export en vereist daarom minimaal bridge 0.0.4.
 Hostage 1.1.8 blijft compatibel en houdt voorlopig zijn bestaande eigen updatechecker.
 Kaartspecifieke rechten, uitgifte en intrekking blijven in keycard.
+
+## Webhook voor kentekenbewijzen
+
+Zie WEBHOOKS-KENTEKENBEWIJS.md: aparte webhook voor nieuwe/vervangende bewijzen, met kaart-PNG en FiveM-modelafbeelding. URL uitsluitend server-side instellen.

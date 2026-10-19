@@ -23,6 +23,7 @@ TSBridgeServer = {
     -- Optionele centrale webhookroutes, per aanroepende resource.
     -- Lege route: gebruik de bestaande server-side URL van het aangesloten script.
     Webhooks = {
-        ts_hostage = { start = '', actions = '' }
+        ts_hostage = { start = '', actions = '' },
+        ts_nlplates = { created = '', replacement = '', registration = '' }
     }
 }

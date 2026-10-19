@@ -3,7 +3,9 @@
 const https = require('https');
 const crypto = require('crypto');
 
-exports('UploadDiscordPhoto', (url, payloadJson, dataUri, callback) => {
+const renderDocument = require(GetResourcePath(GetCurrentResourceName()) + '/server/document_image.js');
+
+function upload(url, payloadJson, dataUri, callback, documentJson) {
     if (typeof callback !== 'function') return;
     let finished = false;
     const finish = (status, body) => {
@@ -21,31 +23,49 @@ exports('UploadDiscordPhoto', (url, payloadJson, dataUri, callback) => {
             typeof dataUri !== 'string' || dataUri.length > 24 * 1024 * 1024) {
             finish(-1, ''); return;
         }
-        const match = /^data:image\/jpe?g;base64,([A-Za-z0-9+/]+={0,2})$/.exec(dataUri);
-        if (!match || match[1].length % 4 !== 0) { finish(-1, ''); return; }
-        const jpeg = Buffer.from(match[1], 'base64');
-        if (jpeg.length < 3 || jpeg.length > 16 * 1024 * 1024 ||
-            jpeg[0] !== 255 || jpeg[1] !== 216 || jpeg[2] !== 255 || jpeg.toString('base64') !== match[1]) {
-            finish(-1, ''); return;
+        let jpeg;
+        if (dataUri) {
+            const match = /^data:image\/jpe?g;base64,([A-Za-z0-9+/]+={0,2})$/.exec(dataUri);
+            if (!match || match[1].length % 4 !== 0) { finish(-1, ''); return; }
+            jpeg = Buffer.from(match[1], 'base64');
+            if (jpeg.length < 3 || jpeg.length > 16 * 1024 * 1024 ||
+                jpeg[0] !== 255 || jpeg[1] !== 216 || jpeg[2] !== 255 || jpeg.toString('base64') !== match[1]) {
+                finish(-1, ''); return;
+            }
         }
+        let document;
+        if (documentJson !== undefined) {
+            if (typeof documentJson !== 'string' || documentJson.length > 16000) { finish(-1, ''); return; }
+            document = JSON.parse(documentJson);
+            if (!document || typeof document.plate !== 'string' || document.plate.length > 8 ||
+                typeof document.documentNumber !== 'string') { finish(-1, ''); return; }
+        }
+        if (!jpeg && !document) { finish(-1, ''); return; }
         const payload = JSON.parse(payloadJson);
         if (!payload || !Array.isArray(payload.embeds) || !payload.embeds[0]) { finish(-1, ''); return; }
         payload.allowed_mentions = { parse: [] };
-        payload.attachments = [{ id: 0, filename: 'screenshot.jpg' }];
-        payload.embeds[0].image = { url: 'attachment://screenshot.jpg' };
+        const files=[];
+        if (document) {
+            files.push({name:'kentekenbewijs.png',mime:'image/png',bytes:renderDocument(document)});
+            payload.embeds[0].image={url:'attachment://kentekenbewijs.png'};
+        }
+        if (jpeg) {
+            files.push({name:'screenshot.jpg',mime:'image/jpeg',bytes:jpeg});
+            if (document) payload.embeds.push({title:'Voertuigfoto bij uitgifte',description:'Clientopname; illustratief beeld.',image:{url:'attachment://screenshot.jpg'}});
+            else payload.embeds[0].image={url:'attachment://screenshot.jpg'};
+        }
+        payload.attachments=files.map((f,id)=>({id,filename:f.name}));
         let boundary;
         do { boundary = 'tsBridge' + crypto.randomBytes(18).toString('hex'); }
-        while (jpeg.includes(boundary) || JSON.stringify(payload).includes(boundary));
-        const body = Buffer.concat([
-            Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="payload_json"\r\nContent-Type: application/json\r\n\r\n' + JSON.stringify(payload) + '\r\n'),
-            Buffer.from('--' + boundary + '\r\nContent-Disposition: form-data; name="files[0]"; filename="screenshot.jpg"\r\nContent-Type: image/jpeg\r\n\r\n'),
-            jpeg,
-            Buffer.from('\r\n--' + boundary + '--\r\n')
-        ]);
+        while (files.some(f=>f.bytes.includes(boundary)) || JSON.stringify(payload).includes(boundary));
+        const parts=[Buffer.from('--'+boundary+'\r\nContent-Disposition: form-data; name="payload_json"\r\nContent-Type: application/json\r\n\r\n'+JSON.stringify(payload)+'\r\n')];
+        files.forEach((f,id)=>parts.push(Buffer.from('--'+boundary+'\r\nContent-Disposition: form-data; name="files['+id+']"; filename="'+f.name+'"\r\nContent-Type: '+f.mime+'\r\n\r\n'),f.bytes,Buffer.from('\r\n')));
+        parts.push(Buffer.from('--'+boundary+'--\r\n'));
+        const body=Buffer.concat(parts);
         req = https.request(url + '?wait=true', {
             method: 'POST',
             headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary,
-                'Content-Length': body.length, 'User-Agent': 'TroyScripts-ts_bridge/1.0.0' }
+                'Content-Length': body.length, 'User-Agent': 'TroyScripts-ts_bridge/1.0.2' }
         }, res => {
             const chunks = [];
             let size = 0;
@@ -67,4 +87,7 @@ exports('UploadDiscordPhoto', (url, payloadJson, dataUri, callback) => {
         if (req) req.destroy();
         finish(req ? 0 : -1, '');
     }
-});
+
+}
+exports('UploadDiscordPhoto', (url, payloadJson, dataUri, callback) => upload(url, payloadJson, dataUri, callback));
+exports('UploadDiscordRegistration', (url, payloadJson, dataUri, documentJson, callback) => upload(url, payloadJson, dataUri, callback, documentJson));

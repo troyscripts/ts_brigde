@@ -1,3 +1,11 @@
+# Volledige release 1.0.2
+
+Plaats deze volledige map onder de naam ts_bridge. Behoud bestaande persoonlijke config.lua/server_config.lua-instellingen bij bijwerken; schema blijft 0.0.6. Configureer vehicle_config.lua voor de nlplates/JG/MrNewb-adapters. Zie VOERTUIGEN.md en WEBHOOKS-KENTEKENBEWIJS.md.
+
+Start na ox_lib en de ingestelde providers, vóór de aangesloten Troy Scripts-resources. De standaardbankprovider is Apex; selecteer esx als jouw server geen Apex-bank gebruikt. Controleer ook Billing.Provider voor je andere scripts.
+
+Hieronder staan de bestaande installatie- en compatibiliteitsinstructies; versiegebonden updatebestanden beschrijven historische wijzigingen.
+
 # Actuele installatie: ts_bridge 0.0.6
 
 Lees UPDATE-LOCATIES.md voor de update vanaf 0.0.5, de nieuwe configvelden en de

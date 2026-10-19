@@ -71,6 +71,7 @@ RegisterNetEvent('ts_bridge:screenshot:result', function(token, data, failure)
     if not request or request.player ~= source then return end
     photoRequests[token] = nil
     local reasons = {
+        vehicle_unavailable = 'voertuig niet beschikbaar, niet stilstaand of andere camera actief',
         unavailable = 'screenshotresource niet gestart op de client',
         busy = 'screenshotopname op de client is nog bezig',
         timeout = 'lokale screenshotopname geeft geen antwoord; controleer screenshot-basic en de F8-console',
@@ -125,9 +126,12 @@ pump = function(lane)
             warning('Discord weigert fotobericht: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; tekstfallback volgt')
             item.image = nil
             item.imageData = nil
+            item.document = nil
             item.payload.attachments = nil
             local embed = item.payload.embeds[1]
-            embed.image = nil
+            for _, entry in ipairs(item.payload.embeds) do
+                if entry.image and type(entry.image.url) == 'string' and entry.image.url:match('^attachment://') then entry.image = nil end
+            end
             embed.fields = type(embed.fields) == 'table' and embed.fields or {}
             if #embed.fields < 25 then
                 embed.fields[#embed.fields + 1] = { name = 'Screenshot',
@@ -158,8 +162,13 @@ pump = function(lane)
     local ok
     if item.image then
         ok = pcall(function()
-            exports[GetCurrentResourceName()]:UploadDiscordPhoto(item.url, json.encode(item.payload), item.imageData,
-                function(status, response) done(tonumber(status) or 0, response) end)
+            if item.document then
+                exports[GetCurrentResourceName()]:UploadDiscordRegistration(item.url, json.encode(item.payload), item.imageData or '',
+                    json.encode(item.document), function(status, response) done(tonumber(status) or 0, response) end)
+            else
+                exports[GetCurrentResourceName()]:UploadDiscordPhoto(item.url, json.encode(item.payload), item.imageData,
+                    function(status, response) done(tonumber(status) or 0, response) end)
+            end
         end)
         if not ok then done(-1, '') end
     else
@@ -171,11 +180,11 @@ pump = function(lane)
     -- Geen automatische POST-herhaling bij time-outs: voorkomt dubbele Discord-logs.
     SetTimeout(30000, function() done(0, '') end)
 end
-local function enqueue(url, payload, image, imageData)
+local function enqueue(url, payload, image, imageData, document)
     if queued + pendingPhotos >= TSBridgeServer.MaxQueue then warning(TSL('webhooks_wachtrij_vol_log_overgeslagen')); return false end
     local lane = lanes[url]
     if not lane then lane = { queue = {}, processing = false }; lanes[url] = lane end
-    lane.queue[#lane.queue + 1] = { url = url, payload = payload, image = image, imageData = imageData, retries = 0 }
+    lane.queue[#lane.queue + 1] = { url = url, payload = payload, image = image or document, imageData = imageData, document = document, retries = 0 }
     queued = queued + 1
     pump(lane)
     return true
@@ -186,6 +195,8 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if not owner then return false, TSL('webhooks_geen_aanroepende_resource') end
     local routes = TSBridgeServer.Webhooks[owner] or {}
     local url = routes[route]
+    if (type(url) ~= 'string' or url == '') and type(options) == 'table'
+        and type(options.fallbackRoute) == 'string' then url = routes[options.fallbackRoute] end
     if type(url) ~= 'string' or url == '' then url = fallbackUrl end
     if url == '' or url == nil then return false, TSL('webhooks_geen_webhook_ingesteld') end
     if not urlValid(url) then warning(TSL('webhooks_ongeldige_discord_webhook_voor') .. owner); return false, TSL('webhooks_ongeldige_url') end
@@ -199,6 +210,14 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     payload = copied
     payload.allowed_mentions = { parse = {} }
     options = type(options) == 'table' and options or {}
+    local document
+    if options.document ~= nil then
+        if type(options.document) ~= 'table' or type(options.document.plate) ~= 'string'
+            or #options.document.plate > 8 or type(options.document.documentNumber) ~= 'string' then
+            return false, 'invalid_document'
+        end
+        document = json.decode(json.encode(options.document))
+    end
     local embed = payload.embeds[1]
     local id = tonumber(options.playerId)
     local function photoFailure(reason)
@@ -212,15 +231,16 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
             if #content + #value + 1 <= 2000 then payload.content = content .. '\n' .. value end
         end
     end
-    if not options.screenshot then return enqueue(url, payload) end
+    if not options.screenshot then return enqueue(url, payload, nil, nil, document) end
     local function unavailable(reason)
         photoFailure(reason)
         warning(owner .. ': ' .. reason)
-        return enqueue(url, payload)
+        return enqueue(url, payload, nil, nil, document)
     end
     if not TSBridgeServer.Screenshots then return unavailable(TSL('webhooks_screenshots_uitgeschakeld_in_ts_bridge')) end
     if GetResourceState(TSBridgeServer.ScreenshotResource) ~= 'started' then return unavailable(TSL('webhooks_screenshotresource_niet_gestart')) end
     if not id or id <= 0 or not GetPlayerName(id) then return unavailable(TSL('webhooks_speler_niet_online')) end
+    local timeout = options.vehicleNetId and math.max(TSBridgeServer.ScreenshotTimeoutMs, 20000) or TSBridgeServer.ScreenshotTimeoutMs
     photoStatus('aangevraagd bij speler ' .. tostring(id))
     pendingPhotos = pendingPhotos + 1
     local completed = false
@@ -239,16 +259,16 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
             photoFailure(reason or TSL('webhooks_screenshot_mislukt'))
             warning(owner .. ': ' .. (reason or TSL('webhooks_screenshot_mislukt')))
         end
-        enqueue(url, payload, image, imageData)
+        enqueue(url, payload, image, imageData, document)
     end
     photoRequests[token] = { player = id, complete = complete }
-    SetTimeout(TSBridgeServer.ScreenshotTimeoutMs, function()
+    SetTimeout(timeout, function()
         complete(nil, 'screenshot time-out: geen volledig clientantwoord ontvangen via FiveM')
     end)
     -- Geen NUI HTTP-upload naar het serverendpoint en geen webhook-URL naar clients.
     local requested = pcall(TriggerClientEvent, 'ts_bridge:screenshot:capture', id,
         token, TSBridgeServer.ScreenshotResource, TSBridgeServer.MaxImageBytes,
-        TSBridgeServer.ScreenshotTimeoutMs)
+        timeout, options.vehicleNetId, options.vehiclePlate)
     if not requested then complete(nil, 'screenshotaanvraag kon niet naar de client worden gestuurd') end
     return true
 end)

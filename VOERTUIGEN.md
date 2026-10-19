@@ -1,4 +1,4 @@
-# Voertuigadapters — 1.0.1
+# Voertuigadapters — 1.0.2
 
 vehicle_config.lua is de centrale selectie voor de nieuwe voertuigmodule. Bestaande bridgegebruikers kunnen Enabled = false zetten als ze deze module niet gebruiken. Er is geen nieuwe verplichte oxmysql-dependency voor andere bridgefuncties; databaseaanroepen worden pas bij gebruik gedaan. nlplates vereist wel oxmysql en een actieve voertuigmodule.
 

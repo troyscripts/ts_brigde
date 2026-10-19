@@ -131,3 +131,30 @@ photo(false,'data:image/jpeg;base64,/9j/')
 requests[1].cb(200,json.encode({id='123'}));timers[#timers].f()
 assert(api.GetWebhookStatus().lastDelivery:find('foto: bevestigd'))
 print('PASS: server-side uploader routing, errorData decoding, confirmed photo')
+
+-- Registration PNG survives absent/failed optional vehicle capture.
+exports.ts_bridge.UploadDiscordRegistration=function(_,url,payloadJson,dataUri,documentJson,cb)
+ requests[#requests+1]={cb=cb,imageData=dataUri,document=copy(jsonObjects[documentJson]),payload=copy(jsonObjects[payloadJson])}
+end
+local doc={plate='A 123 BC',documentNumber='TS-0000001',owner='Troy'}
+requests={};timers={};dofile('server/webhooks.lua')
+assert(api.SendWebhook('registration',a,payload,{document=doc}))
+assert(requests[1].document.plate==doc.plate and requests[1].imageData=='')
+requests={};timers={};dofile('server/webhooks.lua')
+assert(api.SendWebhook('registration',a,payload,{document=doc,screenshot=true,playerId=1,vehicleNetId=42}))
+assert(timers[#timers].ms==20000)
+photo('vehicle_unavailable')
+assert(requests[1].document.plate==doc.plate and requests[1].imageData=='')
+requests[1].cb(413,'');timers[#timers].f()
+assert(not requests[2].document and not requests[2].payload.embeds[1].image)
+requests={};timers={};dofile('server/webhooks.lua')
+assert(api.SendWebhook('registration',a,payload,{document=doc,screenshot=true,playerId=1,vehicleNetId=42}))
+photo(false,'data:image/jpeg;base64,/9j/')
+assert(requests[1].document.documentNumber==doc.documentNumber and requests[1].imageData=='data:image/jpeg;base64,/9j/')
+print('PASS: card-only, photo-timeout budget, missing photo retains card, multipart failure text fallback, card+photo dispatch')
+
+requests={};timers={};dofile('server/webhooks.lua')
+TSBridgeServer.Webhooks.one={registration=b,created=a}
+assert(api.SendWebhook('created',b,payload,{fallbackRoute='registration'}));assert(requests[1].url==a..'?wait=true')
+assert(api.SendWebhook('replacement',a,payload,{fallbackRoute='registration'}));assert(requests[2].url==b..'?wait=true')
+print('PASS: explicit created route and legacy registration fallback')
