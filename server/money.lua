@@ -1,6 +1,10 @@
 if TSBridgeValidation and not TSBridgeValidation.valid then return end
 local B = TSBridge
 local locks = {}
+local function audit(category, action, details, result)
+    if B.Audit then pcall(B.Audit, category, action, GetInvokingResource(), details, result) end
+    return result
+end
 local function failed(code, uncertain, before, after)
     return { ok = false, code = code, uncertain = uncertain == true, before = before, after = after }
 end
@@ -24,9 +28,10 @@ local function playerBalance(player, account, id)
 end
 exports('GetMoney', function(id, account)
     local player, reason = B.Player(id)
-    if not player then return nil, reason end
+    if not player then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed(reason)); return nil, reason end
     local ok, balance, err = pcall(playerBalance, player, account, id)
-    if not ok then return nil, 'balance_read_failed' end
+    if not ok then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed('balance_read_failed')); return nil, 'balance_read_failed' end
+    if balance == nil then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed(err)) end
     return balance, err
 end)
 local function changePlayer(id, account, amount, reason, subtract)
@@ -65,8 +70,14 @@ local function changePlayer(id, account, amount, reason, subtract)
     locks[key] = nil
     return ok and result or failed('provider_error', attempted, before, after)
 end
-exports('AddMoney', function(id, account, amount, reason) return changePlayer(id, account, amount, reason, false) end)
-exports('RemoveMoney', function(id, account, amount, reason) return changePlayer(id, account, amount, reason, true) end)
+exports('AddMoney', function(id, account, amount, reason)
+    return audit('payments', 'AddMoney', { {'Speler-ID', id}, {'Rekeningtype', account}, {'Bedrag', amount}, {'Reden', reason} },
+        changePlayer(id, account, amount, reason, false))
+end)
+exports('RemoveMoney', function(id, account, amount, reason)
+    return audit('payments', 'RemoveMoney', { {'Speler-ID', id}, {'Rekeningtype', account}, {'Bedrag', amount}, {'Reden', reason} },
+        changePlayer(id, account, amount, reason, true))
+end)
 
 local function fetch(name)
     local account
@@ -91,8 +102,8 @@ local function resolve(key)
 end
 exports('GetSocietyBalance', function(key)
     local ok, value, reason = pcall(resolve, key)
-    if not ok then return nil, 'society_read_failed' end
-    if not value then return nil, reason end
+    if not ok then audit('societies', 'GetSocietyBalance', {{'Society', key}}, failed('society_read_failed')); return nil, 'society_read_failed' end
+    if not value then audit('societies', 'GetSocietyBalance', {{'Society', key}}, failed(reason)); return nil, reason end
     return value.balance, value.name
 end)
 local function changeSociety(key, amount, subtract)
@@ -121,5 +132,9 @@ local function changeSociety(key, amount, subtract)
     locks[lock] = nil
     return ok and result or failed('provider_error', attempted, before, after)
 end
-exports('AddSocietyMoney', function(key, amount) return changeSociety(key, amount, false) end)
-exports('RemoveSocietyMoney', function(key, amount) return changeSociety(key, amount, true) end)
+exports('AddSocietyMoney', function(key, amount)
+    return audit('societies', 'AddSocietyMoney', { {'Society', key}, {'Bedrag', amount} }, changeSociety(key, amount, false))
+end)
+exports('RemoveSocietyMoney', function(key, amount)
+    return audit('societies', 'RemoveSocietyMoney', { {'Society', key}, {'Bedrag', amount} }, changeSociety(key, amount, true))
+end)

@@ -13,7 +13,7 @@ exports('RegisterBillingProvider', function(handler)
     provider = { owner = owner, handler = handler }
     return true
 end)
-exports('CreateInvoice', function(invoice)
+local function createInvoice(invoice)
     if type(invoice) ~= 'table' then return failure('invalid_invoice') end
     if not TSBridge.PositiveInteger(invoice.issuerId) or not GetPlayerName(invoice.issuerId)
         or not TSBridge.PositiveInteger(invoice.targetId) or not GetPlayerName(invoice.targetId) then
@@ -70,6 +70,18 @@ exports('CreateInvoice', function(invoice)
         return failure('billing_missing_reference', true)
     end
     return result -- ok=true betekent aangemaakt, niet betaald.
+end
+exports('CreateInvoice', function(invoice)
+    local owner = GetInvokingResource()
+    local result = createInvoice(invoice)
+    if TSBridge.Audit then
+        local data = type(invoice) == 'table' and invoice or {}
+        pcall(TSBridge.Audit, 'invoices', 'CreateInvoice', owner, {
+            {'Uitgever-ID', data.issuerId}, {'Ontvanger-ID', data.targetId},
+            {'Bedrag', data.amount}, {'Society', data.society}, {'Omschrijving', data.label}
+        }, result)
+    end
+    return result
 end)
 local function billingStatus()
     local name = TSBridgeServer.Billing.Resource
@@ -91,7 +103,7 @@ AddEventHandler('onResourceStop', function(name)
     if provider and provider.owner == name then provider = nil end
 end)
 
-exports('GetInvoice', function(id)
+local function getInvoice(id)
     if not TSBridge.PositiveInteger(id) then return nil, 'invalid_invoice_id' end
     if TSBridgeServer.Billing.Provider ~= 'apex' or GetResourceState(TSBridgeServer.Billing.Resource) ~= 'started' then
         return nil, 'billing_unavailable'
@@ -99,4 +111,11 @@ exports('GetInvoice', function(id)
     local ok, invoice = pcall(function() return exports[TSBridgeServer.Billing.Resource]:GetInvoice(id) end)
     if not ok then return nil, 'billing_provider_error' end
     return invoice
+end
+exports('GetInvoice', function(id)
+    local invoice, reason = getInvoice(id)
+    if invoice == nil and reason and TSBridge.Audit then
+        pcall(TSBridge.Audit, 'invoices', 'GetInvoice', GetInvokingResource(), {{'Factuur-ID', id}}, failure(reason))
+    end
+    return invoice, reason
 end)

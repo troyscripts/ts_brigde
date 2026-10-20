@@ -190,6 +190,53 @@ local function enqueue(url, payload, image, imageData, document)
     return true
 end
 
+-- Interne auditroute; geen netevent/export en geen afhankelijkheid van resourcenaam.
+-- Logging is best effort en verandert nooit het resultaat van de oorspronkelijke actie.
+TSBridge = TSBridge or {}
+local auditWarningAt = -60000
+TSBridge.Audit = function(category, action, owner, details, result)
+    local ok, err = pcall(function()
+        local cfg = TSBridgeAuditConfig
+        if type(cfg) ~= 'table' or cfg.Enabled ~= true or type(cfg.Webhooks) ~= 'table' then return end
+        local success = type(result) == 'table' and result.ok == true
+        local url = cfg.Webhooks[success and category or 'errors']
+        if url == nil or url == '' then return end
+        if not urlValid(url) then error('invalid_route') end
+        local fields = {}
+        local function field(name, value)
+            if value == nil then return end
+            local kind = type(value)
+            if kind ~= 'string' and kind ~= 'number' and kind ~= 'boolean' then return end
+            local clean = tostring(value):gsub('https?://%S+', '[URL verborgen]'):gsub('%c', ' ')
+            fields[#fields + 1] = { name = name, value = clean ~= '' and clean:sub(1, 300) or '-', inline = true }
+        end
+        field('Aanroepend script', owner or 'onbekend')
+        field('Actie', action)
+        field('Status', success and 'Geslaagd' or 'Mislukt')
+        for _, entry in ipairs(details or {}) do field(entry[1], entry[2]) end
+        if type(result) == 'table' then
+            field('Foutcode', result.code)
+            field('Uitkomst onzeker', result.uncertain == true)
+            field('Saldo vooraf', result.before)
+            field('Saldo achteraf', result.after)
+            field('Rekening', result.account)
+            field('Factuur-ID', result.id)
+            field('Factuurnummer', result.number)
+        end
+        local payload = { username = 'Troy Scripts', allowed_mentions = { parse = {} }, embeds = {{
+            title = success and 'ts_bridge | Actie geregistreerd' or 'ts_bridge | Actie mislukt',
+            color = success and 3066993 or 15158332, fields = fields,
+            timestamp = os.date('!%Y-%m-%dT%H:%M:%SZ'),
+            footer = { text = 'Factuur aangemaakt betekent niet betaald. Onzekere acties niet automatisch herhalen.' }
+        }} }
+        enqueue(url, payload)
+    end)
+    if not ok and GetGameTimer() - auditWarningAt >= 60000 then
+        auditWarningAt = GetGameTimer()
+        print('[ts_bridge] Auditlog overgeslagen; controleer audit_config.lua. De oorspronkelijke actie blijft behouden.')
+    end
+end
+
 exports('SendWebhook', function(route, fallbackUrl, payload, options)
     local owner = GetInvokingResource()
     if not owner then return false, TSL('webhooks_geen_aanroepende_resource') end

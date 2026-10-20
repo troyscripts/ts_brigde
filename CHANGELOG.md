@@ -1,3 +1,9 @@
+## 1.0.3
+
+- Optionele eigen Discord-logging voor geldacties, society-transacties, facturen en mislukte geld-/factuurkoppelingen.
+- Nieuwe server-only audit_config.lua; bestaande serverconfig en gedeeld configschema blijven intact.
+- Bestaande begrensde webhookwachtrij hergebruikt; logging verandert geen transactieresultaten.
+
 # 1.0.2
 
 - Webhook voor kentekenbewijsuitgifte met servergegenereerde PNG en FiveM-modelafbeelding.

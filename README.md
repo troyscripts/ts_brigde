@@ -1,6 +1,10 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.2** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 1.0.3** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Nieuw in 1.0.3
+
+Eigen bridge-logging voor betalingen, societies, facturen en fouten. Stel de vier optionele URLs in audit_config.lua in. Zie UPDATE-1.0.3.md.
 
 ## Nieuw in 1.0.1
 
