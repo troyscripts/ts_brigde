@@ -1,3 +1,5 @@
+> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+
 # Webhooks met FiveM-modelafbeelding
 
 Dit hoort bij de volledige release ts_nlplates 1.0.6 / ts_bridge 1.0.2. Configschema's: 1.0.3 en 0.0.6. Geen extra SQL-update voor webhooks nodig.

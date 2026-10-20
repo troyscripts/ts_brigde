@@ -1,3 +1,5 @@
+> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+
 # Voorbereiding keycard, banking en billing
 
 Bridge **0.0.3** hoort bij ts_keycard **1.1.4** en ts_hostage **1.1.8**.

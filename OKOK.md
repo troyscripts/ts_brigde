@@ -1,3 +1,5 @@
+> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+
 # okok-ondersteuning — 0.0.3
 
 Apex blijft standaard geselecteerd. De scriptintegraties gebruiken dezelfde bankproviderkeuze.

@@ -1,3 +1,5 @@
+> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+
 # Volledige release 1.0.2
 
 Plaats deze volledige map onder de naam ts_bridge. Behoud bestaande persoonlijke config.lua/server_config.lua-instellingen bij bijwerken; schema blijft 0.0.6. Configureer vehicle_config.lua voor de nlplates/JG/MrNewb-adapters. Zie VOERTUIGEN.md en WEBHOOKS-KENTEKENBEWIJS.md.

@@ -1,6 +1,12 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.3** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 1.0.5** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+
+## Instellen vanaf 1.0.5
+
+Alle algemene instellingen staan in **config.lua**. Alleen webhook-URLs staan in het server-only bestand **webhook_config.lua**. Zie UPDATE-1.0.5.md voor het overnemen van je bestaande waarden en URLs. Configschema: 0.0.7. De geannuleerde okok-uitbreiding van 1.0.4 is niet opgenomen.
+
+Onderstaande oudere releasebeschrijvingen kunnen de oude bestandsnamen noemen; gebruik voor de huidige indeling de instructies hierboven.
 
 ## Nieuw in 1.0.3
 

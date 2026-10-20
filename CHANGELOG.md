@@ -1,3 +1,10 @@
+## 1.0.5
+
+- Alle algemene instellingen gebundeld in config.lua; één InventoryResource voor client en server.
+- Alle webhook-URLs apart in server-only webhook_config.lua.
+- Configschema verhoogd naar 0.0.7; migratiehandleiding en verwijderlijst toegevoegd.
+- Gebaseerd op 1.0.3; geannuleerde okok-uitbreiding van 1.0.4 niet opgenomen.
+
 ## 1.0.3
 
 - Optionele eigen Discord-logging voor geldacties, society-transacties, facturen en mislukte geld-/factuurkoppelingen.

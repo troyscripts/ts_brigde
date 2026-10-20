@@ -1,16 +1,30 @@
-ts_bridge 1.0.2 -> 1.0.3
-Alleen gewijzigde/nieuwe bestanden. Geen bestanden verwijderd.
-Vul audit_config.lua in en herstart de server.
+ts_bridge 1.0.3 -> 1.0.5 | config 0.0.6 -> 0.0.7
+Alleen gewijzigde/nieuwe bestanden. Lees UPDATE-1.0.5.md VOOR installatie.
+Neem eigen instellingen en URLs over en verwijder oude configs volgens VERWIJDERD-1.0.5.txt.
 
 CHANGELOG.md
+INSTALLATIE.md
+KEYCARD-BANKING-BILLING.md
+OKOK.md
 README.md
-UPDATE-1.0.3.md
-audit_config.lua
+UPDATE-1.0.5.md
+VERWIJDERD-1.0.5.txt
+VOERTUIGEN.md
+WEBHOOKS-KENTEKENBEWIJS.md
+config.lua
+config_version.lua
 fxmanifest.lua
-server/billing.lua
-server/money.lua
 server/webhooks.lua
+tests/apex_spec.lua
 tests/audit_integration_spec.lua
 tests/audit_spec.lua
+tests/billing_spec.lua
+tests/config_layout_spec.lua
+tests/config_validation_spec.lua
+tests/keycard_server_spec.lua
+tests/okok_spec.lua
+tests/server_notify_spec.lua
+tests/webhook_lanes_spec.lua
 version.json
+webhook_config.lua
 UPDATE-BESTANDEN.txt
