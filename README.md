@@ -1,6 +1,10 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.5** · FiveM · ts_antipunch 1.8.2, ts_hostage 1.1.9 en ts_keycard 1.1.7
+**Versie 1.0.6** · FiveM · centrale ondersteuning voor Troy Scripts
+
+## Nieuw in 1.0.6
+
+Volledig pakket hersteld: client, server, locales, web en tests worden weer meegeleverd. Automatische pakket- en regressiecontroles bewaken nieuwe uploads. Configschema blijft 0.0.7. Zie UPDATE-1.0.6.md en BRIDGE-AUDIT.md.
 
 ## Instellen vanaf 1.0.5
 

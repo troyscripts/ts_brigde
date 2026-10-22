@@ -1,3 +1,11 @@
+# 1.0.6 — Volledig pakket en automatische controles
+
+- Ontbrekende runtimebestanden hersteld uit het volledige 1.0.5-pakket; bestaande GitHub-bestanden waren bytegelijk.
+- Manifestbestanden, aanvullende documentassets en versies automatisch controleren.
+- Bestaande Lua- en JavaScript-tests bij pushes en pull requests uitvoeren.
+- Uploader-test bijgewerkt voor de bestaande kentekenbewijs-export.
+- Configschema blijft 0.0.7; geen nieuwe instellingen of SQL.
+
 ## 1.0.5
 
 - Alle algemene instellingen gebundeld in config.lua; één InventoryResource voor client en server.
