@@ -1,8 +1,8 @@
-# 1.0.6 — Volledig pakket en automatische controles
+# 1.0.6 — Volledig pakket hersteld
 
 - Ontbrekende runtimebestanden hersteld uit het volledige 1.0.5-pakket; bestaande GitHub-bestanden waren bytegelijk.
-- Manifestbestanden, aanvullende documentassets en versies automatisch controleren.
-- Bestaande Lua- en JavaScript-tests bij pushes en pull requests uitvoeren.
+- Manifestbestanden, aanvullende documentassets en versies lokaal gecontroleerd.
+- Bestaande Lua- en JavaScript-tests lokaal uitgevoerd; dit reparatiepakket bevat geen GitHub-workflows.
 - Uploader-test bijgewerkt voor de bestaande kentekenbewijs-export.
 - Configschema blijft 0.0.7; geen nieuwe instellingen of SQL.
 

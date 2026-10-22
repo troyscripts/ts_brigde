@@ -1,0 +1,7 @@
+Verwijder na het overnemen van eigen instellingen en webhook-URLs:
+- server_config.lua (algemeen -> config.lua; URLs -> webhook_config.lua)
+- vehicle_config.lua (-> config.lua, Vehicles)
+- audit_config.lua (Enabled -> config.lua, Audit; URLs -> webhook_config.lua)
+
+Deze bestanden worden niet meer geladen door fxmanifest.lua.
+Als je de geannuleerde 1.0.4 toch hebt geplaatst: verwijder ook okok_config.lua en server/okok.lua. Deze 1.0.5 bevat die uitbreiding niet en laadt deze bestanden niet.
