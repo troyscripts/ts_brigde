@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua'); dofile('config.lua'); dofile('webhook_config.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua'); dofile('config/config.lua'); dofile('config/webhook_config.lua')
 local api, timers, requests, jsonObjects = {}, {}, {}, {}
 local counter, owner, photo, screenshotState = 0, 'one', nil, 'stopped'
 local function copy(x) if type(x)~='table' then return x end;local t={};for k,v in pairs(x)do t[k]=copy(v)end;return t end
@@ -29,7 +29,7 @@ local a,b='https://discord.com/api/webhooks/1/a','https://discord.com/api/webhoo
 local payload={embeds={{title='Event',description='Original RP text',fields={{name='Player',value='Test'}}}}}
 dofile('server/webhooks.lua')
 
-dofile('webhook_config.lua')
+dofile('config/webhook_config.lua')
 TSBridge.Audit('payments','AddMoney','test',{}, {ok=true})
 assert(#requests==0, 'blank routes disabled')
 for i, category in ipairs({'payments','societies','invoices','errors'}) do

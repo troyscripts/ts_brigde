@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, events, handlers, notifications, removed, added = {}, {}, {}, {}, {}, {}
 local owner, state = 'ts_hostage', 'started'
 exports = setmetatable({ ox_target = {
@@ -17,7 +17,7 @@ function IsEntityDead() return false end
 function IsPedFatallyInjured() return false end
 LocalPlayer = { state = {} }
 lib = { notify = function(data) notifications[#notifications + 1] = data end }
-dofile('config.lua'); dofile('client/main.lua')
+dofile('config/config.lua'); dofile('client/main.lua')
 api.Notify('test'); assert(notifications[1].description == 'test')
 source = 1; events['ts_bridge:notify']('bad'); assert(#notifications == 1)
 source = 65535; events['ts_bridge:notify']('server'); assert(#notifications == 2)

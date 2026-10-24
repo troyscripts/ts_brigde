@@ -1,4 +1,4 @@
-dofile('locales/nl.lua');dofile('locale.lua')
+dofile('locales/nl.lua');dofile('locales/locale.lua')
 local logs,timers,requests,api,events,threads={},{},{},{},{},{}
 local owner,response='ts_keycard',nil
 local realPrint=print

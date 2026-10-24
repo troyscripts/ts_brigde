@@ -1,4 +1,4 @@
-> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+> Huidige instellingen: `config/config.lua` (Server / Vehicles / Audit); webhook-URLs: `config/webhook_config.lua`. Zie INSTALLATIE.md.
 
 # Voorbereiding keycard, banking en billing
 
@@ -105,7 +105,7 @@ politie-factuurstroom; een oude socity_police-rekening wordt niet automatisch ge
 
 ## Server-API voor inventory
 
-Gebruikt ox_inventory, configureerbaar via InventoryResource in server_config.lua.
+Gebruikt ox_inventory, configureerbaar via InventoryResource in config/config.lua (Server).
 Argumenten volgen de overeenkomstige ox_inventory-API, behalve waar hieronder vermeld.
 
 | Export | Argumenten |

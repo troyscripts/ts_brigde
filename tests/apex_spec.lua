@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, stopped, events = {}, {}, {}
 local bank, society, bankCalls, billingCalls = 100, 200, 0, 0
 local reject, throwAfter = false, false
@@ -34,7 +34,7 @@ function TriggerEvent(name,account,cb)
  assert(name=='esx_addonaccount:getSharedAccount')
  cb(account=='society_police' and {money=society,addMoney=function(n) society=society+n end} or nil)
 end
-dofile('config.lua');dofile('webhook_config.lua');dofile('server/framework.lua');dofile('server/money.lua');dofile('server/billing.lua')
+dofile('config/config.lua');dofile('config/webhook_config.lua');dofile('server/framework.lua');dofile('server/money.lua');dofile('server/billing.lua')
 assert(api.GetMoney(1,'bank')==100)
 assert(api.RemoveMoney(1,'bank',10,'kaart').ok and bank==90 and bankCalls==1)
 assert(api.AddMoney(1,'bank',10).ok and bank==100)

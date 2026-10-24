@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, events={},{}
 local owner='test_billing'
 exports=setmetatable({}, {__call=function(_,name,fn) api[name]=fn end})
@@ -7,7 +7,7 @@ function GetCurrentResourceName() return 'ts_bridge' end
 function GetResourceState() return 'started' end
 function GetPlayerName(id) return (id==1 or id==2) and 'test' or nil end
 function AddEventHandler(name,fn) events[name]=fn end
-dofile('config.lua');dofile('webhook_config.lua');dofile('server/framework.lua');dofile('server/billing.lua')
+dofile('config/config.lua');dofile('config/webhook_config.lua');dofile('server/framework.lua');dofile('server/billing.lua')
 TSBridgeServer.Billing.Provider='custom'; TSBridgeServer.Billing.Resource=''
 local invoice={issuerId=1,targetId=2,amount=10,society='society_police',label='Politiekaart'}
 assert(not api.GetBillingStatus().ready)

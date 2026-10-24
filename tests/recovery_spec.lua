@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua'); dofile('config.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua'); dofile('config/config.lua')
 local api, handlers = {}, {}
 local owner, provider = 'ts_hostage', 'started'
 local calls, roots, menus = {}, {}, {}

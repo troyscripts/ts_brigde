@@ -28,10 +28,10 @@ local function playerBalance(player, account, id)
 end
 exports('GetMoney', function(id, account)
     local player, reason = B.Player(id)
-    if not player then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed(reason)); return nil, reason end
+    if not player then audit('payments', 'GetMoney', {{TSL('runtime_player_id'), id}}, failed(reason)); return nil, reason end
     local ok, balance, err = pcall(playerBalance, player, account, id)
-    if not ok then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed('balance_read_failed')); return nil, 'balance_read_failed' end
-    if balance == nil then audit('payments', 'GetMoney', {{'Speler-ID', id}}, failed(err)) end
+    if not ok then audit('payments', 'GetMoney', {{TSL('runtime_player_id'), id}}, failed('balance_read_failed')); return nil, 'balance_read_failed' end
+    if balance == nil then audit('payments', 'GetMoney', {{TSL('runtime_player_id'), id}}, failed(err)) end
     return balance, err
 end)
 local function changePlayer(id, account, amount, reason, subtract)
@@ -71,11 +71,11 @@ local function changePlayer(id, account, amount, reason, subtract)
     return ok and result or failed('provider_error', attempted, before, after)
 end
 exports('AddMoney', function(id, account, amount, reason)
-    return audit('payments', 'AddMoney', { {'Speler-ID', id}, {'Rekeningtype', account}, {'Bedrag', amount}, {'Reden', reason} },
+    return audit('payments', 'AddMoney', { {TSL('runtime_player_id'), id}, {TSL('runtime_account_type'), account}, {TSL('runtime_amount'), amount}, {TSL('runtime_reason'), reason} },
         changePlayer(id, account, amount, reason, false))
 end)
 exports('RemoveMoney', function(id, account, amount, reason)
-    return audit('payments', 'RemoveMoney', { {'Speler-ID', id}, {'Rekeningtype', account}, {'Bedrag', amount}, {'Reden', reason} },
+    return audit('payments', 'RemoveMoney', { {TSL('runtime_player_id'), id}, {TSL('runtime_account_type'), account}, {TSL('runtime_amount'), amount}, {TSL('runtime_reason'), reason} },
         changePlayer(id, account, amount, reason, true))
 end)
 
@@ -133,8 +133,8 @@ local function changeSociety(key, amount, subtract)
     return ok and result or failed('provider_error', attempted, before, after)
 end
 exports('AddSocietyMoney', function(key, amount)
-    return audit('societies', 'AddSocietyMoney', { {'Society', key}, {'Bedrag', amount} }, changeSociety(key, amount, false))
+    return audit('societies', 'AddSocietyMoney', { {'Society', key}, {TSL('runtime_amount'), amount} }, changeSociety(key, amount, false))
 end)
 exports('RemoveSocietyMoney', function(key, amount)
-    return audit('societies', 'RemoveSocietyMoney', { {'Society', key}, {'Bedrag', amount} }, changeSociety(key, amount, true))
+    return audit('societies', 'RemoveSocietyMoney', { {'Society', key}, {TSL('runtime_amount'), amount} }, changeSociety(key, amount, true))
 end)
