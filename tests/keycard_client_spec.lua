@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, events, added, removed = {}, {}, 0, 0
 local owner, state='ts_keycard','started'
 exports=setmetatable({ ox_target={
@@ -11,7 +11,7 @@ function DoesEntityExist(id) return id==42 end
 function GetResourceState() return state end
 function AddEventHandler(name,fn) events[name]=fn end
 lib={progressCircle=function() return false end,inputDialog=function() return nil end,alertDialog=function() return 'cancel' end}
-dofile('config.lua'); dofile('client/keycard_support.lua')
+dofile('config/config.lua'); dofile('client/keycard_support.lua')
 assert(api.AddLocalEntity(42,{{name='ts_keycard_desk'}}));assert(added==1)
 owner='other';assert(not api.RemoveLocalEntity(42,'ts_keycard_desk'));owner='ts_keycard'
 assert(api.RemoveLocalEntity(42,'ts_keycard_desk'));assert(removed==1)

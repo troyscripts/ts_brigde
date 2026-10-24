@@ -1,60 +1,37 @@
-> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+# Installatie — ts_bridge 1.0.7
 
-# Volledige release 1.0.2
+De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
 
-Plaats deze volledige map onder de naam ts_bridge. Behoud bestaande persoonlijke config.lua/server_config.lua-instellingen bij bijwerken; schema blijft 0.0.6. Configureer vehicle_config.lua voor de nlplates/JG/MrNewb-adapters. Zie VOERTUIGEN.md en WEBHOOKS-KENTEKENBEWIJS.md.
-
-Start na ox_lib en de ingestelde providers, vóór de aangesloten Troy Scripts-resources. De standaardbankprovider is Apex; selecteer esx als jouw server geen Apex-bank gebruikt. Controleer ook Billing.Provider voor je andere scripts.
-
-Hieronder staan de bestaande installatie- en compatibiliteitsinstructies; versiegebonden updatebestanden beschrijven historische wijzigingen.
-
-# Actuele installatie: ts_bridge 0.0.6
-
-Lees UPDATE-LOCATIES.md voor de update vanaf 0.0.5, de nieuwe configvelden en de
-gezamenlijke stop/startvolgorde. Dit pakket bevat alleen gewijzigde bestanden.
-Configschema is 0.0.6; server_config.lua blijft staan.
-
-De onderstaande eerdere instructies gelden uitsluitend voor de migratie naar 0.0.5.
-
-# Update ts_bridge 0.0.4 → 0.0.5
-
-Dit pakket bevat alleen gewijzigde/nieuwe bestanden voor een bestaande 0.0.4-installatie.
-De resourcemap heet ts_bridge. De bestaande GitHub-repository heet ts_brigde.
-
-1. Maak een backup en beëindig actieve gijzelingen.
-2. Stop ts_hostage, ts_antipunch en overige afhankelijke scripts (zoals ts_keycard).
-   Stop daarna ts_bridge.
-3. Kopieer de map ts_bridge uit dit pakket over de bestaande map. Laat overige
-   bestanden staan; verwijder niets. Behoud config.lua en server_config.lua.
-4. Installeer antipunch 1.8.2 en hostage 1.1.9, inclusief hun nieuwe configvelden.
-5. Start ox_lib/providers indien nodig, daarna ts_bridge en de gestopte scripts.
+1. Maak een back-up van je resource en eigen instellingen. Beëindig actieve gijzelingen en stop afhankelijke scripts, daarna de bridge.
+2. Plaats de volledige resource. Bij een bestaande installatie op configschema 0.0.7: verplaats je eigen `config.lua` naar `config/config.lua` en `webhook_config.lua` naar `config/webhook_config.lua`. Behoud alle eigen waarden en URLs.
+3. Bij oudere configuratie: neem algemene waarden over in `config/config.lua`. Oude `server_config.lua`-waarden gaan onder `Server`, `vehicle_config.lua` onder `Vehicles` en `audit_config.lua` Enabled onder `Audit`. Stel `InventoryResource` eenmaal bovenaan in. Kopieer alle webhook-URLs naar `config/webhook_config.lua`. Zet Version pas op `0.0.7` nadat de velden zijn overgenomen.
+4. Verwijder na overname de oude rootbestanden `config.lua`, `webhook_config.lua`, `locale.lua`, en indien aanwezig `server_config.lua`, `vehicle_config.lua`, `audit_config.lua`. Verwijder ook oude `UPDATE-*.md`, `UPDATE-BESTANDEN.txt`, `VERWIJDERD*` en `TESTRESULTATEN-*.md`. Als de geannuleerde 1.0.4 is geïnstalleerd: verwijder `okok_config.lua` en `server/okok.lua`.
+5. Kies `Locale = 'nl'` of `Locale = 'en'` in `config/config.lua`. Eigen tekstinstellingen blijven voorrang houden. Bewerk vertalingen in `locales/`.
+6. Start providers, de bridge en daarna alle afhankelijke resources opnieuw.
 
 ```cfg
 ensure ox_lib
-# Bestaande framework-, inventory-, target- en bankingproviders vooraf starten.
+# Start ingestelde ESX-, inventory-, target-, banking- en billingproviders vooraf.
+# Start ts_gemertmap vooraf indien gebruikt.
 ensure ts_bridge
+# Daarna alleen de daadwerkelijk geïnstalleerde scripts:
 ensure ts_antipunch
 ensure ts_hostage
 ensure ts_keycard
 ```
 
-Start alleen geïnstalleerde scripts. Keycard 1.1.5 blijft compatibel.
-Bridgeconfigschema blijft 0.0.3; de scriptversie wordt 0.0.5. Geen databasewijziging.
-Na een bridgeherstart moeten afhankelijke scripts opnieuw starten.
+Controleer Banking.Provider en Billing.Provider: Apex is standaard; kies de bij jouw installatie passende ondersteunde provider. Society-geld loopt via esx_addonaccount. Controleer dat society_police/socity_police en society_ambulance bestaan wanneer gebruikt. Zie KEYCARD-BANKING-BILLING.md, OKOK.md en VOERTUIGEN.md.
 
-Controleer de consoleversies en test richten/gijzelen/loslaten in beide volgordes.
-Test ook herladen, melee, voertuigcamera en resource-stop met twee spelers.
-De oude camera mag pas terugkomen als geen script meer first person aanvraagt.
-De update is lokaal gesimuleerd getest, niet op een live FiveM-server.
+Configschema blijft 0.0.7; geen SQL-migratie. Webhook-URLs blijven server-only: publiceer geen ingevulde URLs op GitHub. Webhookinstellingen van andere resources blijven in die resources staan.
 
-## GitHub-updatecontrole
+## Controle na installatie
 
-Upload alle gewijzigde resourcebestanden, inclusief fxmanifest.lua en version.json
-met 0.0.5, naar troyscripts/ts_brigde. Zo kan een oudere installatie bij een volgende
-start de hogere versie melden. Alleen het versienummer uploaden is onvoldoende:
-de bijbehorende code moet mee. De ZIP publiceert niets automatisch op GitHub.
+Voer `ts_bridge_check` uit in de serverconsole. Controleer meldingen in de gekozen taal, G voor waypoint, Backspace voor persoonlijk negeren, verlopen en twee opeenvolgende meldingen. Bestaande routes en meldingen van collega's moeten intact blijven. Persoonlijke FiveM-keybindings worden niet overschreven door nieuwe defaults.
+
+Test geldmutaties, societybetalingen, kaarten, facturen, screenshots en webhookaflevering. Test camera aanvragen/loslaten met meerdere scripts, voertuigcamera, overlijden en resource-stop. Geen live FiveM-/Discord-test is onderdeel van de lokale controles.
+
+Ontbreekt een foto? Controleer de laatste screenshot-, Discord-resultaat- en Discord-foutregels. Deel geen webhook-URLs. De Node-runtime is ingebouwd in FiveM; npm of een upload-API-sleutel is niet nodig.
 
 ## Terugzetten
 
-Stop afhankelijke scripts en zet bridge én bijpassende antipunch/hostage terug uit
-backup. Antipunch 1.8.2 en hostage 1.1.9 vereisen minimaal bridge 0.0.5.
+Stop afhankelijke scripts en herstel de volledige back-up, inclusief de oude manifest- en configuratie-indeling. Start de bridge en afhankelijke scripts opnieuw.

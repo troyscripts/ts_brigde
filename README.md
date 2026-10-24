@@ -1,90 +1,12 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.6** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.0.7** · FiveM · centrale ondersteuning voor Troy Scripts
 
-## Nieuw in 1.0.6
+Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema blijft **0.0.7**.
 
-Volledig pakket hersteld: client, server, locales, web en tests worden weer meegeleverd. Automatische pakket- en regressiecontroles bewaken nieuwe uploads. Configschema blijft 0.0.7. Zie UPDATE-1.0.6.md en BRIDGE-AUDIT.md.
+Lees [INSTALLATIE.md](INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](CHANGELOG.md) voor de versiegeschiedenis.
 
-## Instellen vanaf 1.0.5
-
-Alle algemene instellingen staan in **config.lua**. Alleen webhook-URLs staan in het server-only bestand **webhook_config.lua**. Zie UPDATE-1.0.5.md voor het overnemen van je bestaande waarden en URLs. Configschema: 0.0.7. De geannuleerde okok-uitbreiding van 1.0.4 is niet opgenomen.
-
-Onderstaande oudere releasebeschrijvingen kunnen de oude bestandsnamen noemen; gebruik voor de huidige indeling de instructies hierboven.
-
-## Nieuw in 1.0.3
-
-Eigen bridge-logging voor betalingen, societies, facturen en fouten. Stel de vier optionele URLs in audit_config.lua in. Zie UPDATE-1.0.3.md.
-
-## Nieuw in 1.0.1
-
-Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewb. Zie VOERTUIGEN.md en INSTALLATIE.md. Bestaande configschema blijft 0.0.6; nieuwe selectie staat in vehicle_config.lua.
-
-## Nieuw in 1.0.0: binaire foto-upload
-
-Foto's gaan server-side via de ingebouwde Node.js-runtime met een Buffer en
-expliciete Content-Length naar Discord. Dit vermijdt de Lua HTTP-uploadroute
-die nulbytes in JPEG-data kan afkappen. Geen externe pakketten, uploadprovider
-of API-sleutel nodig. Screenshotopname, wachtrij en tekstfallback blijven bestaan.
-Foutdetails uit FiveM's errorData worden nu ook uitgelezen.
-Zie UPDATE-1.0.0.md voor installatie over 0.0.9. Config blijft ongewijzigd.
-
-## Nieuw in 0.0.9: Discord-bevestiging en diagnose
-
-Discord-verzending gebruikt `wait=true`. Bij een expliciete afwijzing van een
-fotobericht (HTTP 400/413/415/422) volgt eenmaal een tekstbericht zonder foto.
-`ts_bridge_check` toont nu ook het laatste screenshotresultaat, de laatste
-Discord-uitkomst en de laatste Discord-fout, ook bij een lege wachtrij.
-De precieze oorzaak van een uploadfout moet uit de nieuwe diagnose blijken.
-Zie `UPDATE-0.0.9.md` voor installatie. Configuratie blijft ongewijzigd.
-
-## Nieuw in 0.0.8: screenshottransport
-
-Screenshots worden lokaal opgenomen via `requestScreenshot` en met een begrensd
-latent FiveM-event naar de server gestuurd. De HTTP-upload naar het gameserverendpoint
-vervalt. Discord-webhooks blijven server-side. Alleen aangevraagde antwoorden van
-de juiste speler worden verwerkt; time-outs en ongeldige foto's geven een tekstlog.
-Bij gelijktijdige opnames voor dezelfde speler kan een tekstlog met melding 'bezig'
-volgen. Dit voorkomt dat screenshot-basic een nog lopende opname overschrijft.
-De lokale screenshot-basic NUI-callback moet nog steeds werken. Een fout daarin
-vereist controle van screenshot-basic zelf. Geen live FiveM-test uitgevoerd.
-
-## Nieuw in 0.0.7: ambulancerekening
-
-De serverconfig bevat de alias `ambulance = { 'society_ambulance' }` voor
-betaalde ambulancekaarten uit ts_keycard 1.1.7. Controleer of die gedeelde
-rekening in ESX bestaat. De gedeelde `config.lua` en de configschemaversie
-blijven 0.0.6; bestaande bridge-exports blijven hetzelfde.
-
-## Nieuw in 0.0.6: locaties, postcodes en persoonlijk negeren
-
-Zie **UPDATE-LOCATIES.md** voor de actuele update-instructies en instellingen.
-Meldingen via AlertJobs tonen optioneel een kaartgebied en dichtstbijzijnde postcode.
-G zet een waypoint naar de exacte incidentlocatie; Backspace verwijdert alleen op
-je eigen client de melding, tijdelijke blip en G-bestemming. Bestaande routes en
-meldingen van collega's blijven intact. Het nieuwe paneel neemt geen invoerfocus.
-
-Scriptversie en configschema zijn nu 0.0.6: de config bevat nieuwe velden.
-server_config.lua blijft ongewijzigd. Hostage/antipunch/keycard hoeven niet bijgewerkt
-te worden voor deze functie. De kaartupdate ts_gemertmap 1.0.6 levert de locaties.
-Bij afwezige kaartgegevens blijft een fallbackmelding werken.
-De onderstaande eerdere releasehoofdstukken beschrijven de voorgaande functies.
-
-
-## Nieuw in 0.0.5: gedeelde camera en combatcontexten
-
-De bridge beheert aanvragen van antipunch 1.8.2 en hostage 1.1.9. First person
-blijft actief totdat de laatste deelnemer loslaat. De ped- en voertuigcamera
-hebben ieder eigen aanvragen en een oorspronkelijke stand. De worker draait
-iedere frame zolang aanvragen/contexten of een herstelvertraging actief zijn.
-Er is geen cameraloop nodig als deze niet worden gebruikt.
-
-Het updatepakket bevat alleen gewijzigde/nieuwe bestanden voor bridge 0.0.4.
-Zie INSTALLATIE.md. Scriptversie en version.json zijn 0.0.5; configschema blijft
-0.0.3. Bestaande config.lua/server_config.lua en de server-API blijven behouden.
-Keycard 1.1.5 blijft compatibel. De oudere release-uitleg hieronder beschrijft
-voorgaande uitbreidingen; de huidige installatie-informatie staat hier en in
-INSTALLATIE.md.
+## Gedeelde camera en combatcontext
 
 ### Nieuwe client-API
 
@@ -157,8 +79,10 @@ Er is geen Fiveguard-adapter toegevoegd; geen anticheatinstellingen worden gewij
 
 | Bestand | Functie |
 | --- | --- |
-| config.lua | Gedeelde instellingen zonder geheimen |
-| server_config.lua | ESX, screenshotlimieten en centrale webhookroutes |
+| config/config.lua | Alle algemene instellingen zonder geheimen |
+| config/webhook_config.lua | Geheime webhookroutes, uitsluitend server-side |
+| locales/ | Nederlandse en Engelse teksten en de locale-loader |
+| tests/ en tools/ | Ontwikkelcontroles; niet nodig op de FiveM-server |
 | client/main.lua | Meldingen, doodstatus en targetopties |
 | client/alerts.lua | Straatnaam, meldingslocatie en waypoint |
 | server/main.lua | Jobcontrole, jobmeldingen en diagnosecommand |
@@ -253,10 +177,10 @@ De server geeft tevens framework/resources/banking terug; de client de targetres
 De aangesloten scripts controleren deze gegevens; ts_antipunch 1.8.2 en ts_hostage 1.1.9 vereisen minimaal 0.0.5.
 Herstart afhankelijke scripts na een bridgeherstart; ze blijven na uitval niet automatisch actief.
 
-TSBridgeConfig.Locale = 'nl' is standaard. Teksten staan in locales/nl.lua en Nederlandse
+TSBridgeConfig.Locale = 'nl' is standaard. Teksten staan in locales/nl.lua en locales/en.lua en Nederlandse
 fallback is ingebouwd. Configuratievelden voor teksten blijven expliciet instelbaar.
 
-## Nieuw in stabiele versie 0.0.3
+## Meldingen, radialmenu en configversie
 
 Dezelfde API 1 blijft beschikbaar. Bestaande string- en table-aanroepen van Notify
 werken zonder extra wachttijd; de limiet is optioneel en geldt per aanroepende resource
@@ -286,22 +210,19 @@ andere resource blijven bij een gewone resource-stop bestaan.
 CheckConfigVersion is beschikbaar op beide kanten; alleen de server print de
 configstatus. De export vergelijkt schemaversies exact, wijzigt de config niet en
 retourneert een boolean. Scripts bepalen zelf hun defaults en benodigde versie.
-De bridge zelf verwacht TSBridgeConfig.Version = '0.0.3'. Het schemaversienummer
+De bridge zelf verwacht TSBridgeConfig.Version = '0.0.7'. Het schemaversienummer
 blijft bij toekomstige scriptupdates gelijk zolang de configuratie niet wijzigt.
 
 Voor ts_hostage: gebruik de bijbehorende bijgewerkte 1.1.8, die minimaal bridge
 0.0.3 en de nieuwe features controleert. De versie van hostage blijft 1.1.8 en
 zijn configversie blijft 1.1.8. Gameplayregels blijven in hostage.
 
-## Aanvulling binnen 0.0.3
+## Configuratie en herstel
 
-Deze aanvulling behoudt scriptversie en configversie 0.0.3. Wie de eerdere 0.0.3
-gebruikt, vervangt deze bestanden handmatig. De GitHub-versiecontrole kan twee
-verschillende builds met hetzelfde versienummer niet onderscheiden.
 
 ### Configinhoud en diagnose
 
-De bridge controleert nu ook de inhoud van config.lua en server_config.lua:
+De bridge controleert de algemene instellingen en server-side webhookroutes:
 verplichte velden, providernamen, resourcenamen, tabellen, booleans, numerieke limieten
 en centrale webhook-URL's. Onbruikbare configuratie blokkeert de operationele exports;
 GetStatus retourneert dan ready=false en een lege featurelijst. Er worden geen
@@ -360,25 +281,23 @@ stabiele versies numeriek, toont een repositorylink bij een nieuwere versie en
 installeert niets automatisch. HTTP-fouten, ongeldige JSON en een time-out stoppen
 het script niet. De repository en version.json moeten publiek leesbaar zijn.
 
-Optioneel in TSBridgeServer (server_config.lua):
+In TSBridgeConfig.Server van config/config.lua:
 ```lua
 UpdateCheck = { Enabled = true, Repository = 'troyscripts/ts_brigde' },
 ```
-Een oude server_config.lua zonder dit blok gebruikt dezelfde standaardwaarden.
+Zonder dit blok worden dezelfde standaardwaarden gebruikt.
 Enabled=false schakelt de controle uit. De GitHub-naam ts_brigde is bewust overgenomen;
 de FiveM-resourcemap blijft ts_bridge. Bij een volgende release werk je zowel de
-manifestversie als version.json bij. Publiceren op GitHub is niet in deze download uitgevoerd.
+manifestversie als version.json bij.
 
 Technische API-bron: [GitHub repository contents](https://docs.github.com/en/rest/repos/contents#get-repository-content).
-De openbare repository kon vanuit deze omgeving niet live worden opgehaald;
-versievergelijking en foutafhandeling zijn met gesimuleerde HTTP-antwoorden getest.
+Versievergelijking en foutafhandeling worden met gesimuleerde HTTP-antwoorden getest.
 
-## Nieuw in 0.0.4: gedeelde GitHub-updatecontrole
+## Gedeelde GitHub-updatecontrole
 
 De serverexport `CheckForUpdates(settings)` controleert de versie van de aanroepende
 resource. De bridge gebruikt dezelfde code voor zijn eigen versiecheck. API 1 blijft
-behouden en bestaande exports blijven werken. De configschema-versie blijft **0.0.3**:
-config.lua en server_config.lua hoeven voor deze stap niet te worden vervangen.
+behouden en bestaande exports blijven werken. Het huidige configschema is **0.0.7**.
 
 ```lua
 exports.ts_bridge:CheckForUpdates({
@@ -404,3 +323,15 @@ Kaartspecifieke rechten, uitgifte en intrekking blijven in keycard.
 ## Webhook voor kentekenbewijzen
 
 Zie WEBHOOKS-KENTEKENBEWIJS.md: aparte webhook voor nieuwe/vervangende bewijzen, met kaart-PNG en FiveM-modelafbeelding. URL uitsluitend server-side instellen.
+
+## Tests en distributie
+
+Testresultaten hoeven niet te worden geüpload. Bewaar tests en tools wel in GitHub om toekomstige wijzigingen te controleren; FiveM laadt deze niet. Gegenereerde rapporten worden genegeerd via `.gitignore`.
+
+```sh
+python tools/check_package.py
+for test in tests/*_spec.lua; do lua "$test" || exit 1; done
+node tests/screenshot_upload_spec.js
+```
+
+Lua 5.4 is vereist (alternatief: `luatex --luaonly` per test). Tests gebruiken gesimuleerde providers; controleer ook op een FiveM-testserver.

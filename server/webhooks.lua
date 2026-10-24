@@ -1,8 +1,8 @@
 if TSBridgeValidation and not TSBridgeValidation.valid then return end
 -- Alleen serverresources starten logs; clients kunnen uitsluitend een aangevraagde foto beantwoorden.
 local lanes, queued, pendingPhotos = {}, 0, 0
-local lastPhoto, lastDelivery = 'geen aanvraag sinds start', 'geen verzending sinds start'
-local lastFailure = 'geen fout sinds start'
+local lastPhoto, lastDelivery = TSL('runtime_no_request_since_startup'), TSL('runtime_no_delivery_since_startup')
+local lastFailure = TSL('runtime_no_error_since_startup')
 local function photoStatus(message)
     lastPhoto = os.date('!%H:%M:%S') .. ' UTC | ' .. message
 end
@@ -13,15 +13,15 @@ end
 local function discordResult(response)
     if type(response) == 'string' then response = response:gsub('^HTTP %d+:%s*', '') end
     local ok, data = pcall(json.decode, response or '')
-    if not ok or type(data) ~= 'table' then return nil, 'geen leesbaar Discord-antwoord' end
+    if not ok or type(data) ~= 'table' then return nil, TSL('runtime_no_readable_discord_response') end
     local parts = {}
-    if type(data.code) == 'number' then parts[#parts + 1] = 'Discord-code ' .. tostring(data.code) end
+    if type(data.code) == 'number' then parts[#parts + 1] = TSL('runtime_discord_code') .. tostring(data.code) end
     local function fields(node, path, depth)
         if type(node) ~= 'table' or depth > 6 or #parts >= 8 then return end
         for key, value in pairs(node) do
             if #parts >= 8 then break end
             if key == '_errors' then
-                parts[#parts + 1] = 'veld ' .. path
+                parts[#parts + 1] = TSL('runtime_field') .. path
             elseif type(key) == 'string' or type(key) == 'number' then
                 local safe = tostring(key):gsub('[^%w_]', ''):sub(1, 40)
                 fields(value, path .. '.' .. safe, depth + 1)
@@ -29,7 +29,7 @@ local function discordResult(response)
         end
     end
     fields(data.errors, 'payload', 0)
-    return data, #parts > 0 and table.concat(parts, '; ') or 'geen foutcode'
+    return data, #parts > 0 and table.concat(parts, '; ') or TSL('runtime_no_error_code')
 end
 local function warning(message) print(TSL('webhooks_ts_bridge_webhook') .. message .. '^7') end
 local function urlValid(url)
@@ -71,15 +71,15 @@ RegisterNetEvent('ts_bridge:screenshot:result', function(token, data, failure)
     if not request or request.player ~= source then return end
     photoRequests[token] = nil
     local reasons = {
-        vehicle_unavailable = 'voertuig niet beschikbaar, niet stilstaand of andere camera actief',
-        unavailable = 'screenshotresource niet gestart op de client',
-        busy = 'screenshotopname op de client is nog bezig',
-        timeout = 'lokale screenshotopname geeft geen antwoord; controleer screenshot-basic en de F8-console',
-        capture = 'lokale screenshotexport mislukt',
-        invalid = 'ongeldig of te groot JPEG-antwoord van de client'
+        vehicle_unavailable = TSL('runtime_vehicle_unavailable_moving_or_another_camera_is_active'),
+        unavailable = TSL('runtime_screenshot_resource_not_started_on_the_client'),
+        busy = TSL('runtime_client_screenshot_capture_is_still_in_progress'),
+        timeout = TSL('runtime_local_screenshot_capture_did_not_respond_check_screenshot_basic_and_the_f8_console'),
+        capture = TSL('runtime_local_screenshot_export_failed'),
+        invalid = TSL('runtime_invalid_or_oversized_jpeg_response_from_the_client')
     }
     if failure ~= nil then
-        request.complete(nil, reasons[failure] or 'screenshotclient meldt een fout')
+        request.complete(nil, reasons[failure] or TSL('runtime_screenshot_client_reported_an_error'))
         return
     end
     local image = decodeJpeg(data)
@@ -109,8 +109,8 @@ pump = function(lane)
         if responded then return end
         responded = true
         local result, detail = discordResult(response)
-        if status == -1 then detail = 'lokale foto-uploader niet beschikbaar of invoer afgewezen' end
-        local kind = item.image and 'foto' or 'tekst'
+        if status == -1 then detail = TSL('runtime_local_photo_uploader_unavailable_or_input_rejected') end
+        local kind = item.image and TSL('runtime_photo') or TSL('runtime_text')
         deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' | ' .. detail)
         if status < 200 or status >= 300 then lastFailure = lastDelivery end
         if status == 429 and item.retries < 3 then
@@ -123,7 +123,7 @@ pump = function(lane)
             return
         end
         if item.image and (status == -1 or status == 400 or status == 413 or status == 415 or status == 422) then
-            warning('Discord weigert fotobericht: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; tekstfallback volgt')
+            warning(TSL('runtime_discord_rejected_photo_message_http') .. tostring(status) .. ' | ' .. detail .. TSL('runtime_text_fallback_follows'))
             item.image = nil
             item.imageData = nil
             item.document = nil
@@ -135,7 +135,7 @@ pump = function(lane)
             embed.fields = type(embed.fields) == 'table' and embed.fields or {}
             if #embed.fields < 25 then
                 embed.fields[#embed.fields + 1] = { name = 'Screenshot',
-                    value = 'Fotobericht afgewezen door Discord (HTTP ' .. tostring(status) .. '). Actie zonder foto geregistreerd.', inline = false }
+                    value = TSL('runtime_photo_message_rejected_by_discord_http') .. tostring(status) .. TSL('runtime_action_logged_without_photo'), inline = false }
             end
             item.retries = 0
             SetTimeout(1000, function() lane.processing = false; pump(lane) end)
@@ -143,13 +143,13 @@ pump = function(lane)
         end
         if status >= 200 and status < 300 and type(result) == 'table'
             and type(result.id) == 'string' and result.id:match('^%d+$') then
-            deliveryStatus(kind .. ': bevestigd door Discord | bericht ' .. result.id)
-            if item.image then print('[ts_bridge] Discord-foto bevestigd | bericht ' .. result.id) end
+            deliveryStatus(kind .. TSL('runtime_confirmed_by_discord_message') .. result.id)
+            if item.image then print(TSL('runtime_ts_bridge_discord_photo_confirmed_message') .. result.id) end
         elseif status >= 200 and status < 300 then
-            deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' zonder berichtbevestiging')
-            warning('Discord gaf HTTP ' .. tostring(status) .. ' zonder berichtbevestiging; geen herhaling om dubbele logs te voorkomen')
+            deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. TSL('runtime_without_message_confirmation'))
+            warning(TSL('runtime_discord_returned_http') .. tostring(status) .. TSL('runtime_without_message_confirmation_no_retry_to_prevent_duplicate_logs'))
         else
-            warning('Versturen ' .. kind .. ' mislukt: HTTP ' .. tostring(status) .. ' | ' .. detail .. '; webhook-URL wordt niet getoond')
+            warning(TSL('runtime_sending') .. kind .. TSL('runtime_failed_http') .. tostring(status) .. ' | ' .. detail .. TSL('runtime_webhook_url_is_not_shown'))
         end
         table.remove(queue, 1)
         queued = queued - 1
@@ -158,7 +158,7 @@ pump = function(lane)
             if #queue == 0 then lanes[item.url] = nil else pump(lane) end
         end)
     end
-    deliveryStatus((item.image and 'foto' or 'tekst') .. ': HTTP-aanvraag gestart')
+    deliveryStatus((item.image and TSL('runtime_photo') or TSL('runtime_text')) .. TSL('runtime_http_request_started'))
     local ok
     if item.image then
         ok = pcall(function()
@@ -207,33 +207,33 @@ TSBridge.Audit = function(category, action, owner, details, result)
             if value == nil then return end
             local kind = type(value)
             if kind ~= 'string' and kind ~= 'number' and kind ~= 'boolean' then return end
-            local clean = tostring(value):gsub('https?://%S+', '[URL verborgen]'):gsub('%c', ' ')
+            local clean = tostring(value):gsub('https?://%S+', TSL('runtime_url_hidden')):gsub('%c', ' ')
             fields[#fields + 1] = { name = name, value = clean ~= '' and clean:sub(1, 300) or '-', inline = true }
         end
-        field('Aanroepend script', owner or 'onbekend')
-        field('Actie', action)
-        field('Status', success and 'Geslaagd' or 'Mislukt')
+        field(TSL('runtime_calling_resource'), owner or TSL('runtime_unknown'))
+        field(TSL('runtime_action'), action)
+        field('Status', success and TSL('runtime_succeeded') or TSL('runtime_failed'))
         for _, entry in ipairs(details or {}) do field(entry[1], entry[2]) end
         if type(result) == 'table' then
-            field('Foutcode', result.code)
-            field('Uitkomst onzeker', result.uncertain == true)
-            field('Saldo vooraf', result.before)
-            field('Saldo achteraf', result.after)
-            field('Rekening', result.account)
-            field('Factuur-ID', result.id)
-            field('Factuurnummer', result.number)
+            field(TSL('runtime_error_code'), result.code)
+            field(TSL('runtime_uncertain_outcome'), result.uncertain == true)
+            field(TSL('runtime_balance_before'), result.before)
+            field(TSL('runtime_balance_after'), result.after)
+            field(TSL('runtime_account'), result.account)
+            field(TSL('runtime_invoice_id'), result.id)
+            field(TSL('runtime_invoice_number'), result.number)
         end
         local payload = { username = 'Troy Scripts', allowed_mentions = { parse = {} }, embeds = {{
-            title = success and 'ts_bridge | Actie geregistreerd' or 'ts_bridge | Actie mislukt',
+            title = success and TSL('runtime_ts_bridge_action_logged') or TSL('runtime_ts_bridge_action_failed'),
             color = success and 3066993 or 15158332, fields = fields,
             timestamp = os.date('!%Y-%m-%dT%H:%M:%SZ'),
-            footer = { text = 'Factuur aangemaakt betekent niet betaald. Onzekere acties niet automatisch herhalen.' }
+            footer = { text = TSL('runtime_an_invoice_being_created_does_not_mean_it_was_paid_do_not_automatically_retry_uncerta') }
         }} }
         enqueue(url, payload)
     end)
     if not ok and GetGameTimer() - auditWarningAt >= 60000 then
         auditWarningAt = GetGameTimer()
-        print('[ts_bridge] Auditlog overgeslagen; controleer config.lua en webhook_config.lua. De oorspronkelijke actie blijft behouden.')
+        print(TSL('runtime_ts_bridge_audit_log_skipped_check_config_config_lua_and_config_webhook_config_lua_the'))
     end
 end
 
@@ -288,7 +288,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if GetResourceState(TSBridgeServer.ScreenshotResource) ~= 'started' then return unavailable(TSL('webhooks_screenshotresource_niet_gestart')) end
     if not id or id <= 0 or not GetPlayerName(id) then return unavailable(TSL('webhooks_speler_niet_online')) end
     local timeout = options.vehicleNetId and math.max(TSBridgeServer.ScreenshotTimeoutMs, 20000) or TSBridgeServer.ScreenshotTimeoutMs
-    photoStatus('aangevraagd bij speler ' .. tostring(id))
+    photoStatus(TSL('runtime_requested_from_player') .. tostring(id))
     pendingPhotos = pendingPhotos + 1
     local completed = false
     photoSequence = photoSequence + 1
@@ -298,7 +298,7 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
         completed = true
         photoRequests[token] = nil
         pendingPhotos = pendingPhotos - 1
-        photoStatus(image and ('ontvangen: ' .. tostring(#image) .. ' bytes') or ('mislukt: ' .. tostring(reason)))
+        photoStatus(image and (TSL('runtime_received') .. tostring(#image) .. ' bytes') or (TSL('runtime_failed_50') .. tostring(reason)))
         if image then
             embed.image = { url = 'attachment://screenshot.jpg' }
             payload.attachments = { { id = 0, filename = 'screenshot.jpg' } }
@@ -310,13 +310,13 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     end
     photoRequests[token] = { player = id, complete = complete }
     SetTimeout(timeout, function()
-        complete(nil, 'screenshot time-out: geen volledig clientantwoord ontvangen via FiveM')
+        complete(nil, TSL('runtime_screenshot_timeout_no_complete_client_response_received_through_fivem'))
     end)
     -- Geen NUI HTTP-upload naar het serverendpoint en geen webhook-URL naar clients.
     local requested = pcall(TriggerClientEvent, 'ts_bridge:screenshot:capture', id,
         token, TSBridgeServer.ScreenshotResource, TSBridgeServer.MaxImageBytes,
         timeout, options.vehicleNetId, options.vehiclePlate)
-    if not requested then complete(nil, 'screenshotaanvraag kon niet naar de client worden gestuurd') end
+    if not requested then complete(nil, TSL('runtime_could_not_send_screenshot_request_to_the_client')) end
     return true
 end)
 

@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, events = {}, {}
 local owner = 'ts_keycard'
 local cash, bank, society = 100, 500, 200
@@ -35,7 +35,7 @@ function TriggerEvent(name, account, callback)
   addMoney=setmetatable({}, {__call=function(_,amount) mutations=mutations+1; if not denied then society=society+amount end end}),
   removeMoney=function(amount) society=society-amount end })
 end
-dofile('config.lua'); dofile('webhook_config.lua'); dofile('server/framework.lua'); dofile('server/money.lua'); TSBridgeServer.Banking.Provider='esx'
+dofile('config/config.lua'); dofile('config/webhook_config.lua'); dofile('server/framework.lua'); dofile('server/money.lua'); TSBridgeServer.Banking.Provider='esx'
 assert(api.GetPlayerData(1).identifier=='test:1')
 assert(api.GetPlayerData(99)==nil)
 assert(api.HasJob(1,{police=true},7)); assert(not api.HasJob(1,{police=true},8))

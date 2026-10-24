@@ -1,4 +1,4 @@
-> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+> Huidige instellingen: `config/config.lua` (Server / Vehicles / Audit); webhook-URLs: `config/webhook_config.lua`. Zie INSTALLATIE.md.
 
 # okok-ondersteuning — 0.0.3
 
@@ -7,7 +7,7 @@ Apex- en okok-resourcebestanden zelf zijn niet gewijzigd.
 
 ## okokBanking met ESX
 
-Kies in ts_bridge/server_config.lua:
+Kies in ts_bridge/config/config.lua:
 
 ```lua
 Banking = { Provider = 'okok', Resource = 'okokBanking' },

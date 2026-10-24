@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, events, stopped = {}, {}, {}
 local bank, society, mutations = 100, 200, 0
 local owner = 'ts_keycard'
@@ -19,7 +19,7 @@ function TriggerEvent(name,key,cb)
  assert(name=='esx_addonaccount:getSharedAccount')
  cb(key=='society_police' and {money=society,addMoney=function(n) society=society+n end} or nil)
 end
-dofile('config.lua');dofile('webhook_config.lua');dofile('server/framework.lua');dofile('server/money.lua');dofile('server/billing.lua')
+dofile('config/config.lua');dofile('config/webhook_config.lua');dofile('server/framework.lua');dofile('server/money.lua');dofile('server/billing.lua')
 TSBridgeServer.Banking={Provider='okok',Resource='okokBanking'}
 assert(api.GetMoney(1,'bank')==100)
 assert(api.RemoveMoney(1,'bank',10).ok and bank==90 and mutations==1)

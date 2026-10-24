@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua'); dofile('config.lua'); dofile('webhook_config.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua'); dofile('config/config.lua'); dofile('config/webhook_config.lua')
 local api, events, sent = {}, {}, {}
 local owner, now = 'one', 10000
 exports = function(n,f) api[n]=f end

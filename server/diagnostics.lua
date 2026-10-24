@@ -22,17 +22,17 @@ exports('GetDiagnostics', diagnostics)
 RegisterCommand('ts_bridge_check', function(src)
     if src ~= 0 then return end
     local d = diagnostics()
-    print(('[ts_bridge] %s | config: %s'):format(d.version or '?', d.configValid and 'OK' or 'FOUT'))
+    print(('[ts_bridge] %s | config: %s'):format(d.version or '?', d.configValid and 'OK' or TSL('runtime_error')))
     for _, field in ipairs(d.configErrors) do print(TSL('validation_error'):format(field)) end
     if not d.configValid then return end
     for name, state in pairs(d.resources) do print(('[ts_bridge] %s: %s'):format(name, state)) end
-    print(('[ts_bridge] billing %s: %s (%s)'):format(d.billing.provider or '?', tostring(d.billing.ready), d.billing.reason or 'geen adapterfout'))
-    if d.webhooks then print(('[ts_bridge] logs: %d/%d | screenshots: %d | bestemmingen: %d'):format(
+    print(('[ts_bridge] billing %s: %s (%s)'):format(d.billing.provider or '?', tostring(d.billing.ready), d.billing.reason or TSL('runtime_no_adapter_error')))
+    if d.webhooks then print((TSL('runtime_ts_bridge_logs_d_d_screenshots_d_destinations_d')):format(
         d.webhooks.queued, d.webhooks.capacity, d.webhooks.pendingPhotos, d.webhooks.destinations)) end
     if d.webhooks then
-        print('[ts_bridge] Laatste screenshot: ' .. (d.webhooks.lastPhoto or 'onbekend'))
-        print('[ts_bridge] Laatste Discord-resultaat: ' .. (d.webhooks.lastDelivery or 'onbekend'))
-        print('[ts_bridge] Laatste Discord-fout: ' .. (d.webhooks.lastFailure or 'geen'))
+        print(TSL('runtime_ts_bridge_last_screenshot') .. (d.webhooks.lastPhoto or TSL('runtime_unknown')))
+        print(TSL('runtime_ts_bridge_last_discord_result') .. (d.webhooks.lastDelivery or TSL('runtime_unknown')))
+        print(TSL('runtime_ts_bridge_last_discord_error') .. (d.webhooks.lastFailure or TSL('runtime_none')))
     end
-    print(('[ts_bridge] GitHub geconfigureerd: %s'):format(tostring(d.updateCheckConfigured)))
+    print((TSL('runtime_ts_bridge_github_configured_s')):format(tostring(d.updateCheckConfigured)))
 end, false)

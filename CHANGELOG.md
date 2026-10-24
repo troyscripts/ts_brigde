@@ -1,3 +1,23 @@
+# 1.0.7 — Opgeruimde structuur en Engels
+
+- Configuratie en server-only webhookinstellingen verplaatst naar config/; manifest, tests en handleidingen volgen de nieuwe paden.
+- Alle locale-bestanden en loader onder locales/; volledige Engelse locale toegevoegd, inclusief diagnose- en auditteksten die eerder hardcoded waren. Nederlands blijft standaard en fallback.
+- Ongebruikte oude locale-sleutels verwijderd; alle configonderdelen vermelden opties, limieten en providervereisten.
+- Scriptversie 1.0.7; configschema blijft 0.0.7 omdat geen instelbare velden veranderen. Geen SQL-migratie.
+- Oude UPDATE-bestanden, losse verwijderlijsten en TESTRESULTATEN-1.0.6.md verwijderd. Tests en pakketcontrole blijven ontwikkelgereedschap; gegenereerde rapporten worden genegeerd.
+- Actuele installatie-instructies staan in INSTALLATIE.md. Bij bijwerken eigen configs naar config/ verplaatsen en oude rootbestanden verwijderen.
+
+## Bewaarde migratie- en release-informatie
+
+- 0.0.6: G bevestigt een waypoint; Backspace negeert alleen de eigen melding. Verlopen/negeren verandert bestaande routes niet. Nieuwe melding vervangt de vorige. Kaart/postcode via GetLocation, fallback bij ontbrekende provider; MaxPostcodeDistance 0 betekent onbeperkt. Persoonlijke keybindings blijven behouden.
+- 0.0.7–0.0.8: ambulance-societyalias behouden; screenshot-basic legt lokaal vast en stuurt een begrensd FiveM-event naar de server. Geen HTTP-upload naar het gameserverendpoint; alleen het antwoord van de aangevraagde speler wordt verwerkt. Bij falen blijft tekstlogging bestaan.
+- 0.0.9–1.0.0: Discord-bevestiging met wait=true; expliciete fotoafwijzing (400/413/415/422) krijgt eenmaal tekstfallback. Geen automatische herhaling bij onzekere POST-time-outs. Foto-upload gebruikt Node Buffer/Content-Length; geen npm-installatie of upload-API-sleutel. Diagnose via ts_bridge_check.
+- 1.0.2: kentekenbewijs gebruikt kaart-PNG en vaste FiveM-modelafbeelding; oude centrale registration-route blijft fallback. De live voertuigfoto-aanvraag is uit ts_nlplates verwijderd; gedeelde bridge-screenshots blijven voor andere scripts bestaan. Geen kaarten, kentekens of rechten verwijderd.
+- 1.0.3: auditcategorieën payments, societies, invoices en errors loggen alleen bridgeacties. Een aangemaakte factuur is nog geen betaling. Lege URL schakelt een categorie uit; Audit.Enabled=false schakelt eigen auditlogs uit. Logging blokkeert geen transactie, is begrensd/niet permanent en onderdrukt mentions. Onzekere uitkomsten niet blind herhalen.
+- 1.0.5: algemene instellingen uit server_config.lua, vehicle_config.lua en audit_config.lua naar één config verplaatst; URLs apart. Oude bestanden na overname verwijderen. De geannuleerde 1.0.4-uitbreiding (okok_config.lua/server/okok.lua) is niet opgenomen. Configschema werd 0.0.7.
+- 1.0.6: ontbrekende runtime-mappen hersteld uit het volledige 1.0.5-pakket. Historische lokale validatie: 17 bridge Lua-tests, 12 hostage-tests, Node-uploadtest en pakketcontrole geslaagd; geen live FiveM-/Discord-test. De bridge-audit blijft beschikbaar in BRIDGE-AUDIT.md.
+- Voor alle migraties: back-up maken, bridge vóór afhankelijke scripts starten en afhankelijke scripts na bridgeherstart opnieuw starten. Behoud persoonlijke instellingen en geheime URLs. Actuele paden en teststappen staan in INSTALLATIE.md.
+
 # 1.0.6 — Volledig pakket hersteld
 
 - Ontbrekende runtimebestanden hersteld uit het volledige 1.0.5-pakket; bestaande GitHub-bestanden waren bytegelijk.
@@ -30,7 +50,7 @@
 - Centrale voertuigadapters voor ts_nlplates 1.0.5, JG en MrNewbVehicleKeys.
 - GetInventory/GetInventoryItems en inventarisstopmelding toegevoegd.
 - Nieuwe vehicle_config.lua; bestaande configschema 0.0.6 behouden.
-- Zie VOERTUIGEN.md en VERWIJDERD.md.
+- Zie VOERTUIGEN.md; eerdere verwijderingen zijn hieronder samengevat.
 
 ## 1.0.0 — binaire Discord-foto-upload
 

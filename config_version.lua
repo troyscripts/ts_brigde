@@ -3,7 +3,7 @@ local function check(current, required, owner)
     local ok = current == required
     if IsDuplicityVersion() then
         if ok then print(TSL('config_version_ok'):format(owner, required))
-        else print(TSL('config_version_old'):format(owner, tostring(current or 'zonder versie'), required)) end
+        else print(TSL('config_version_old'):format(owner, tostring(current or TSL('runtime_unversioned')), required)) end
     end
     return ok
 end

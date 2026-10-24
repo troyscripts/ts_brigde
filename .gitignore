@@ -1,0 +1,5 @@
+# Generated test reports; keep test sources in tests/
+TESTRESULTATEN-*.md
+test-results/
+coverage/
+*.log

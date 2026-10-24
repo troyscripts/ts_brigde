@@ -1,13 +1,7 @@
-# Aanpasbare teksten
+# Vertalingen
 
-Nederlands (`nl`) is de hoofdlocale en standaard. Bewerk `nl.lua` met UTF-8.
-Laat sleutels en formattekens zoals `%s`, `%d`, `%.1f`, `~y~`, `~s~` en `\n` intact.
-Gebruik geen echte nieuwe regel binnen een korte Lua-string; gebruik `\n`.
+Kies `Locale = 'nl'` of `Locale = 'en'` in `config/config.lua`. Nederlands is standaard en fallback. `locale.lua` bevat de loader; `nl.lua` en `en.lua` bevatten teksten.
 
-Voor een extra taal: kopieer nl.lua naar bijvoorbeeld en.lua, verander
-`Locales['nl']` in `Locales['en']`, vertaal de waarden en kies Locale = 'en' in config.lua.
-Ontbrekende talen en sleutels vallen terug op Nederlands. Commandonamen, exports,
-resourcebenamingen, technische foutcodes en metadata-veldnamen worden niet vertaald.
-Expliciete tekstinstellingen in je bestaande config blijven voorrang houden.
-Herstart de resource na het wijzigen. Foutieve Lua-syntax in een localebestand moet
-worden hersteld; de fallback kan geen ongeldige Lua-broncode repareren.
+Bewerk bestanden met UTF-8. Behoud sleutels, formattekens (%s, %d, %.1f), kleurcodes en \n. Voor een extra taal kopieer je nl.lua, wijzig je zowel Locales['nl'] als Locales.nl en voeg je het bestand vóór de config toe aan shared_scripts in fxmanifest.lua.
+
+Ontbrekende talen en sleutels vallen terug op Nederlands. Exports, commands, resourcenamen en technische foutcodes blijven ongewijzigd. Eigen tekstinstellingen en teksten van aanroepende scripts worden niet automatisch vertaald. Herstart na wijzigen; fallback herstelt geen Lua-syntaxfouten.

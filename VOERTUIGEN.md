@@ -1,20 +1,20 @@
-> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+> Huidige instellingen: `config/config.lua` (Server / Vehicles / Audit); webhook-URLs: `config/webhook_config.lua`. Zie INSTALLATIE.md.
 
 # Voertuigadapters — 1.0.2
 
-vehicle_config.lua is de centrale selectie voor de nieuwe voertuigmodule. Bestaande bridgegebruikers kunnen Enabled = false zetten als ze deze module niet gebruiken. Er is geen nieuwe verplichte oxmysql-dependency voor andere bridgefuncties; databaseaanroepen worden pas bij gebruik gedaan. nlplates vereist wel oxmysql en een actieve voertuigmodule.
+config/config.lua (Vehicles) is de centrale selectie voor de nieuwe voertuigmodule. Bestaande bridgegebruikers kunnen Enabled = false zetten als ze deze module niet gebruiken. Er is geen nieuwe verplichte oxmysql-dependency voor andere bridgefuncties; databaseaanroepen worden pas bij gebruik gedaan. nlplates vereist wel oxmysql en een actieve voertuigmodule.
 
 | Onderdeel | Instelling | Geïmplementeerd |
 | --- | --- | --- |
-| Framework | server_config.lua Framework / ESXResource | ESX |
-| Inventarisresource | config.lua én server_config.lua InventoryResource | ox_inventory API |
-| Inventarisadapter | vehicle_config.lua Inventory | ox |
+| Framework | config/config.lua (Server) Framework / ESXResource | ESX |
+| Inventarisresource | config/config.lua InventoryResource | ox_inventory API |
+| Inventarisadapter | config/config.lua (Vehicles) Inventory | ox |
 | Eigenaarsgegevens | Ownership | esx: owned_vehicles, users, jobs |
 | Dealer | Dealer.Provider / Resource | jg / jg-dealerships |
 | Garage | Garage.Provider / Resource | jg / jg-advancedgarages |
 | Sleutels | Keys.Provider / Resource | mrnewb / MrNewbVehicleKeys; none schakelt uit |
 | Kentekenleverancier | PlatesResource | ts_nlplates |
-| Bankbetaling | server_config.lua Banking | bestaande esx/apex/okok-adapters |
+| Bankbetaling | config/config.lua (Server) Banking | bestaande esx/apex/okok-adapters |
 
 Alleen de genoemde adapters zijn nu geïmplementeerd. Een nieuwe naam invullen maakt geen ondersteuning. Provider-ID kiest het protocol; Resource kiest de resourcenaam. Houd de standaard JG-resourcenamen aan: JG gebruikt ook vaste interne eventnamen.
 

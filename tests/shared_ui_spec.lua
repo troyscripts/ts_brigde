@@ -1,4 +1,4 @@
-dofile('locales/nl.lua'); dofile('locale.lua')
+dofile('locales/nl.lua'); dofile('locales/locale.lua')
 local api, handlers, shown, roots, subs = {}, {}, {}, {}, {}
 local owner, now = 'one', 10000
 function GetInvokingResource() return owner end
@@ -14,7 +14,7 @@ lib = { notify = function(d) table.insert(shown, d) end,
  registerRadial = function(d) subs[d.id] = d end,
  addRadialItem = function(d) roots[d.id] = d end,
  removeRadialItem = function(id) roots[id] = nil end }
-dofile('config.lua'); dofile('client/main.lua'); dofile('client/radial.lua'); dofile('config_version.lua')
+dofile('config/config.lua'); dofile('client/main.lua'); dofile('client/radial.lua'); dofile('config_version.lua')
 local d = { id = 'same', description = 'test' }
 assert(api.Notify(d, 5000)); assert(d.title == nil and d.id == 'same', 'input not mutated')
 assert(not api.Notify(d, 5000)); owner = 'two'; assert(api.Notify(d, 5000), 'resource cooldown isolation')

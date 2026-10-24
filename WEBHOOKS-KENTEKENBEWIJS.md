@@ -1,4 +1,4 @@
-> Vanaf 1.0.5: algemene instellingen staan in config.lua (Server / Vehicles / Audit); alle webhook-URLs staan in webhook_config.lua. Oude bestandsverwijzingen hieronder zijn vervangen door deze indeling. Zie UPDATE-1.0.5.md.
+> Huidige instellingen: `config/config.lua` (Server / Vehicles / Audit); webhook-URLs: `config/webhook_config.lua`. Zie INSTALLATIE.md.
 
 # Webhooks met FiveM-modelafbeelding
 
@@ -6,7 +6,7 @@ Dit hoort bij de volledige release ts_nlplates 1.0.6 / ts_bridge 1.0.2. Configsc
 
 ## Instellen
 
-Kopieer de bestanden naar de gelijknamige resourcemappen. Behoud jouw geheime URL als je webhook_config.lua al hebt ingevuld. Stel in ts_nlplates/webhook_config.lua in:
+Kopieer de bestanden naar de gelijknamige resourcemappen. Behoud jouw geheime URL als je config/webhook_config.lua al hebt ingevuld. Stel in ts_nlplates/webhook_config.lua in:
 
 ```lua
 TSPlateWebhook = {
@@ -22,7 +22,7 @@ TSPlateWebhook = {
 
 Vul een echte https://discord.com/api/webhooks/... URL in. Met alleen url ingesteld gaan beide soorten naar hetzelfde kanaal. createdUrl is voor de eerste uitgifte; replacementUrl voor de vervangende kaart. Dit bestand is server-only; publiceer geen ingevulde URLs.
 
-Je kunt de URLs ook centraal instellen binnen de bestaande TSBridgeServer.Webhooks-tabel van ts_bridge/server_config.lua:
+Je kunt de URLs ook centraal instellen binnen de bestaande TSBridgeServer.Webhooks-tabel van ts_bridge/config/webhook_config.lua:
 
 ```lua
 ['ts_nlplates'] = {

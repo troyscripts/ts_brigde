@@ -77,8 +77,8 @@ exports('CreateInvoice', function(invoice)
     if TSBridge.Audit then
         local data = type(invoice) == 'table' and invoice or {}
         pcall(TSBridge.Audit, 'invoices', 'CreateInvoice', owner, {
-            {'Uitgever-ID', data.issuerId}, {'Ontvanger-ID', data.targetId},
-            {'Bedrag', data.amount}, {'Society', data.society}, {'Omschrijving', data.label}
+            {TSL('runtime_issuer_id'), data.issuerId}, {TSL('runtime_recipient_id'), data.targetId},
+            {TSL('runtime_amount'), data.amount}, {'Society', data.society}, {TSL('runtime_description'), data.label}
         }, result)
     end
     return result
@@ -115,7 +115,7 @@ end
 exports('GetInvoice', function(id)
     local invoice, reason = getInvoice(id)
     if invoice == nil and reason and TSBridge.Audit then
-        pcall(TSBridge.Audit, 'invoices', 'GetInvoice', GetInvokingResource(), {{'Factuur-ID', id}}, failure(reason))
+        pcall(TSBridge.Audit, 'invoices', 'GetInvoice', GetInvokingResource(), {{TSL('runtime_invoice_id'), id}}, failure(reason))
     end
     return invoice, reason
 end)
