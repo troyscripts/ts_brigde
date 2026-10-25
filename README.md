@@ -1,8 +1,8 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.7** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.0.8** · FiveM · centrale ondersteuning voor Troy Scripts
 
-Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema blijft **0.0.7**.
+Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema blijft **0.0.8**.
 
 Lees [INSTALLATIE.md](INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](CHANGELOG.md) voor de versiegeschiedenis.
 
@@ -210,7 +210,7 @@ andere resource blijven bij een gewone resource-stop bestaan.
 CheckConfigVersion is beschikbaar op beide kanten; alleen de server print de
 configstatus. De export vergelijkt schemaversies exact, wijzigt de config niet en
 retourneert een boolean. Scripts bepalen zelf hun defaults en benodigde versie.
-De bridge zelf verwacht TSBridgeConfig.Version = '0.0.7'. Het schemaversienummer
+De bridge zelf verwacht TSBridgeConfig.Version = '0.0.8'. Het schemaversienummer
 blijft bij toekomstige scriptupdates gelijk zolang de configuratie niet wijzigt.
 
 Voor ts_hostage: gebruik de bijbehorende bijgewerkte 1.1.8, die minimaal bridge
@@ -297,7 +297,7 @@ Versievergelijking en foutafhandeling worden met gesimuleerde HTTP-antwoorden ge
 
 De serverexport `CheckForUpdates(settings)` controleert de versie van de aanroepende
 resource. De bridge gebruikt dezelfde code voor zijn eigen versiecheck. API 1 blijft
-behouden en bestaande exports blijven werken. Het huidige configschema is **0.0.7**.
+behouden en bestaande exports blijven werken. Het huidige configschema is **0.0.8**.
 
 ```lua
 exports.ts_bridge:CheckForUpdates({

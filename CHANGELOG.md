@@ -1,3 +1,10 @@
+# 1.0.8 — Brandweer (2026-10-25)
+
+- Societyalias firefighter verwijst naar society_firefighter via esx_addonaccount.
+- Configschema verhoogd naar 0.0.8; controles en documentatie bijgewerkt.
+- Herhaalbare SQL voor de rekening zonder bestaande saldi, jobs of rangen te wijzigen.
+- Brandweerinstallatie voor ts_keycard 1.2.2 beschreven.
+
 # 1.0.7 — Opgeruimde structuur en Engels
 
 - Configuratie en server-only webhookinstellingen verplaatst naar config/; manifest, tests en handleidingen volgen de nieuwe paden.

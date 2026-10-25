@@ -6,7 +6,7 @@
 
 -- 1. Algemeen, meldingen, toetsen en inventory
 TSBridgeConfig = {
-    Version = '0.0.7', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    Version = '0.0.8', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
     Locale = 'nl', -- 'nl' = Nederlands, 'en' = Engels; ontbrekende teksten vallen terug op Nederlands.
     NotificationTitle = 'Troy Scripts', -- Eigen, niet-lege standaardtitel; een melding mag deze overschrijven.
     NotificationDuration = 5000, -- Geheel getal 1–300000 milliseconden; 5000 = 5 seconden.
@@ -68,7 +68,8 @@ TSBridgeConfig.Server = {
         -- Eigen aliases toevoegen is mogelijk: alias = { 'rekeningnaam', 'optionele_fallback' }.
         -- Minimaal één rekeningnaam per alias. Standaardrekening eerst; oude spelling alleen als fallback.
         police = { 'society_police', 'socity_police' },
-        ambulance = { 'society_ambulance' }
+        ambulance = { 'society_ambulance' },
+        firefighter = { 'society_firefighter' } -- Brandweer; exacte ESX-job: firefighter.
     },
     ScreenshotResource = 'screenshot-basic', -- screenshot-basic-compatibele requestScreenshot-export.
     Screenshots = true, -- false = geen screenshots; webhook-tekst blijft beschikbaar.

@@ -10,4 +10,4 @@ end
 exports('CheckConfigVersion', function(current, required)
     return check(current, required, GetInvokingResource() or GetCurrentResourceName())
 end)
-check(type(TSBridgeConfig) == 'table' and TSBridgeConfig.Version, '0.0.7', GetCurrentResourceName())
+check(type(TSBridgeConfig) == 'table' and TSBridgeConfig.Version, '0.0.8', GetCurrentResourceName())
