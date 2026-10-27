@@ -32,3 +32,4 @@ exports('GetStatus', function()
     else result.target = TSBridgeConfig.TargetResource end
     return result
 end)
+

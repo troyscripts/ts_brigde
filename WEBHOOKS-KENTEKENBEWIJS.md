@@ -65,3 +65,4 @@ De kaart-PNG gebruikt servergegevens. Een bekend model krijgt nu ook zijn leesba
 - Test een addonmodel: kaart wordt gelogd, ontbrekende modelafbeelding wordt vermeld.
 
 Lokaal getest: positieve/negatieve hashes, nieuwe/vervangende routes, gedeelde fallback, uitschakelopties, onbekende modellen, PNG-upload en bestaande bridgewebhookwachtrij. Geen live Discordbericht verstuurd. Webhookfouten draaien een uitgifte niet terug. De verzendwachtrij is niet permanent; uitstaande logs kunnen bij een serverstop verloren gaan. Bij onzekere HTTP-time-outs wordt niet automatisch opnieuw gepost.
+

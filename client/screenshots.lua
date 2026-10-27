@@ -80,3 +80,4 @@ RegisterNetEvent('ts_bridge:screenshot:capture', function(token, resource, maxBy
         if not ok then complete(nil, 'capture') end
     end)
 end)
+

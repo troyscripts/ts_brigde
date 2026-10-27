@@ -91,3 +91,4 @@ function upload(url, payloadJson, dataUri, callback, documentJson) {
 }
 exports('UploadDiscordPhoto', (url, payloadJson, dataUri, callback) => upload(url, payloadJson, dataUri, callback));
 exports('UploadDiscordRegistration', (url, payloadJson, dataUri, documentJson, callback) => upload(url, payloadJson, dataUri, callback, documentJson));
+

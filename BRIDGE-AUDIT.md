@@ -20,3 +20,4 @@ De bridgeguards van hostage, antipunch en keycard overlappen. Een gedeelde valid
 ## Afbakening
 
 Alle algemene bridge-instellingen blijven in config/config.lua; geheime webhook-URLs staan in config/webhook_config.lua. De configversie stijgt alleen bij een daadwerkelijke schemawijziging. Bij deze herstelrelease blijft die 0.0.7.
+

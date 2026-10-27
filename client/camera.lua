@@ -163,3 +163,4 @@ AddEventHandler('onClientResourceStop', function(name)
     end
     if contexts[name] then contexts[name] = nil; contextChanged() end
 end)
+

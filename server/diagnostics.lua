@@ -36,3 +36,4 @@ RegisterCommand('ts_bridge_check', function(src)
     end
     print((TSL('runtime_ts_bridge_github_configured_s')):format(tostring(d.updateCheckConfigured)))
 end, false)
+

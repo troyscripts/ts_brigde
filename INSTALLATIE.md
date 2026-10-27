@@ -1,4 +1,4 @@
-# Installatie — ts_bridge 1.0.8
+# Installatie — ts_bridge 1.0.9
 
 De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
 
@@ -35,3 +35,4 @@ Ontbreekt een foto? Controleer de laatste screenshot-, Discord-resultaat- en Dis
 ## Terugzetten
 
 Stop afhankelijke scripts en herstel de volledige back-up, inclusief de oude manifest- en configuratie-indeling. Start de bridge en afhankelijke scripts opnieuw.
+

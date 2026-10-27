@@ -114,3 +114,4 @@ Locales.nl.runtime_ts_bridge_last_discord_error = '[ts_bridge] Laatste Discord-f
 Locales.nl.runtime_none = 'geen'
 Locales.nl.runtime_ts_bridge_github_configured_s = '[ts_bridge] GitHub geconfigureerd: %s'
 Locales.nl.runtime_unversioned = 'zonder versie'
+

@@ -72,3 +72,4 @@ exports('CheckForUpdates', function(settings)
     return check(owner, settings)
 end)
 AddEventHandler('onResourceStop', function(name) active[name] = nil end)
+

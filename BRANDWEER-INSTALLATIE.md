@@ -1,4 +1,4 @@
-# Brandweer installeren — ts_keycard 1.2.2 + ts_bridge 1.0.8
+# Brandweer installeren — ts_keycard 1.2.2 + ts_bridge 1.0.9
 
 Job: `firefighter`. Bridgealias: `firefighter`. ESX-rekening: `society_firefighter`.
 
@@ -27,3 +27,4 @@ Lokaal zijn Lua-syntax, gemockte betaling/uitgifte, afdelingstoegang, vervalsing
 
 ESX-tabelstructuur gecontroleerd aan de officiële bron:
 https://github.com/esx-framework/esx_core/blob/main/%5BSQL%5D/legacy.sql
+

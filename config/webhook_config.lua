@@ -25,3 +25,4 @@ TSBridgeAuditConfig.Webhooks = {
     invoices = '', -- Aangemaakte facturen; dit betekent niet dat ze zijn betaald.
     errors = '', -- Mislukte geldacties, facturen en saldo-/factuuropvragingen; geen algemene consolelogger.
 }
+

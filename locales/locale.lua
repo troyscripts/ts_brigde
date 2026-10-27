@@ -10,3 +10,4 @@ function TSL(key, ...)
     local ok, text = pcall(string.format, value, ...)
     return ok and text or value
 end
+

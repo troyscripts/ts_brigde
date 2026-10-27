@@ -138,3 +138,4 @@ end)
 exports('RemoveSocietyMoney', function(key, amount)
     return audit('societies', 'RemoveSocietyMoney', { {'Society', key}, {TSL('runtime_amount'), amount} }, changeSociety(key, amount, true))
 end)
+

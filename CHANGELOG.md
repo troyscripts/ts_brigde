@@ -1,5 +1,12 @@
 # 1.0.8 — Brandweer (2026-10-25)
 
+## 1.0.9
+
+- Directe radiaalacties via `RegisterRadialAction` / `RemoveRadialAction`.
+- Resourcegebonden IDs, opruimen bij stoppen en herstel na ox_lib-herstart.
+- Ondersteuning voor de schuifoptie van ts_nohelmet 1.0.2.
+- Configschema blijft 0.0.8; bestaande configuratie en webhooks ongewijzigd.
+
 - Societyalias firefighter verwijst naar society_firefighter via esx_addonaccount.
 - Configschema verhoogd naar 0.0.8; controles en documentatie bijgewerkt.
 - Herhaalbare SQL voor de rekening zonder bestaande saldi, jobs of rangen te wijzigen.
@@ -191,3 +198,4 @@
 - Geen gebruik van okok-societyexports; society blijft via esx_addonaccount.
 - okokBilling-providerkeuze voorbereid; aanvragen worden geweigerd totdat de echte adapter is aangesloten.
 - Instructies, beperkingen en providerregressietest toegevoegd. Apex-defaults behouden.
+

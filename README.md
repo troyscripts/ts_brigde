@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.8** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.0.9** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema blijft **0.0.8**.
 
@@ -335,3 +335,18 @@ node tests/screenshot_upload_spec.js
 ```
 
 Lua 5.4 is vereist (alternatief: `luatex --luaonly` per test). Tests gebruiken gesimuleerde providers; controleer ook op een FiveM-testserver.
+
+
+## Directe radiaalacties (1.0.9)
+
+```lua
+exports.ts_bridge:RegisterRadialAction({
+    id = "shuffle", label = "Schuif naar bestuurder", icon = "chair",
+    onSelect = function() --[[ eigen actie ]] end
+})
+exports.ts_bridge:RemoveRadialAction("shuffle")
+```
+
+Registreer alleen wanneer de actie beschikbaar is en verwijder bij statuswisseling. Controleer voorwaarden opnieuw in de callback. IDs worden per aanroepende resource gescheiden; registreren met dezelfde ID vervangt de eigen actie. De API kopieert invoer, geeft true/false terug, ruimt op bij stoppen en herstelt bij ox_lib-herstart. `keepOpen` is optioneel (standaard false). Bestaande RegisterRadialMenu/RemoveRadialMenu blijven ongewijzigd.
+
+ts_nohelmet 1.0.2 gebruikt deze API voor zijn contextafhankelijke schuifoptie. Configschema 0.0.8 blijft gelijk; er zijn geen nieuwe bridge-instellingen.

@@ -55,3 +55,4 @@ exports('GetGloveboxId', function(raw)
     assert(C.Inventory == 'ox', 'vehicle_inventory_unsupported')
     return 'glove' .. (GetConvarBool('inventory:trimplate', true) and raw:upper():match('^%s*(.-)%s*$') or raw)
 end)
+

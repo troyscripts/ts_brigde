@@ -61,3 +61,4 @@ exports('HasPermission', function(id, rules)
         and B.Finite(minimum) and minimum >= 0 and minimum % 1 == 0
         and B.Finite(job.grade) and job.grade >= minimum
 end)
+

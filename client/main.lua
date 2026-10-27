@@ -98,3 +98,4 @@ AddEventHandler('onClientResourceStart', function(name)
         else registered[owner] = nil end
     end
 end)
+

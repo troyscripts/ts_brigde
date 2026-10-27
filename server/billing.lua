@@ -119,3 +119,4 @@ exports('GetInvoice', function(id)
     end
     return invoice, reason
 end)
+

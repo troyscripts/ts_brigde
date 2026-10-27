@@ -90,3 +90,4 @@ TSBridgeServer.InventoryResource = TSBridgeConfig.InventoryResource
 TSBridgeServer.Webhooks = {}
 TSBridgeAuditConfig = TSBridgeConfig.Audit
 TSBridgeAuditConfig.Webhooks = {}
+

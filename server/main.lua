@@ -60,3 +60,4 @@ exports('AlertJobs', function(jobs, data, coords, seconds)
     return recipients
 end)
 print(('[ts_bridge] %s gestart'):format(GetResourceMetadata(GetCurrentResourceName(), 'version', 0) or '?'))
+

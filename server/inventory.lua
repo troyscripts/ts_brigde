@@ -82,3 +82,4 @@ AddEventHandler('onResourceStart', function(name)
         TriggerEvent('ts_bridge:inventoryReady')
     end
 end)
+

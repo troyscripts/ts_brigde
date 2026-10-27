@@ -112,3 +112,4 @@ Locales.en.runtime_ts_bridge_last_discord_error = '[ts_bridge] Last Discord erro
 Locales.en.runtime_none = 'none'
 Locales.en.runtime_ts_bridge_github_configured_s = '[ts_bridge] GitHub configured: %s'
 Locales.en.runtime_unversioned = 'unversioned'
+

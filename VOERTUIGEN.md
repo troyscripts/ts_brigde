@@ -27,3 +27,4 @@ Clientexports: CloseInventory(), GiveVehicleKeys(entity), RemoveVehicleKeys(enti
 Uitbreiding: voeg een adaptertak/module in de bridge toe, houd bovenstaande contracten gelijk en breid de gereedheidscontrole uit. Voeg provider-tests toe voordat je de keuze documenteert. nlplates hoeft niet te weten welke externe tabel, export of garage-event de adapter gebruikt. De eigen documentregistratie en SQL van nlplates blijven van nlplates.
 
 Er is geen netwerkexport voor vrij uitgeven van kentekens of wijzigen van eigendom toegevoegd. Sleutelbeveiliging blijft bij het bestaande MrNewb-systeem.
+

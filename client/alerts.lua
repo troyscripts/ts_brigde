@@ -112,3 +112,4 @@ RegisterKeyMapping('ts_bridge_ignore_alert', TSL('alerts_dismiss_binding'), 'key
 AddEventHandler('onClientResourceStop', function(name)
     if name == GetCurrentResourceName() then clear() end
 end)
+
