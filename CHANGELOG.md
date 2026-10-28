@@ -1,4 +1,13 @@
-# 1.0.8 — Brandweer (2026-10-25)
+# Changelog
+
+## 1.1.0
+
+- Radiaalmenu configureerbaar via `Radial.Enabled` en `Radial.Provider` (`ox_lib`).
+- Instelling geldt voor zowel submenu’s als directe acties; andere ox_lib-opties blijven intact.
+- Uitgeschakelde registratie wordt geaccepteerd zonder zichtbare optie of foutmelding bij aanroepende scripts.
+- Configschema verhoogd naar 0.0.9; bestaande configs behouden standaard het eerdere ox_lib-gedrag.
+- Provider en aan/uit-instelling worden gevalideerd.
+
 
 ## 1.0.9
 
@@ -6,6 +15,8 @@
 - Resourcegebonden IDs, opruimen bij stoppen en herstel na ox_lib-herstart.
 - Ondersteuning voor de schuifoptie van ts_nohelmet 1.0.2.
 - Configschema blijft 0.0.8; bestaande configuratie en webhooks ongewijzigd.
+
+## 1.0.8 — Brandweer (2026-10-25)
 
 - Societyalias firefighter verwijst naar society_firefighter via esx_addonaccount.
 - Configschema verhoogd naar 0.0.8; controles en documentatie bijgewerkt.

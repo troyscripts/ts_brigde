@@ -1,10 +1,10 @@
-# Installatie — ts_bridge 1.0.9
+# Installatie — ts_bridge 1.1.0
 
 De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
 
 1. Maak een back-up van je resource en eigen instellingen. Beëindig actieve gijzelingen en stop afhankelijke scripts, daarna de bridge.
 2. Plaats de volledige resource. Bij een bestaande installatie op configschema 0.0.8: verplaats je eigen `config.lua` naar `config/config.lua` en `webhook_config.lua` naar `config/webhook_config.lua`. Behoud alle eigen waarden en URLs.
-3. Bij oudere configuratie: neem algemene waarden over in `config/config.lua`. Oude `server_config.lua`-waarden gaan onder `Server`, `vehicle_config.lua` onder `Vehicles` en `audit_config.lua` Enabled onder `Audit`. Stel `InventoryResource` eenmaal bovenaan in. Kopieer alle webhook-URLs naar `config/webhook_config.lua`. Zet Version pas op `0.0.8` nadat de velden zijn overgenomen.
+3. Bij oudere configuratie: neem algemene waarden over in `config/config.lua`. Oude `server_config.lua`-waarden gaan onder `Server`, `vehicle_config.lua` onder `Vehicles` en `audit_config.lua` Enabled onder `Audit`. Stel `InventoryResource` eenmaal bovenaan in. Kopieer alle webhook-URLs naar `config/webhook_config.lua`. Voeg ook het Radial-blok hieronder toe. Zet Version pas op `0.0.9` nadat alle velden zijn overgenomen.
 4. Verwijder na overname de oude rootbestanden `config.lua`, `webhook_config.lua`, `locale.lua`, en indien aanwezig `server_config.lua`, `vehicle_config.lua`, `audit_config.lua`. Verwijder ook oude `UPDATE-*.md`, `UPDATE-BESTANDEN.txt`, `VERWIJDERD*` en `TESTRESULTATEN-*.md`. Als de geannuleerde 1.0.4 is geïnstalleerd: verwijder `okok_config.lua` en `server/okok.lua`.
 5. Kies `Locale = 'nl'` of `Locale = 'en'` in `config/config.lua`. Eigen tekstinstellingen blijven voorrang houden. Bewerk vertalingen in `locales/`.
 6. Start providers, de bridge en daarna alle afhankelijke resources opnieuw.
@@ -36,3 +36,28 @@ Ontbreekt een foto? Controleer de laatste screenshot-, Discord-resultaat- en Dis
 
 Stop afhankelijke scripts en herstel de volledige back-up, inclusief de oude manifest- en configuratie-indeling. Start de bridge en afhankelijke scripts opnieuw.
 
+
+## ts_nohelmet 1.0.2 koppelen
+
+Voor de directe schuifoptie in het ox_lib-radiaalmenu is ts_bridge 1.1.0 of nieuwer nodig. Start in deze volgorde:
+
+```cfg
+ensure ox_lib
+ensure ts_bridge
+ensure ts_nohelmet
+```
+
+De instellingen voor `/schuif`, de automatische stoelblokkering en de menutekst staan in `ts_nohelmet/config/config.lua`. Voor 1.1.0 moet het Radial-blok worden toegevoegd en de configversie naar 0.0.9. Behoud je overige instellingen en webhooks. De optie verschijnt alleen wanneer de voorste passagier naar een vrije bestuurdersstoel kan schuiven.
+
+## Configmigratie 1.1.0 — radiaalmenu
+
+Voeg in de tabel `TSBridgeConfig` in `config/config.lua` toe:
+
+```lua
+Radial = {
+    Enabled = true, -- false verbergt bridge-menuopties; commands blijven werken.
+    Provider = 'ox_lib' -- Enige ondersteunde provider.
+},
+```
+
+Verander in dezelfde tabel `Version = '0.0.8'` naar `Version = '0.0.9'`, nadat je het blok hebt overgenomen. Vervang niet je aangepaste bank-, job- of webhookinstellingen door defaults. Plan een serverherstart. ox_lib moet vóór ts_bridge starten en blijft ook bij een uitgeschakeld radiaalmenu vereist. Controleer met `Enabled = true` dat submenu’s en `Wissel voorstoel` verschijnen wanneer het aanroepende script ze beschikbaar maakt. Met `Enabled = false` mogen alleen de bridge-opties verdwijnen; `/schuif` blijft bruikbaar.

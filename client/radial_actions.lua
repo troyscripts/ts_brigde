@@ -1,5 +1,12 @@
 if TSBridgeValidation and not TSBridgeValidation.valid then return end
 
+-- Oudere configs behouden het bestaande gedrag; de configversie meldt de migratie.
+local function radialEnabled()
+    local config = TSBridgeConfig and TSBridgeConfig.Radial
+    if config == nil then return true end
+    return type(config) == 'table' and config.Enabled == true and config.Provider == 'ox_lib'
+end
+
 -- Directe acties naast de bestaande submenu-API. Elke resource bezit eigen IDs.
 local actions = {}
 local function key(owner, id) return owner .. ':action:' .. id end
@@ -17,7 +24,7 @@ exports('RegisterRadialAction', function(data)
     if GetResourceState('ox_lib') ~= 'started' then return false end
     local copy = { label = data.label, icon = data.icon or 'circle',
         onSelect = data.onSelect, keepOpen = data.keepOpen == true }
-    show(owner, data.id, copy)
+    if radialEnabled() then show(owner, data.id, copy) end
     actions[owner] = actions[owner] or {}
     actions[owner][data.id] = copy
     return true
@@ -40,7 +47,7 @@ AddEventHandler('onClientResourceStop', function(name)
     end
 end)
 AddEventHandler('onClientResourceStart', function(name)
-    if name ~= 'ox_lib' then return end
+    if name ~= 'ox_lib' or not radialEnabled() then return end
     for owner, ids in pairs(actions) do
         if GetResourceState(owner) == 'started' then
             for id, data in pairs(ids) do show(owner, id, data) end

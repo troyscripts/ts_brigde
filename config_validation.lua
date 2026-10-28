@@ -20,6 +20,12 @@ local function validate(shared, server)
         -- Nieuwe velden zijn optioneel bij migratie; de configversie waarschuwt.
         if shared.AlertDismissKey ~= nil then text(shared, 'AlertDismissKey', 'TSBridgeConfig') end
         if shared.AlertBlip ~= nil and type(shared.AlertBlip) ~= 'boolean' then issue('TSBridgeConfig.AlertBlip') end
+        if shared.Radial ~= nil then
+            if type(shared.Radial) ~= 'table' then issue('TSBridgeConfig.Radial') else
+                if type(shared.Radial.Enabled) ~= 'boolean' then issue('TSBridgeConfig.Radial.Enabled') end
+                enum(shared.Radial, 'Provider', 'TSBridgeConfig.Radial', { ox_lib = true })
+            end
+        end
         if shared.AlertLocation ~= nil then
             local loc = shared.AlertLocation
             if type(loc) ~= 'table' then issue('TSBridgeConfig.AlertLocation') else

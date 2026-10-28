@@ -6,7 +6,7 @@
 
 -- 1. Algemeen, meldingen, toetsen en inventory
 TSBridgeConfig = {
-    Version = '0.0.8', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    Version = '0.0.9', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
     Locale = 'nl', -- 'nl' = Nederlands, 'en' = Engels; ontbrekende teksten vallen terug op Nederlands.
     NotificationTitle = 'Troy Scripts', -- Eigen, niet-lege standaardtitel; een melding mag deze overschrijven.
     NotificationDuration = 5000, -- Geheel getal 1–300000 milliseconden; 5000 = 5 seconden.
@@ -21,6 +21,13 @@ TSBridgeConfig = {
         MaxPostcodeDistance = 1500.0 -- Eindig getal >= 0, in meters; 0 = geen afstandslimiet.
     },
     AlertBlip = true, -- true = tijdelijke incidentblip; false = geen blip. Geen automatische route.
+
+    Radial = {
+        Enabled = true, -- true = bridge-opties tonen; false = alle bridge-opties verbergen. Commands blijven werken.
+        Provider = 'ox_lib' -- Alleen 'ox_lib' ondersteund; gebruikt het bestaande ox_lib-radiaalmenu.
+        -- ox_lib blijft ook bij Enabled = false nodig voor andere bridgefuncties.
+        -- Herstart de server na wijzigen; hiermee wijzig je niet de persoonlijke menu-keybinding.
+    },
 
     InventoryResource = 'ox_inventory', -- ox_inventory-compatibele resource; één naam voor client én server.
     TargetResource = 'ox_target', -- Alleen ox_target-compatibele API; geen qb-target-adapter.

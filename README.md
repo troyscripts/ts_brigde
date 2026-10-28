@@ -1,8 +1,8 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.0.9** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.0** · FiveM · centrale ondersteuning voor Troy Scripts
 
-Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema blijft **0.0.8**.
+Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.0.9**.
 
 Lees [INSTALLATIE.md](INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](CHANGELOG.md) voor de versiegeschiedenis.
 
@@ -349,4 +349,21 @@ exports.ts_bridge:RemoveRadialAction("shuffle")
 
 Registreer alleen wanneer de actie beschikbaar is en verwijder bij statuswisseling. Controleer voorwaarden opnieuw in de callback. IDs worden per aanroepende resource gescheiden; registreren met dezelfde ID vervangt de eigen actie. De API kopieert invoer, geeft true/false terug, ruimt op bij stoppen en herstelt bij ox_lib-herstart. `keepOpen` is optioneel (standaard false). Bestaande RegisterRadialMenu/RemoveRadialMenu blijven ongewijzigd.
 
-ts_nohelmet 1.0.2 gebruikt deze API voor zijn contextafhankelijke schuifoptie. Configschema 0.0.8 blijft gelijk; er zijn geen nieuwe bridge-instellingen.
+ts_nohelmet 1.0.2 gebruikt deze API voor zijn contextafhankelijke schuifoptie. Vanaf 1.1.0 wordt deze API ook bestuurd door de onderstaande radiaalinstellingen.
+
+## Radiaalmenu instellen (1.1.0)
+
+In `config/config.lua`, binnen `TSBridgeConfig`:
+
+```lua
+Radial = {
+    Enabled = true,
+    Provider = 'ox_lib'
+},
+```
+
+`Provider = 'ox_lib'` is de ondersteunde koppeling. `Enabled = false` verbergt alle via de bridge geregistreerde submenu’s en directe acties; commands zoals `/schuif` blijven werken. Opties die andere scripts rechtstreeks in ox_lib registreren worden niet uitgeschakeld. ox_lib blijft een verplichte bridge-dependency voor de overige functies.
+
+Voeg bij een bestaande configuratie dit blok toe en zet `Version = '0.0.9'`. Behoud je andere instellingen en webhooks. Herstart daarna de server zodat afhankelijke resources hun menu’s opnieuw registreren. De toetsenbinding wordt door ox_lib en de persoonlijke FiveM-instellingen bepaald.
+
+Registratie bij een uitgeschakeld menu geeft `true`: de bridge bewaart de registratie maar toont niets. Er wordt dus geen ontbrekende-exportfout veroorzaakt bij bestaande aanroepers. Een oude config zonder `Radial` behoudt het eerdere ingeschakelde ox_lib-gedrag en geeft de gebruikelijke configversiewaarschuwing.
