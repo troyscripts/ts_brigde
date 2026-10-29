@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+- Accepteert aanroepbare FiveM-exportcallbacks voor directe radiaalacties.
+- Verhelpt afgewezen registratie van de schuifoptie van ts_nohelmet.
+- Configschema blijft 0.0.9; instellingen en webhooks behouden.
+
 ## 1.1.0
 
 - Radiaalmenu configureerbaar via `Radial.Enabled` en `Radial.Provider` (`ox_lib`).

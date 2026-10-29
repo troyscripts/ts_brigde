@@ -17,7 +17,7 @@ TSBridgeConfig = {
         MapResource = 'ts_gemertmap', -- Resource met GetLocation-export; bij ontbreken geldt native locatie-fallback.
         ShowArea = true, -- true = gebiedsnaam tonen; false = verbergen.
         ShowPostcode = true, -- true = dichtstbijzijnde postcode tonen als de kaartprovider die aanlevert.
-        ShowStreet = false, -- true = GTA-straat/kruising toevoegen; false = weglaten.
+        ShowStreet = true, -- true = GTA-straat/kruising toevoegen; false = weglaten.
         MaxPostcodeDistance = 1500.0 -- Eindig getal >= 0, in meters; 0 = geen afstandslimiet.
     },
     AlertBlip = true, -- true = tijdelijke incidentblip; false = geen blip. Geen automatische route.

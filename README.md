@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.0** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.1** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.0.9**.
 

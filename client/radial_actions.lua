@@ -7,6 +7,14 @@ local function radialEnabled()
     return type(config) == 'table' and config.Enabled == true and config.Provider == 'ox_lib'
 end
 
+-- FiveM exportcallbacks kunnen als aanroepbare tabel worden doorgegeven.
+local function isCallable(value)
+    if type(value) == 'function' then return true end
+    if type(value) ~= 'table' then return false end
+    local mt = getmetatable(value)
+    return type(mt) == 'table' and type(mt.__call) == 'function'
+end
+
 -- Directe acties naast de bestaande submenu-API. Elke resource bezit eigen IDs.
 local actions = {}
 local function key(owner, id) return owner .. ':action:' .. id end
@@ -18,7 +26,7 @@ exports('RegisterRadialAction', function(data)
     local owner = GetInvokingResource()
     if not owner or type(data) ~= 'table' or type(data.id) ~= 'string'
         or data.id == '' or #data.id > 100 or type(data.label) ~= 'string'
-        or data.label == '' or type(data.onSelect) ~= 'function'
+        or data.label == '' or not isCallable(data.onSelect)
         or (data.icon ~= nil and type(data.icon) ~= 'string')
         or (data.keepOpen ~= nil and type(data.keepOpen) ~= 'boolean') then return false end
     if GetResourceState('ox_lib') ~= 'started' then return false end

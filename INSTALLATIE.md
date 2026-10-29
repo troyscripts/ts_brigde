@@ -1,4 +1,4 @@
-# Installatie — ts_bridge 1.1.0
+# Installatie — ts_bridge 1.1.1
 
 De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
 
@@ -39,7 +39,7 @@ Stop afhankelijke scripts en herstel de volledige back-up, inclusief de oude man
 
 ## ts_nohelmet 1.0.2 koppelen
 
-Voor de directe schuifoptie in het ox_lib-radiaalmenu is ts_bridge 1.1.0 of nieuwer nodig. Start in deze volgorde:
+Voor de directe schuifoptie in het ox_lib-radiaalmenu is ts_bridge 1.1.1 of nieuwer nodig. Start in deze volgorde:
 
 ```cfg
 ensure ox_lib
@@ -47,7 +47,7 @@ ensure ts_bridge
 ensure ts_nohelmet
 ```
 
-De instellingen voor `/schuif`, de automatische stoelblokkering en de menutekst staan in `ts_nohelmet/config/config.lua`. Voor 1.1.0 moet het Radial-blok worden toegevoegd en de configversie naar 0.0.9. Behoud je overige instellingen en webhooks. De optie verschijnt alleen wanneer de voorste passagier naar een vrije bestuurdersstoel kan schuiven.
+De instellingen voor `/schuif`, de automatische stoelblokkering en de menutekst staan in `ts_nohelmet/config/config.lua`. Voor 1.1.0 moet het Radial-blok worden toegevoegd en de configversie naar 0.0.9. Behoud je overige instellingen en webhooks. De optie verschijnt alleen wanneer je op een voorstoel zit en de andere voorstoel vrij is.
 
 ## Configmigratie 1.1.0 — radiaalmenu
 
