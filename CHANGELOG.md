@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.2
+
+- Optionele jobcardkoppeling centraal onder JobCards (Enabled, Resource, KeycardResource).
+- Clientexport OpenJobCardDesk met foutafhandeling en NL/EN-melding bij ontbrekende, gestopte of incompatibele idcard.
+- Serverexport IsAtKeycardDesk geeft locatie-/jobcontrole door aan de resource die de loketten beheert.
+- GetStatus vermeldt beide nieuwe API-functies. Geen harde idcard-dependency.
+- Societyaliases mechanic, taxi, sheriff, justice en fib toegevoegd voor extra sleutelkaarten.
+- Configschema 0.0.10; overige instellingen en webhookconfig blijven behouden.
+- Documentatie bijgewerkt voor ts_keycard 1.3.0.
+
 ## 1.1.1
 
 - Accepteert aanroepbare FiveM-exportcallbacks voor directe radiaalacties.

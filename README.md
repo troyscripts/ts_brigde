@@ -1,8 +1,8 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.1** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.2** · FiveM · centrale ondersteuning voor Troy Scripts
 
-Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.0.9**.
+Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.0.10**.
 
 Lees [INSTALLATIE.md](INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](CHANGELOG.md) voor de versiegeschiedenis.
 
@@ -316,7 +316,7 @@ van vijftien seconden. Resource-stop maakt oude callbacks ongeldig. Geen automat
 installatie; alleen stabiele X.Y.Z-versies en een veilige repository-downloadlink.
 JSON bevat version en optioneel download; een tekstbestand bevat alleen het versienummer.
 
-Keycard 1.1.5 gebruikt deze nieuwe export en vereist daarom minimaal bridge 0.0.4.
+Keycard 1.3.0 gebruikt deze export en vereist minimaal bridge 1.1.2 voor de optionele werkpaskoppeling.
 Hostage 1.1.8 blijft compatibel en houdt voorlopig zijn bestaande eigen updatechecker.
 Kaartspecifieke rechten, uitgifte en intrekking blijven in keycard.
 
@@ -364,6 +364,10 @@ Radial = {
 
 `Provider = 'ox_lib'` is de ondersteunde koppeling. `Enabled = false` verbergt alle via de bridge geregistreerde submenu’s en directe acties; commands zoals `/schuif` blijven werken. Opties die andere scripts rechtstreeks in ox_lib registreren worden niet uitgeschakeld. ox_lib blijft een verplichte bridge-dependency voor de overige functies.
 
-Voeg bij een bestaande configuratie dit blok toe en zet `Version = '0.0.9'`. Behoud je andere instellingen en webhooks. Herstart daarna de server zodat afhankelijke resources hun menu’s opnieuw registreren. De toetsenbinding wordt door ox_lib en de persoonlijke FiveM-instellingen bepaald.
+Voeg bij een bestaande configuratie dit blok toe en zet `Version = '0.0.10'`. Behoud je andere instellingen en webhooks. Herstart daarna de server zodat afhankelijke resources hun menu’s opnieuw registreren. De toetsenbinding wordt door ox_lib en de persoonlijke FiveM-instellingen bepaald.
 
 Registratie bij een uitgeschakeld menu geeft `true`: de bridge bewaart de registratie maar toont niets. Er wordt dus geen ontbrekende-exportfout veroorzaakt bij bestaande aanroepers. Een oude config zonder `Radial` behoudt het eerdere ingeschakelde ox_lib-gedrag en geeft de gebruikelijke configversiewaarschuwing.
+
+## Gedeelde werkpasloketten
+
+Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.0 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.0.10 zet. Deze update voegt geen harde idcard-dependency toe.

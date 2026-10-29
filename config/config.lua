@@ -6,7 +6,13 @@
 
 -- 1. Algemeen, meldingen, toetsen en inventory
 TSBridgeConfig = {
-    Version = '0.0.9', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    Version = '0.0.10', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    -- Optionele werkpaskoppeling. Geen harde dependency op 0r_idcard.
+    JobCards = {
+        Enabled = true, -- false: werkpasoptie meldt niet beschikbaar; sleutelkaarten blijven werken.
+        Resource = '0r_idcard', -- cijfer nul, exacte naam van de werkpasresource.
+        KeycardResource = 'ts_keycard', -- resource die de gedeelde loketten beheert.
+    },
     Locale = 'nl', -- 'nl' = Nederlands, 'en' = Engels; ontbrekende teksten vallen terug op Nederlands.
     NotificationTitle = 'Troy Scripts', -- Eigen, niet-lege standaardtitel; een melding mag deze overschrijven.
     NotificationDuration = 5000, -- Geheel getal 1–300000 milliseconden; 5000 = 5 seconden.
@@ -76,6 +82,11 @@ TSBridgeConfig.Server = {
         -- Minimaal één rekeningnaam per alias. Standaardrekening eerst; oude spelling alleen als fallback.
         police = { 'society_police', 'socity_police' },
         ambulance = { 'society_ambulance' },
+        mechanic = { 'society_mechanic' },
+        taxi = { 'society_taxi' },
+        sheriff = { 'society_sheriff' },
+        justice = { 'society_justice' },
+        fib = { 'society_fib' },
         firefighter = { 'society_firefighter' } -- Brandweer; exacte ESX-job: firefighter.
     },
     ScreenshotResource = 'screenshot-basic', -- screenshot-basic-compatibele requestScreenshot-export.

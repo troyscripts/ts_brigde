@@ -2,8 +2,8 @@
 
 # Voorbereiding keycard, banking en billing
 
-Bridge **0.0.3** hoort bij ts_keycard **1.1.4** en ts_hostage **1.1.8**.
-Keycard is nu aangesloten; Apex/okok-resources zelf zijn niet aangepast.
+Huidige combinatie: bridge **1.1.2** met ts_keycard **1.3.0**. De bestaande hostage-API blijft behouden.
+Keycard is aangesloten; Apex/okok-resources zelf zijn niet aangepast. Werkpasmenu en loketcontrole: zie [JOBCARDS.md](JOBCARDS.md).
 
 ## Gekozen koppelingen
 
@@ -190,3 +190,5 @@ uitkomst van een asynchrone provider. `Provider='none'` schakelt facturen uit.
 - [ox_inventory server](https://overextended.dev/docs/ox_inventory/Functions/Server)
 - [ox_inventory hooks](https://overextended.dev/docs/ox_inventory/Functions/Server/Hooks)
 
+
+Nieuwe afdelingen gebruiken hun eigen afhandeling in ts_keycard/server/departments.lua. Een ontbrekende society blokkeert betaalde uitgifte vóór afschrijving. Na een mislukte latere societybijschrijving wordt de transactiereferentie gelogd voor handmatige controle; dit is geen atomaire transactie. Jobcards van idcard blijven gratis.

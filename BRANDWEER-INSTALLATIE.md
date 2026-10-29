@@ -28,3 +28,7 @@ Lokaal zijn Lua-syntax, gemockte betaling/uitgifte, afdelingstoegang, vervalsing
 ESX-tabelstructuur gecontroleerd aan de officiële bron:
 https://github.com/esx-framework/esx_core/blob/main/%5BSQL%5D/legacy.sql
 
+
+## Gedeelde werkpasloketten
+
+Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.0 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.0.10 zet. Deze update voegt geen harde idcard-dependency toe.

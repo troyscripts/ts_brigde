@@ -6,3 +6,5 @@ Bewerk bestanden met UTF-8. Behoud sleutels, formattekens (%s, %d, %.1f), kleurc
 
 Ontbrekende talen en sleutels vallen terug op Nederlands. Exports, commands, resourcenamen en technische foutcodes blijven ongewijzigd. Eigen tekstinstellingen en teksten van aanroepende scripts worden niet automatisch vertaald. Herstart na wijzigen; fallback herstelt geen Lua-syntaxfouten.
 
+
+De optionele werkpaskoppeling gebruikt jobcards_title en jobcards_unavailable in beide locales. Zie ../JOBCARDS.md.

@@ -21,3 +21,7 @@ De bridgeguards van hostage, antipunch en keycard overlappen. Een gedeelde valid
 
 Alle algemene bridge-instellingen blijven in config/config.lua; geheime webhook-URLs staan in config/webhook_config.lua. De configversie stijgt alleen bij een daadwerkelijke schemawijziging. Bij deze herstelrelease blijft die 0.0.7.
 
+
+## Gedeelde werkpasloketten
+
+Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.0 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.0.10 zet. Deze update voegt geen harde idcard-dependency toe.

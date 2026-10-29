@@ -6,12 +6,12 @@ local names = server and {
     'GetInventorySlot', 'GetEmptySlot', 'CanCarryItem', 'AddItem', 'RemoveItem',
     'SetItemMetadata', 'GetInventories', 'RegisterInventoryHook', 'RemoveInventoryHook',
     'CheckForUpdates', 'GetDiagnostics', 'GetWebhookStatus', 'CheckConfigVersion', 'Notify', 'AlertJobs', 'SendWebhook', 'GetStatus', 'GetJob', 'GetItemCount', 'HasItem',
-    'CreateInvoice', 'GetInvoice', 'GetBillingStatus', 'RegisterBillingProvider'
+    'IsAtKeycardDesk', 'CreateInvoice', 'GetInvoice', 'GetBillingStatus', 'RegisterBillingProvider'
 } or {
     'RequestFirstPerson', 'ReleaseFirstPerson', 'SetCombatContext', 'GetCombatContext',
     'CheckConfigVersion', 'RegisterRadialMenu', 'RemoveRadialMenu', 'Notify', 'IsDead', 'GetTargetResource', 'AddGlobalPlayer', 'AddGlobalVehicle',
     'RemoveGlobalPlayer', 'RemoveGlobalVehicle', 'AddLocalEntity', 'RemoveLocalEntity',
-    'UseItem', 'ProgressCircle', 'InputDialog', 'AlertDialog', 'GetStatus'
+    'OpenJobCardDesk', 'UseItem', 'ProgressCircle', 'InputDialog', 'AlertDialog', 'GetStatus'
 }
 exports('GetStatus', function()
     if TSBridgeValidation and not TSBridgeValidation.valid then

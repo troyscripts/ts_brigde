@@ -113,3 +113,6 @@ Locales.en.runtime_none = 'none'
 Locales.en.runtime_ts_bridge_github_configured_s = '[ts_bridge] GitHub configured: %s'
 Locales.en.runtime_unversioned = 'unversioned'
 
+
+Locales["en"]["jobcards_title"] = "Work IDs"
+Locales["en"]["jobcards_unavailable"] = "Work IDs are currently unavailable. Keycards are still available."
