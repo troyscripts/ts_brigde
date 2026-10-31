@@ -1,6 +1,6 @@
-# Werkpaskoppeling — ts_bridge 1.1.2
+# Werkpaskoppeling — ts_bridge 1.1.3
 
-De bridge verbindt ts_keycard 1.3.0 met de optionele resource 0r_idcard. Sleutelkaarten blijven beschikbaar wanneer idcard ontbreekt of gestopt is.
+De bridge verbindt ts_keycard 1.3.1 met de optionele resource 0r_idcard. Sleutelkaarten blijven beschikbaar wanneer idcard ontbreekt of gestopt is.
 
 ```lua
 JobCards = {
@@ -10,7 +10,7 @@ JobCards = {
 },
 ```
 
-Dit blok staat in `config/config.lua` naast `Locale`; configschema is **0.0.10**. De resourcenaam begint met een nul. Gebruik de aangepaste idcard-resource met export `OpenJobCardDesk`.
+Dit blok staat in `config/config.lua` naast `Locale`; configschema is **0.1.0**. De resourcenaam begint met een nul. Gebruik de aangepaste idcard-resource met export `OpenJobCardDesk`.
 
 Client: `exports.ts_bridge:OpenJobCardDesk()` opent het idcard-menu en retourneert true. Bij uitgeschakelde koppeling, ontbrekende resource/export of een fout retourneert het false en toont het de NL/EN-melding dat jobkaarten momenteel niet werken. De melding komt uit `locales/` en gebruikt de bridge-taal.
 

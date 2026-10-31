@@ -6,7 +6,7 @@
 
 -- 1. Algemeen, meldingen, toetsen en inventory
 TSBridgeConfig = {
-    Version = '0.0.10', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    Version = '0.1.0', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
     -- Optionele werkpaskoppeling. Geen harde dependency op 0r_idcard.
     JobCards = {
         Enabled = true, -- false: werkpasoptie meldt niet beschikbaar; sleutelkaarten blijven werken.
@@ -49,6 +49,7 @@ TSBridgeConfig.Vehicles = {
     Dealer = { Provider = 'jg', Resource = 'jg-dealerships' }, -- Alleen 'jg'; dealer roept de kentekengenerator aan.
     Garage = { Provider = 'jg', Resource = 'jg-advancedgarages' }, -- Alleen 'jg'; jobgarages vereisen TSGetJobGarages-export.
     Keys = { Provider = 'mrnewb', Resource = 'MrNewbVehicleKeys' }, -- 'mrnewb' = GiveKeys/RemoveKeys; 'none' = geen sleutelkoppeling (Resource wordt dan genegeerd).
+    SkyFakePlates = { Enabled = true, StateKey = 'sky_fakePlate' }, -- true: echt kenteken uit Sky-state voor registratie; false: zichtbaar kenteken.
     PlatesResource = 'ts_nlplates' -- Resource met GeneratePlate-export voor de dealer; geen andere ingebouwde kentekenadapter.
 }
 

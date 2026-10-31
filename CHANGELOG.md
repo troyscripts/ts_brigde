@@ -1,3 +1,8 @@
+# 1.1.3 — 2026-10-30
+
+- Centrale Sky-kentekenlezers en correcte voertuigfotoherkenning; instelbaar via Vehicles.SkyFakePlates.
+- Configversie 0.1.0; metadata en actuele documentatie bijgewerkt.
+
 # Changelog
 
 ## 1.1.2

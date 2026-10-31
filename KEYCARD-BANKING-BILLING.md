@@ -2,7 +2,7 @@
 
 # Voorbereiding keycard, banking en billing
 
-Huidige combinatie: bridge **1.1.2** met ts_keycard **1.3.0**. De bestaande hostage-API blijft behouden.
+Huidige combinatie: bridge **1.1.3** met ts_keycard **1.3.1**. De bestaande hostage-API blijft behouden.
 Keycard is aangesloten; Apex/okok-resources zelf zijn niet aangepast. Werkpasmenu en loketcontrole: zie [JOBCARDS.md](JOBCARDS.md).
 
 ## Gekozen koppelingen

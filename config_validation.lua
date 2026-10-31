@@ -18,6 +18,13 @@ local function validate(shared, server)
     if type(shared) ~= 'table' then issue('TSBridgeConfig') else
         for _, key in ipairs({ 'Locale', 'NotificationTitle', 'WaypointKey', 'InventoryResource', 'TargetResource' }) do text(shared, key, 'TSBridgeConfig') end
         -- Nieuwe velden zijn optioneel bij migratie; de configversie waarschuwt.
+        local sky = type(shared.Vehicles) == 'table' and shared.Vehicles.SkyFakePlates
+        if sky ~= nil then
+            if type(sky) ~= 'table' then issue('Vehicles.SkyFakePlates') else
+                if type(sky.Enabled) ~= 'boolean' then issue('Vehicles.SkyFakePlates.Enabled') end
+                text(sky, 'StateKey', 'Vehicles.SkyFakePlates')
+            end
+        end
         if shared.AlertDismissKey ~= nil then text(shared, 'AlertDismissKey', 'TSBridgeConfig') end
         if shared.AlertBlip ~= nil and type(shared.AlertBlip) ~= 'boolean' then issue('TSBridgeConfig.AlertBlip') end
         if shared.Radial ~= nil then

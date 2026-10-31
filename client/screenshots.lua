@@ -59,7 +59,7 @@ RegisterNetEvent('ts_bridge:screenshot:capture', function(token, resource, maxBy
                 or IsEntityDead(ped) or GetEntitySpeed(vehicle) > 0.5
                 or #(GetEntityCoords(ped) - GetEntityCoords(vehicle)) > 12
                 or type(vehiclePlate) ~= 'string'
-                or GetVehicleNumberPlateText(vehicle):upper():match('^%s*(.-)%s*$') ~= vehiclePlate
+                or TSBridgePlate.GetReal(vehicle):upper():match('^%s*(.-)%s*$') ~= vehiclePlate
                 or not IsGameplayCamRendering() then complete(nil, 'vehicle_unavailable'); return end
             local minimum, maximum = GetModelDimensions(GetEntityModel(vehicle))
             local length = math.max(3.0, maximum.y - minimum.y)
