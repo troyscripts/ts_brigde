@@ -116,3 +116,9 @@ Locales.en.runtime_unversioned = 'unversioned'
 
 Locales["en"]["jobcards_title"] = "Work IDs"
 Locales["en"]["jobcards_unavailable"] = "Work IDs are currently unavailable. Keycards are still available."
+
+Locales.en.screenshot_phase_received = "Client received the photo request; capturing image."
+Locales.en.screenshot_phase_uploading = "Client captured the photo; transferring image to server."
+Locales.en.screenshot_timeout_requested = "Client did not acknowledge the photo request. Check F8, ts_bridge client startup and event blocking."
+Locales.en.screenshot_timeout_received = "Client acknowledged the request but returned no capture. Check screenshot-basic and F8."
+Locales.en.screenshot_timeout_uploading = "Photo captured but transfer to server did not complete. Check network and event blocking."

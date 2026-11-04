@@ -65,6 +65,19 @@ end
 -- Een antwoord is eenmalig en gebonden aan de speler van de serveraanvraag.
 local photoRequests, photoSequence = {}, 0
 local photoEpoch = tostring(os.time()) .. ':' .. tostring(GetGameTimer())
+-- Kleine voortgangsberichten onderscheiden opnameproblemen van vertraagde foto-overdracht.
+-- Alleen de aangevraagde speler, alleen vooruit; dit verlengt nooit de deadline.
+RegisterNetEvent('ts_bridge:screenshot:progress', function(token, phase)
+    if type(token) ~= 'string' then return end
+    local request = photoRequests[token]
+    if not request or request.player ~= source then return end
+    if phase == 'received' and request.phase == 'requested' then
+        request.phase = 'received'
+    elseif phase == 'uploading' and (request.phase == 'requested' or request.phase == 'received') then
+        request.phase = 'uploading'
+    else return end
+    photoStatus(TSL('screenshot_phase_' .. request.phase))
+end)
 RegisterNetEvent('ts_bridge:screenshot:result', function(token, data, failure)
     if type(token) ~= 'string' then return end
     local request = photoRequests[token]
@@ -287,7 +300,10 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
     if not TSBridgeServer.Screenshots then return unavailable(TSL('webhooks_screenshots_uitgeschakeld_in_ts_bridge')) end
     if GetResourceState(TSBridgeServer.ScreenshotResource) ~= 'started' then return unavailable(TSL('webhooks_screenshotresource_niet_gestart')) end
     if not id or id <= 0 or not GetPlayerName(id) then return unavailable(TSL('webhooks_speler_niet_online')) end
-    local timeout = options.vehicleNetId and math.max(TSBridgeServer.ScreenshotTimeoutMs, 20000) or TSBridgeServer.ScreenshotTimeoutMs
+    -- De oude 8 seconden omvatten zowel opname als de volledige latent-overdracht.
+    -- Base64 maakt de foto circa 1/3 groter. Reserveer ook tijd voor netwerkvertraging.
+    local transferBudget = math.ceil((math.ceil(TSBridgeServer.MaxImageBytes / 3) * 4 + 64) / 1000000 * 1000) * 2
+    local timeout = math.max(TSBridgeServer.ScreenshotTimeoutMs, 45000, 20000 + transferBudget + 5000)
     photoStatus(TSL('runtime_requested_from_player') .. tostring(id))
     pendingPhotos = pendingPhotos + 1
     local completed = false
@@ -308,9 +324,11 @@ exports('SendWebhook', function(route, fallbackUrl, payload, options)
         end
         enqueue(url, payload, image, imageData, document)
     end
-    photoRequests[token] = { player = id, complete = complete }
+    photoRequests[token] = { player = id, complete = complete, phase = 'requested' }
     SetTimeout(timeout, function()
-        complete(nil, TSL('runtime_screenshot_timeout_no_complete_client_response_received_through_fivem'))
+        local request = photoRequests[token]
+        if not request then return end
+        complete(nil, TSL('screenshot_timeout_' .. request.phase))
     end)
     -- Geen NUI HTTP-upload naar het serverendpoint en geen webhook-URL naar clients.
     local requested = pcall(TriggerClientEvent, 'ts_bridge:screenshot:capture', id,

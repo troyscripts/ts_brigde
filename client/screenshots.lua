@@ -19,6 +19,7 @@ RegisterNetEvent('ts_bridge:screenshot:capture', function(token, resource, maxBy
     local function fail(reason)
         TriggerServerEvent('ts_bridge:screenshot:result', token, nil, reason)
     end
+    TriggerServerEvent('ts_bridge:screenshot:progress', token, 'received')
     if busy then fail('busy'); return end
     if GetResourceState(resource) ~= 'started' then fail('unavailable'); return end
     busy = true
@@ -34,9 +35,10 @@ RegisterNetEvent('ts_bridge:screenshot:capture', function(token, resource, maxBy
             fail('invalid'); return
         end
         -- Begrensde overdracht zonder het normale eventkanaal met een grote foto te blokkeren.
+        TriggerServerEvent('ts_bridge:screenshot:progress', token, 'uploading')
         TriggerLatentServerEvent('ts_bridge:screenshot:result', 1000000, token, data)
     end
-    SetTimeout(math.max(100, math.min(vehicleNetId and 19000 or 6000, timeoutMs - 500)), function()
+    SetTimeout(math.max(100, math.min(vehicleNetId and 19000 or 15000, timeoutMs - 500)), function()
         complete(nil, 'timeout')
     end)
     local function capture()

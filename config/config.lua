@@ -6,7 +6,7 @@
 
 -- 1. Algemeen, meldingen, toetsen en inventory
 TSBridgeConfig = {
-    Version = '0.1.0', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
+    Version = '0.1.1', -- Vereist configschema; geen keuze. Alleen wijzigen na overnemen van nieuwe velden.
     -- Optionele werkpaskoppeling. Geen harde dependency op 0r_idcard.
     JobCards = {
         Enabled = true, -- false: werkpasoptie meldt niet beschikbaar; sleutelkaarten blijven werken.
@@ -92,7 +92,7 @@ TSBridgeConfig.Server = {
     },
     ScreenshotResource = 'screenshot-basic', -- screenshot-basic-compatibele requestScreenshot-export.
     Screenshots = true, -- false = geen screenshots; webhook-tekst blijft beschikbaar.
-    ScreenshotTimeoutMs = 8000, -- Geheel getal 100–300000 ms. Voertuigfoto-aanvragen gebruiken minimaal 20000 ms.
+    ScreenshotTimeoutMs = 45000, -- Totale wachttijd; minimaal 45 sec plus zo nodig ruimte voor grote foto-overdracht.
     MaxImageBytes = 4 * 1024 * 1024, -- Geheel getal 1–26214400 bytes (max. 25 MiB); standaard 4 MiB.
     MaxQueue = 32, -- Geheel getal 1–1000; totaal voor logs én gereserveerde screenshotplaatsen, alle scripts samen.
 }

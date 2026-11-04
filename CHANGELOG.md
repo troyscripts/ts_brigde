@@ -1,3 +1,12 @@
+# 1.1.4 — 2026-11-04
+
+- Fototime-out hersteld: aparte ruimte voor opname en base64-overdracht, ook bij bestaande configs met 8000 ms.
+- Client bevestigt aanvraag en start overdracht; ts_bridge_check en tekstfallback tonen waar de opname stopt. Voortgang verlengt geen deadlines.
+
+- Centrale webhookroutes voor ts_repairpoints: murder, placed en removed.
+- Foto's via bestaande beveiligde screenshotwachtrij; tekstfallback bij ontbrekende opname.
+- Configschema 0.1.1. Bestaande integraties behouden.
+
 # 1.1.3 — 2026-10-30
 
 - Centrale Sky-kentekenlezers en correcte voertuigfotoherkenning; instelbaar via Vehicles.SkyFakePlates.

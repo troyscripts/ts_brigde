@@ -5,6 +5,11 @@
 -- Lege centrale route = aangesloten script mag zijn eigen server-side URL gebruiken.
 -- Aanvullende routes: resource_naam = { route_naam = 'URL' }; de aanroeper bepaalt de route.
 TSBridgeServer.Webhooks = {
+    ts_repairpoints = {
+        murder = '', -- Gedode reparateur, foto indien beschikbaar.
+        placed = '', -- Reparatiepunt geplaatst door beheerder.
+        removed = '', -- Reparatiepunt verwijderd door beheerder.
+    },
     ts_hostage = {
         start = '', -- Start van een gijzeling.
         actions = '' -- Vervolgacties zoals loslaten of doden, aangeleverd door ts_hostage.

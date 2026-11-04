@@ -118,3 +118,9 @@ Locales.nl.runtime_unversioned = 'zonder versie'
 
 Locales["nl"]["jobcards_title"] = "Werkpassen"
 Locales["nl"]["jobcards_unavailable"] = "Jobkaarten werken op dit moment niet. Sleutelkaarten zijn wel beschikbaar."
+
+Locales.nl.screenshot_phase_received = "Client heeft de fotoaanvraag ontvangen; opname wordt gemaakt."
+Locales.nl.screenshot_phase_uploading = "Client heeft de foto gemaakt; foto-overdracht naar server bezig."
+Locales.nl.screenshot_timeout_requested = "Client heeft de fotoaanvraag niet bevestigd. Controleer F8, ts_bridge clientstart en eventblokkades."
+Locales.nl.screenshot_timeout_received = "Client heeft de aanvraag bevestigd, maar geen opname teruggestuurd. Controleer screenshot-basic en F8."
+Locales.nl.screenshot_timeout_uploading = "Foto is gemaakt, maar de overdracht naar de server is niet voltooid. Controleer netwerk en eventblokkades."
