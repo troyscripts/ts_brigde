@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.4** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.5** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.1.1**.
 
@@ -378,3 +378,7 @@ Zie [SKY-MECHANIC.md](SKY-MECHANIC.md) voor Sky-ondersteuning en installatie.
 ## Reparatiepunten-webhooks
 
 Sinds 1.1.4 zijn `ts_repairpoints.murder`, `.placed` en `.removed` opgenomen in de serverconfig. Zie [REPAIRPOINTS-WEBHOOKS.md](REPAIRPOINTS-WEBHOOKS.md) voor URLs, foto's, tekstfallback en installatie met ts_repairpoints 1.1.1. De bestaande screenshot-API en andere integraties blijven beschikbaar.
+
+## Openbare distributie
+
+ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er hoeft geen Gemert RP-specifieke includeregel te worden toegevoegd. Gebruik de hierboven beschreven functionele dependencies en configureer de ondersteunde providers, jobs en locaties voor jouw eigen server. Deze onderhoudsupdate wijzigt het configschema niet.
