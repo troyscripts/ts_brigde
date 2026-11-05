@@ -1,3 +1,9 @@
+# 1.1.5 — 2026-11-05
+
+- Vaste ElectronAC-include verwijderd uit de openbare distributie; geen anti-cheatresource vereist.
+- Installatie-instructies verduidelijkt voor andere servers; bestaande functionele dependencies blijven gelden.
+- Configuratie en gameplay ongewijzigd; behoud bestaande eigen instellingen.
+
 # 1.1.4 — 2026-11-04
 
 - Fototime-out hersteld: aparte ruimte voor opname en base64-overdracht, ook bij bestaande configs met 8000 ms.

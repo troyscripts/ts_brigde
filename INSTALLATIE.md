@@ -1,4 +1,4 @@
-# Installatie — ts_bridge 1.1.4
+# Installatie — ts_bridge 1.1.5
 
 De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
 
@@ -65,3 +65,7 @@ Verander in dezelfde tabel `Version = '0.0.8'` naar `Version = '0.1.1'`, nadat j
 ## Gedeelde werkpasloketten
 
 Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.1 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.1.1 zet. Deze update voegt geen harde idcard-dependency toe.
+
+## Openbare distributie
+
+ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er hoeft geen Gemert RP-specifieke includeregel te worden toegevoegd. Gebruik de hierboven beschreven functionele dependencies en configureer de ondersteunde providers, jobs en locaties voor jouw eigen server. Deze onderhoudsupdate wijzigt het configschema niet.
