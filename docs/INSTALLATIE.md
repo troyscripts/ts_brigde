@@ -69,3 +69,8 @@ Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.1 
 ## Openbare distributie
 
 ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er hoeft geen Gemert RP-specifieke includeregel te worden toegevoegd. Gebruik de hierboven beschreven functionele dependencies en configureer de ondersteunde providers, jobs en locaties voor jouw eigen server. Deze onderhoudsupdate wijzigt het configschema niet.
+
+
+## Electron AntiCheat en screenshots
+
+Gebruik je Electron AntiCheat met `resourceProtection`, volg dan [de whitelist-handleiding](electron-anticheat.md). Whitelist het betreffende script, `screenshot-basic` en `ts_bridge` wanneer de screenshots via de bridge lopen. Electron blijft optioneel; de bridge vereist geen anticheatresource.

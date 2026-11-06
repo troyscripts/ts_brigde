@@ -1,3 +1,11 @@
+# Documentatieonderhoud — 2026-11-06
+
+- Handleidingen en changelog gebundeld in `docs/`; `README.md` blijft in de hoofdmap.
+- Vertaalhandleiding verplaatst naar `docs/LOCALES.md`; lettertypelicentie behouden in `docs/licenses/`.
+- Algemene Electron AntiCheat-whitelist-handleiding toegevoegd als `docs/electron-anticheat.md`.
+- Documentatieoverzicht en verwijzingen bijgewerkt.
+- Alleen documentatie gewijzigd; scriptversie 1.1.5 en configschema 0.1.1 blijven gelijk.
+
 # 1.1.5 — 2026-11-05
 
 - Vaste ElectronAC-include verwijderd uit de openbare distributie; geen anti-cheatresource vereist.
@@ -245,4 +253,5 @@
 - Geen gebruik van okok-societyexports; society blijft via esx_addonaccount.
 - okokBilling-providerkeuze voorbereid; aanvragen worden geweigerd totdat de echte adapter is aangesloten.
 - Instructies, beperkingen en providerregressietest toegevoegd. Apex-defaults behouden.
+
 

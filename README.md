@@ -4,7 +4,28 @@
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.1.1**.
 
-Lees [INSTALLATIE.md](INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](CHANGELOG.md) voor de versiegeschiedenis.
+Lees [INSTALLATIE.md](docs/INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](docs/CHANGELOG.md) voor de versiegeschiedenis.
+
+## Documentatie
+
+Alle handleidingen staan in [`docs/`](docs/). Bestandspaden in de handleidingen zijn relatief aan de hoofdmap van de resource, tenzij anders aangegeven.
+
+| Onderwerp | Handleiding |
+| --- | --- |
+| Installatie en migratie | [INSTALLATIE.md](docs/INSTALLATIE.md) |
+| Versiegeschiedenis | [CHANGELOG.md](docs/CHANGELOG.md) |
+| Electron AntiCheat en webhookafbeeldingen | [electron-anticheat.md](docs/electron-anticheat.md) |
+| Brandweer | [BRANDWEER-INSTALLATIE.md](docs/BRANDWEER-INSTALLATIE.md) |
+| Bridge-audit | [BRIDGE-AUDIT.md](docs/BRIDGE-AUDIT.md) |
+| Werkpassen | [JOBCARDS.md](docs/JOBCARDS.md) |
+| Keycards, bankieren en facturen | [KEYCARD-BANKING-BILLING.md](docs/KEYCARD-BANKING-BILLING.md) |
+| okok-koppelingen | [OKOK.md](docs/OKOK.md) |
+| Reparatiepunten en webhooks | [REPAIRPOINTS-WEBHOOKS.md](docs/REPAIRPOINTS-WEBHOOKS.md) |
+| Sky Mechanic | [SKY-MECHANIC.md](docs/SKY-MECHANIC.md) |
+| Voertuigen | [VOERTUIGEN.md](docs/VOERTUIGEN.md) |
+| Kentekenbewijzen en webhooks | [WEBHOOKS-KENTEKENBEWIJS.md](docs/WEBHOOKS-KENTEKENBEWIJS.md) |
+| Vertalingen | [LOCALES.md](docs/LOCALES.md) |
+| Licentie documentlettertype | [DOCUMENT_FONT_LICENSE.txt](docs/licenses/DOCUMENT_FONT_LICENSE.txt) |
 
 ## Gedeelde camera en combatcontext
 
@@ -60,7 +81,7 @@ serverbeveiliging. Directe camerawijzigingen van andere scripts kunnen nog botse
 De integratie is lokaal met gesimuleerde FiveM-functies getest; geen live FiveM-test.
 
 
-Centrale ondersteuningsresource voor Troy Scripts. Lees INSTALLATIE.md voor installatie,
+Centrale ondersteuningsresource voor Troy Scripts. Lees docs/INSTALLATIE.md voor installatie,
 configuratie, teststappen en terugzetten.
 
 Deze versie ondersteunt ESX-jobcontrole, ox_lib-meldingen, ox_target, politiemeldingen met
@@ -68,7 +89,7 @@ locatie en waypoint, Discord-webhooks en screenshot-basic. De gijzelingsregels,
 handen-omhoog-functie en animaties blijven in ts_hostage.
 
 Voor de keycard-aansluiting zijn inventory-, ESX-speler/rechten-, cash/bank- en
-societyfuncties toegevoegd. Zie **KEYCARD-BANKING-BILLING.md** voor de volledige API.
+societyfuncties toegevoegd. Zie **docs/KEYCARD-BANKING-BILLING.md** voor de volledige API.
 Persoonlijke bankmutaties gebruiken Apex Banking. Society-mutaties gebruiken alleen
 esx_addonaccount. Facturen aanmaken en opvragen gebruikt Apex Billing. Automatische
 factuurbetaling is nog niet aangesloten; zie de concrete Apex-beperking in die handleiding. QBCore en Qbox zijn niet geïmplementeerd.
@@ -162,13 +183,13 @@ De meegeleverde Lua-testscripts in beide resources controleren samen de bestaand
 jobselectie, waypoint, webhooktransport, screenshots, betalingen, rechten, billingcontract en targetcleanup met gesimuleerde API's.
 Voer tests uit vanuit de map van de betreffende resource met Lua 5.4, bijvoorbeeld
 `lua tests/client_spec.lua`. De hostage-integratietests verwachten ts_bridge ernaast.
-Live controle blijft nodig; zie INSTALLATIE.md.
+Live controle blijft nodig; zie docs/INSTALLATIE.md.
 
 ## okok-keuzes
 
 okokBanking is als ESX-bankaccountadapter toegevoegd. okokBilling heeft een voorbereide
 providerkeuze, maar vereist nog jouw resourcebestanden voor de daadwerkelijke serverkoppeling.
-Zie **OKOK.md**. Apex blijft standaard ingesteld; society-geld blijft bij esx_addonaccount.
+Zie **docs/OKOK.md**. Apex blijft standaard ingesteld; society-geld blijft bij esx_addonaccount.
 
 ## Status-API en locales
 
@@ -322,7 +343,7 @@ Kaartspecifieke rechten, uitgifte en intrekking blijven in keycard.
 
 ## Webhook voor kentekenbewijzen
 
-Zie WEBHOOKS-KENTEKENBEWIJS.md: aparte webhook voor nieuwe/vervangende bewijzen, met kaart-PNG en FiveM-modelafbeelding. URL uitsluitend server-side instellen.
+Zie docs/WEBHOOKS-KENTEKENBEWIJS.md: aparte webhook voor nieuwe/vervangende bewijzen, met kaart-PNG en FiveM-modelafbeelding. URL uitsluitend server-side instellen.
 
 ## Tests en distributie
 
@@ -370,15 +391,16 @@ Registratie bij een uitgeschakeld menu geeft `true`: de bridge bewaart de regist
 
 ## Gedeelde werkpasloketten
 
-Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.1 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.1.1 zet. Deze update voegt geen harde idcard-dependency toe.
+Zie [JOBCARDS.md](docs/JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.1 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.1.1 zet. Deze update voegt geen harde idcard-dependency toe.
 
 
-Zie [SKY-MECHANIC.md](SKY-MECHANIC.md) voor Sky-ondersteuning en installatie.
+Zie [SKY-MECHANIC.md](docs/SKY-MECHANIC.md) voor Sky-ondersteuning en installatie.
 
 ## Reparatiepunten-webhooks
 
-Sinds 1.1.4 zijn `ts_repairpoints.murder`, `.placed` en `.removed` opgenomen in de serverconfig. Zie [REPAIRPOINTS-WEBHOOKS.md](REPAIRPOINTS-WEBHOOKS.md) voor URLs, foto's, tekstfallback en installatie met ts_repairpoints 1.1.1. De bestaande screenshot-API en andere integraties blijven beschikbaar.
+Sinds 1.1.4 zijn `ts_repairpoints.murder`, `.placed` en `.removed` opgenomen in de serverconfig. Zie [REPAIRPOINTS-WEBHOOKS.md](docs/REPAIRPOINTS-WEBHOOKS.md) voor URLs, foto's, tekstfallback en installatie met ts_repairpoints 1.1.1. De bestaande screenshot-API en andere integraties blijven beschikbaar.
 
 ## Openbare distributie
 
 ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er hoeft geen Gemert RP-specifieke includeregel te worden toegevoegd. Gebruik de hierboven beschreven functionele dependencies en configureer de ondersteunde providers, jobs en locaties voor jouw eigen server. Deze onderhoudsupdate wijzigt het configschema niet.
+
