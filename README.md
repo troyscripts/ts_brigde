@@ -1,10 +1,14 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.6** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.7** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.1.1**.
 
 Lees [INSTALLATIE.md](docs/INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](docs/CHANGELOG.md) voor de versiegeschiedenis.
+
+## Nieuwe veilige webhookdiagnose (1.1.7)
+
+`ts_bridge_check` toont nu per resource welke centrale webhookroutes geconfigureerd zijn, plus aantallen Discord-bevestigingen, mislukte pogingen, 429-herkansingen en foto-naar-tekstfallbacks. Er worden **geen webhook-URL's of tokens** getoond. `GetWebhookStatus()` geeft server-side daarnaast `configuredRoutes` en `auditRoutes` terug als naam/boolean-overzichten. Deze tellers gelden vanaf de laatste bridgeherstart. Zie [docs/WEBHOOK-DIAGNOSE.md](docs/WEBHOOK-DIAGNOSE.md).
 
 ## Documentatie
 
