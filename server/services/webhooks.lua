@@ -3,6 +3,8 @@ if TSBridgeValidation and not TSBridgeValidation.valid then return end
 local lanes, queued, pendingPhotos = {}, 0, 0
 local lastPhoto, lastDelivery = TSL('runtime_no_request_since_startup'), TSL('runtime_no_delivery_since_startup')
 local lastFailure = TSL('runtime_no_error_since_startup')
+-- Alleen tellingen en routenamen, nooit URLs of tokens. Reset bij een resourceherstart.
+local deliveryCounts = { confirmed = 0, unconfirmed = 0, failed = 0, rateLimited = 0, photoFallbacks = 0 }
 local function photoStatus(message)
     lastPhoto = os.date('!%H:%M:%S') .. ' UTC | ' .. message
 end
@@ -127,6 +129,7 @@ pump = function(lane)
         deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. ' | ' .. detail)
         if status < 200 or status >= 300 then lastFailure = lastDelivery end
         if status == 429 and item.retries < 3 then
+            deliveryCounts.rateLimited = deliveryCounts.rateLimited + 1
             item.retries = item.retries + 1
             local seconds = type(result) == 'table' and tonumber(result.retry_after) or 2
             if not seconds or seconds ~= seconds then seconds = 2 end
@@ -136,6 +139,7 @@ pump = function(lane)
             return
         end
         if item.image and (status == -1 or status == 400 or status == 413 or status == 415 or status == 422) then
+            deliveryCounts.photoFallbacks = deliveryCounts.photoFallbacks + 1
             warning(TSL('runtime_discord_rejected_photo_message_http') .. tostring(status) .. ' | ' .. detail .. TSL('runtime_text_fallback_follows'))
             item.image = nil
             item.imageData = nil
@@ -156,12 +160,15 @@ pump = function(lane)
         end
         if status >= 200 and status < 300 and type(result) == 'table'
             and type(result.id) == 'string' and result.id:match('^%d+$') then
+            deliveryCounts.confirmed = deliveryCounts.confirmed + 1
             deliveryStatus(kind .. TSL('runtime_confirmed_by_discord_message') .. result.id)
             if item.image then print(TSL('runtime_ts_bridge_discord_photo_confirmed_message') .. result.id) end
         elseif status >= 200 and status < 300 then
+            deliveryCounts.unconfirmed = deliveryCounts.unconfirmed + 1
             deliveryStatus(kind .. ': HTTP ' .. tostring(status) .. TSL('runtime_without_message_confirmation'))
             warning(TSL('runtime_discord_returned_http') .. tostring(status) .. TSL('runtime_without_message_confirmation_no_retry_to_prevent_duplicate_logs'))
         else
+            deliveryCounts.failed = deliveryCounts.failed + 1
             warning(TSL('runtime_sending') .. kind .. TSL('runtime_failed_http') .. tostring(status) .. ' | ' .. detail .. TSL('runtime_webhook_url_is_not_shown'))
         end
         table.remove(queue, 1)
@@ -344,8 +351,32 @@ TSBridgeWebhookStatus = function()
         destinations = destinations + 1
         if lane.processing then active = active + 1 end
     end
-    return { queued = queued, pendingPhotos = pendingPhotos, destinations = destinations, active = active,
-        capacity = TSBridgeServer.MaxQueue, lastPhoto = lastPhoto, lastDelivery = lastDelivery, lastFailure = lastFailure }
+
+    -- Server-only overzicht. Toon alleen namen en booleans, nooit geheime URLs.
+    -- Andere scripts kunnen hiermee een niet-ingestelde route zonder waarschuwing overslaan.
+    local configuredRoutes = {}
+    for owner, routes in pairs(TSBridgeServer.Webhooks or {}) do
+        if type(owner) == 'string' and type(routes) == 'table' then
+            local names = {}
+            for route, url in pairs(routes) do
+                if type(route) == 'string' and urlValid(url) then names[route] = true end
+            end
+            if next(names) then configuredRoutes[owner] = names end
+        end
+    end
+    local auditRoutes = {}
+    for route, url in pairs((TSBridgeAuditConfig or {}).Webhooks or {}) do
+        if type(route) == 'string' and urlValid(url) then auditRoutes[route] = true end
+    end
+
+    return {
+        queued = queued, pendingPhotos = pendingPhotos, destinations = destinations, active = active,
+        capacity = TSBridgeServer.MaxQueue, lastPhoto = lastPhoto, lastDelivery = lastDelivery, lastFailure = lastFailure,
+        configuredRoutes = configuredRoutes, auditRoutes = auditRoutes,
+        deliveries = { confirmed = deliveryCounts.confirmed, unconfirmed = deliveryCounts.unconfirmed,
+            failed = deliveryCounts.failed, rateLimited = deliveryCounts.rateLimited,
+            photoFallbacks = deliveryCounts.photoFallbacks }
+    }
 end
 exports('GetWebhookStatus', TSBridgeWebhookStatus)
 

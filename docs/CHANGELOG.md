@@ -1,3 +1,11 @@
+# 1.1.7 — 2026-11-07
+
+- `ts_bridge_check` toont ingestelde webhookroutes per resource, zonder URL's of tokens.
+- Veilige aflevertellers toegevoegd: door Discord bevestigde berichten, 2xx zonder message-id, definitieve fouten, 429-herpogingen en fotofallbacks.
+- `GetWebhookStatus` uitgebreid met server-side `configuredRoutes`, `auditRoutes` en `deliveries`, zonder bestaande velden of exports te verwijderen.
+- Geen wijzigingen aan webhooktransport, URL-validatie, wachtrij, retries, configuratieschema of gameplay.
+- Scriptversie naar 1.1.7; configuratieschema blijft 0.1.1.
+
 # 1.1.6 — 2026-11-07
 
 - Bestaande functies logisch heringedeeld: gedeelde helpers in `shared/`, client- en serveronderdelen per core, integratie en service.

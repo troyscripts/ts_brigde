@@ -34,6 +34,29 @@ RegisterCommand('ts_bridge_check', function(src)
         print(TSL('runtime_ts_bridge_last_discord_result') .. (d.webhooks.lastDelivery or TSL('runtime_unknown')))
         print(TSL('runtime_ts_bridge_last_discord_error') .. (d.webhooks.lastFailure or TSL('runtime_none')))
     end
+    if d.webhooks then
+        local totals = d.webhooks.deliveries or {}
+        print(('[ts_bridge] Discord: bevestigd=%d | HTTP zonder bevestiging=%d | mislukt=%d | 429-pogingen=%d | foto-tekstfallback=%d'):format(
+            totals.confirmed or 0, totals.unconfirmed or 0, totals.failed or 0,
+            totals.rateLimited or 0, totals.photoFallbacks or 0))
+        local owners = {}
+        for owner in pairs(d.webhooks.configuredRoutes or {}) do owners[#owners + 1] = owner end
+        table.sort(owners)
+        for _, owner in ipairs(owners) do
+            local routes = {}
+            for route, enabled in pairs(d.webhooks.configuredRoutes[owner]) do
+                if enabled then routes[#routes + 1] = route end
+            end
+            table.sort(routes)
+            print(('[ts_bridge] Webhookroutes %s: %s'):format(owner, table.concat(routes, ', ')))
+        end
+        local audit = {}
+        for route, enabled in pairs(d.webhooks.auditRoutes or {}) do
+            if enabled then audit[#audit + 1] = route end
+        end
+        table.sort(audit)
+        if #audit > 0 then print('[ts_bridge] Auditwebhooks: ' .. table.concat(audit, ', ')) end
+    end
     print((TSL('runtime_ts_bridge_github_configured_s')):format(tostring(d.updateCheckConfigured)))
 end, false)
 
