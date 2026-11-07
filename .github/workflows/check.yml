@@ -76,3 +76,17 @@ jobs:
           find server web -type f -name '*.js' -print0 | while IFS= read -r -d '' file; do
             node --check "$file"
           done
+      - name: Verify renderer module and asset paths
+        run: |
+          node - <<'NODE'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const uploader = fs.readFileSync('server/uploads/screenshot_upload.js', 'utf8');
+          assert(uploader.includes("'/server/uploads/document_image.js'"), 'Uploader does not point to moved renderer');
+          assert(fs.existsSync('server/uploads/document_font.json'), 'Font atlas missing');
+          const render = require('./server/uploads/document_image.js');
+          assert.equal(typeof render, 'function', 'Renderer export missing');
+          const png = render({ plate: 'AB1234', owner: 'Test', documentNumber: '12345678', issued: '2026-11-07', model: 'Sultan' });
+          assert(Buffer.isBuffer(png) && png.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])), 'Invalid PNG render');
+          console.log('Document upload module and PNG rendering OK');
+          NODE
