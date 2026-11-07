@@ -46,7 +46,7 @@ jobs:
               addRadialItem = function(data) shown[data.id] = data end,
               removeRadialItem = function(id) shown[id] = nil end
           }
-          dofile('client/radial_actions.lua')
+          dofile('client/core/radial_actions.lua')
           local callback = setmetatable({}, { __call = function() calls = calls + 1 end })
           local data = { id = 'shuffle', label = 'Wissel voorstoel', onSelect = callback }
           assert(api.RegisterRadialAction(data), 'Callable export callback rejected')
