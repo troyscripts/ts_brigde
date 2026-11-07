@@ -1,6 +1,8 @@
-# Installatie — ts_bridge 1.1.5
+# Installatie — ts_bridge 1.1.6
 
 De repository heet `ts_brigde`; de FiveM-resourcemap moet **ts_bridge** heten.
+
+**Bij upgrade naar 1.1.6:** bewaar eerst je huidige `config/config.lua` en `config/webhook_config.lua` buiten de resource. Vervang daarna de volledige oude resource-map (niet de nieuwe map over de oude heen kopiëren). Neem je aangepaste waarden over, zonder gewijzigde instellingen te verliezen. De nieuwe paden van alle modules en extra controlepunten staan in [STRUCTUUR.md](STRUCTUUR.md). Het configschema blijft 0.1.1; neem dit niet zomaar opnieuw over als eigen configuratie een latere versie gebruikt.
 
 1. Maak een back-up van je resource en eigen instellingen. Beëindig actieve gijzelingen en stop afhankelijke scripts, daarna de bridge.
 2. Plaats de volledige resource. Bij een bestaande installatie op configschema 0.0.8: verplaats je eigen `config.lua` naar `config/config.lua` en `webhook_config.lua` naar `config/webhook_config.lua`. Behoud alle eigen waarden en URLs.
@@ -22,7 +24,7 @@ ensure ts_keycard
 
 Controleer Banking.Provider en Billing.Provider: Apex is standaard; kies de bij jouw installatie passende ondersteunde provider. Society-geld loopt via esx_addonaccount. Controleer dat society_police/socity_police en society_ambulance bestaan wanneer gebruikt. Zie KEYCARD-BANKING-BILLING.md, OKOK.md en VOERTUIGEN.md.
 
-Configschema 0.0.8 bevat de firefighter-societyalias. Voor brandweer: zie BRANDWEER-INSTALLATIE.md en install/firefighter_society.sql. Webhook-URLs blijven server-only: publiceer geen ingevulde URLs op GitHub. Webhookinstellingen van andere resources blijven in die resources staan.
+Configschema 0.0.8 bevat de firefighter-societyalias. Voor brandweer: zie BRANDWEER-INSTALLATIE.md en install/sql/firefighter_society.sql. Webhook-URLs blijven server-only: publiceer geen ingevulde URLs op GitHub. Webhookinstellingen van andere resources blijven in die resources staan.
 
 ## Controle na installatie
 

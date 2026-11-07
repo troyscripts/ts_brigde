@@ -1,3 +1,13 @@
+# 1.1.6 — 2026-11-07
+
+- Bestaande functies logisch heringedeeld: gedeelde helpers in `shared/`, client- en serveronderdelen per core, integratie en service.
+- Kentekenbewijsrenderer, lettertypeatlas en screenshot-uploader samen in `server/uploads/`; JavaScript-laadpad aangepast.
+- Firefighter-SQL naar `install/sql/`, handleidingen bijgewerkt en nieuwe mapuitleg toegevoegd.
+- De oorspronkelijke uitvoervolgorde, alle exports, namen van events, `ts_bridge`-resourcenaam, GitHub-repo `ts_brigde` en publieke configuratiesleutels blijven ongewijzigd.
+- `shared_status.lua` blijft in de hoofdmap voor oudere tests/integraties die dit bestand rechtstreeks laden.
+- Scriptversie naar 1.1.6; configuratieschema blijft 0.1.1. Geen nieuwe gameplay-functies.
+- GitHub Actions uitgebreider gecontroleerd op het laadpad van de afbeeldingsrenderer.
+
 # Documentatieonderhoud — 2026-11-06
 
 - Handleidingen en changelog gebundeld in `docs/`; `README.md` blijft in de hoofdmap.

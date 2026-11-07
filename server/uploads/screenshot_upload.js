@@ -3,7 +3,7 @@
 const https = require('https');
 const crypto = require('crypto');
 
-const renderDocument = require(GetResourcePath(GetCurrentResourceName()) + '/server/document_image.js');
+const renderDocument = require(GetResourcePath(GetCurrentResourceName()) + '/server/uploads/document_image.js');
 
 function upload(url, payloadJson, dataUri, callback, documentJson) {
     if (typeof callback !== 'function') return;

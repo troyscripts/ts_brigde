@@ -1,6 +1,6 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.5** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.6** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.1.1**.
 
@@ -13,6 +13,7 @@ Alle handleidingen staan in [`docs/`](docs/). Bestandspaden in de handleidingen 
 | Onderwerp | Handleiding |
 | --- | --- |
 | Installatie en migratie | [INSTALLATIE.md](docs/INSTALLATIE.md) |
+| Bestandsindeling en upgrade 1.1.6 | [STRUCTUUR.md](docs/STRUCTUUR.md) |
 | Versiegeschiedenis | [CHANGELOG.md](docs/CHANGELOG.md) |
 | Electron AntiCheat en webhookafbeeldingen | [electron-anticheat.md](docs/electron-anticheat.md) |
 | Brandweer | [BRANDWEER-INSTALLATIE.md](docs/BRANDWEER-INSTALLATIE.md) |
@@ -96,6 +97,12 @@ factuurbetaling is nog niet aangesloten; zie de concrete Apex-beperking in die h
 De bijbehorende scriptupdates vereisen deze bridgebuild. Start ts_bridge vóór beide scripts.
 Er is geen Fiveguard-adapter toegevoegd; geen anticheatinstellingen worden gewijzigd.
 
+## Indeling vanaf 1.1.6
+
+De code is verdeeld in `shared/`, `client/core/`, `client/integrations/`, `server/core/`, `server/integrations/`, `server/services/` en `server/uploads/`. De configuratie blijft in `config/`, documentatie in `docs/`. De FiveM-resource blijft **`ts_bridge`** heten, ook al heet deze GitHub-repository **`ts_brigde`**. Zie [STRUCTUUR.md](docs/STRUCTUUR.md) voor de volledige mapindeling en overgang.
+
+**Upgrade:** maak eerst een back-up van `config/config.lua` en `config/webhook_config.lua`, vervang de complete oude resource-map en neem eigen instellingen weer over. Laat geen oude kopieën van verplaatste bestanden staan. Configschema **0.1.1** en alle exportnamen blijven gelijk.
+
 ## Bestanden
 
 | Bestand | Functie |
@@ -103,11 +110,13 @@ Er is geen Fiveguard-adapter toegevoegd; geen anticheatinstellingen worden gewij
 | config/config.lua | Alle algemene instellingen zonder geheimen |
 | config/webhook_config.lua | Geheime webhookroutes, uitsluitend server-side |
 | locales/ | Nederlandse en Engelse teksten en de locale-loader |
-| tests/ en tools/ | Ontwikkelcontroles; niet nodig op de FiveM-server |
-| client/main.lua | Meldingen, doodstatus en targetopties |
-| client/alerts.lua | Straatnaam, meldingslocatie en waypoint |
-| server/main.lua | Jobcontrole, jobmeldingen en diagnosecommand |
-| server/webhooks.lua | Wachtrij, upload, JPEG-validatie en time-outs |
+| shared/ | Configvalidatie, versiecontrole en kentekenhelpers |
+| .github/workflows/check.yml | Automatische syntax-, manifest- en regressiecontroles |
+| client/core/main.lua | Meldingen, doodstatus en targetopties |
+| client/core/alerts.lua | Straatnaam, meldingslocatie en waypoint |
+| server/core/main.lua | Jobcontrole, jobmeldingen en diagnosecommand |
+| server/services/webhooks.lua | Wachtrij, webhooktransport en time-outs |
+| server/uploads/ | Server-side afbeelding- en screenshotuploads |
 
 ## Gebruik door andere resources
 
@@ -179,11 +188,9 @@ De aanroepende serverresource blijft verantwoordelijk voor autorisatie van de ac
 
 ## Validatie
 
-De meegeleverde Lua-testscripts in beide resources controleren samen de bestaande gijzelingscontroles,
-jobselectie, waypoint, webhooktransport, screenshots, betalingen, rechten, billingcontract en targetcleanup met gesimuleerde API's.
-Voer tests uit vanuit de map van de betreffende resource met Lua 5.4, bijvoorbeeld
-`lua tests/client_spec.lua`. De hostage-integratietests verwachten ts_bridge ernaast.
-Live controle blijft nodig; zie docs/INSTALLATIE.md.
+De GitHub Actions-workflow `.github/workflows/check.yml` controleert de distributiepaden, Lua-syntax, directe radiaalcallbacks en JavaScript-syntax. Voor documentuploads controleert de workflow ook de laadpaden van de renderer.
+
+Deze automatische controles vervangen geen FiveM-testserver. Controleer na een herindeling met `ts_bridge_check` en test de gekoppelde scripts; zie [INSTALLATIE.md](docs/INSTALLATIE.md).
 
 ## okok-keuzes
 
@@ -347,16 +354,7 @@ Zie docs/WEBHOOKS-KENTEKENBEWIJS.md: aparte webhook voor nieuwe/vervangende bewi
 
 ## Tests en distributie
 
-Testresultaten hoeven niet te worden geüpload. Bewaar tests en tools wel in GitHub om toekomstige wijzigingen te controleren; FiveM laadt deze niet. Gegenereerde rapporten worden genegeerd via `.gitignore`.
-
-```sh
-python tools/check_package.py
-for test in tests/*_spec.lua; do lua "$test" || exit 1; done
-node tests/screenshot_upload_spec.js
-```
-
-Lua 5.4 is vereist (alternatief: `luatex --luaonly` per test). Tests gebruiken gesimuleerde providers; controleer ook op een FiveM-testserver.
-
+GitHub Actions voert de beschikbare distributie-, Lua-, radiaal- en Node-controles uit. Handmatig test je op de FiveM-testserver, waaronder `ts_bridge_check`, keycards, voertuigplaten, webhooktransport en kentekenbewijsafbeeldingen.
 
 ## Directe radiaalacties (1.0.9)
 
