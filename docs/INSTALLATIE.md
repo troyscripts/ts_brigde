@@ -76,3 +76,4 @@ ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er
 ## Electron AntiCheat en screenshots
 
 Gebruik je Electron AntiCheat met `resourceProtection`, volg dan [de whitelist-handleiding](electron-anticheat.md). Whitelist het betreffende script, `screenshot-basic` en `ts_bridge` wanneer de screenshots via de bridge lopen. Electron blijft optioneel; de bridge vereist geen anticheatresource.
+

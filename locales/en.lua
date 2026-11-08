@@ -122,3 +122,4 @@ Locales.en.screenshot_phase_uploading = "Client captured the photo; transferring
 Locales.en.screenshot_timeout_requested = "Client did not acknowledge the photo request. Check F8, ts_bridge client startup and event blocking."
 Locales.en.screenshot_timeout_received = "Client acknowledged the request but returned no capture. Check screenshot-basic and F8."
 Locales.en.screenshot_timeout_uploading = "Photo captured but transfer to server did not complete. Check network and event blocking."
+

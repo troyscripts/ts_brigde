@@ -12,3 +12,4 @@ exports('CheckConfigVersion', function(current, required)
 end)
 check(type(TSBridgeConfig) == 'table' and TSBridgeConfig.Version, '0.1.1', GetCurrentResourceName())
 
+

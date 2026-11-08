@@ -7,3 +7,4 @@ exports('IsAtKeycardDesk', function(src)
     local ok, allowed = pcall(function() return exports[cfg.KeycardResource]:IsAtJobCardDesk(src) end)
     return ok and allowed == true
 end)
+

@@ -17,3 +17,4 @@ function TSBridgePlate.GetReal(vehicle)
 end
 exports('GetVehicleRealPlate', TSBridgePlate.GetReal)
 exports('HasVehicleFakePlate', function(vehicle) return TSBridgePlate.GetFakeState(vehicle) ~= nil end)
+

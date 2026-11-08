@@ -25,3 +25,4 @@ Start providers, dan `ts_bridge`, `ts_keycard` en optioneel `0r_idcard`. Na brid
 Extra sleutelkaart-societies: mechanic → society_mechanic, taxi → society_taxi, sheriff → society_sheriff, justice → society_justice en fib → society_fib. Deze aliases staan onder `Server.SocietyAccounts`. Ze maken geen rekeningen of banen aan; controleer de bestaande ESX-database en pas namen zo nodig aan.
 
 Volledige installatie, items en jobcardgedrag: `ts_keycard/INSTALLATIE.md` en `ts_keycard/JOBCARDS.md`. Documentatie en versienummer van 0r_idcard zijn niet gewijzigd.
+

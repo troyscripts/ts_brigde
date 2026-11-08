@@ -30,3 +30,4 @@ In `ts_repairpoints/config/server.lua` staat `RepairWebhookConfig`: hoofdschakel
 
 ## Foto-time-outs
 De bridge reserveert minimaal 45 seconden voor opname plus foto-overdracht, ook met een oude ScreenshotTimeoutMs = 8000. Normale opname krijgt 15 seconden. Via ts_bridge_check is zichtbaar of de client de aanvraag ontvangt en of de foto-overdracht begint. Bij uitblijvende bevestiging: controleer F8 bij de fotobron en eventuele eventblokkades. Verhoog niet blind de time-out als de client niet antwoordt.
+

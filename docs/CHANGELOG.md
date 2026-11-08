@@ -1,3 +1,13 @@
+# 1.1.8 — 2026-11-08
+
+- Apex-societyadapter toegevoegd via bestaande `Server.SocietyResource = 'apex_banking'`.
+- ESX-addonaccount blijft instelbaar; geen automatische fallback of saldomigratie.
+- `society_`-prefix wordt voor Apex omgezet naar de jobnaam.
+- Numerieke Apex-retourwaarden, inclusief nul, worden als succes verwerkt; expliciete weigeringen en onzekere fouten blijven onderscheiden.
+- Configschema blijft 0.1.1: er zijn geen nieuwe velden. Dit pakket kiest standaard Apex; bestaande configs worden niet automatisch omgezet.
+- Installatiedocumentatie, regressietest en GitHub-workflow bijgewerkt.
+- Geen bestanden of instellingen van Sky, JG of Apex zelf meegeleverd of gewijzigd.
+
 # 1.1.7 — 2026-11-07
 
 - `ts_bridge_check` toont ingestelde webhookroutes per resource, zonder URL's of tokens.
@@ -271,5 +281,6 @@
 - Geen gebruik van okok-societyexports; society blijft via esx_addonaccount.
 - okokBilling-providerkeuze voorbereid; aanvragen worden geweigerd totdat de echte adapter is aangesloten.
 - Instructies, beperkingen en providerregressietest toegevoegd. Apex-defaults behouden.
+
 
 

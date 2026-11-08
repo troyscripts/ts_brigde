@@ -24,3 +24,4 @@ Sky tuning plate_index: gewoon 0, oldtimer 6 (gamebuild 3095+), luxe 3. Legacy 1
 6. Test in Sky de stijlen 0, 6 en 3.
 
 Offline syntax- en gerichte logische tests vervangen geen live FiveM-test.
+

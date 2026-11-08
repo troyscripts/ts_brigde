@@ -83,3 +83,4 @@ RegisterNetEvent('ts_bridge:screenshot:capture', function(token, resource, maxBy
     end)
 end)
 
+

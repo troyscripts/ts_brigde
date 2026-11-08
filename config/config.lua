@@ -77,7 +77,7 @@ TSBridgeConfig.Server = {
 
     Framework = 'esx', -- 'esx' of 'standalone'. Standalone heeft geen ESX-spelers/jobs/geld en geen jobontvangers.
     ESXResource = 'es_extended', -- ESX-resource met getSharedObject-export; gebruikt bij Framework = 'esx'.
-    SocietyResource = 'esx_addonaccount', -- ESX getSharedAccount-event; geen andere ingebouwde society-adapter.
+    SocietyResource = 'apex_banking', -- 'apex_banking' voor de Apex-bedrijfsrekening; 'esx_addonaccount' voor ESX society.
     SocietyAccounts = {
         -- Eigen aliases toevoegen is mogelijk: alias = { 'rekeningnaam', 'optionele_fallback' }.
         -- Minimaal één rekeningnaam per alias. Standaardrekening eerst; oude spelling alleen als fallback.
@@ -109,4 +109,5 @@ TSBridgeServer.InventoryResource = TSBridgeConfig.InventoryResource
 TSBridgeServer.Webhooks = {}
 TSBridgeAuditConfig = TSBridgeConfig.Audit
 TSBridgeAuditConfig.Webhooks = {}
+
 

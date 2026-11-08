@@ -77,3 +77,4 @@ Bij Gemert RP werkten de webhookfoto's na de eerdere whitelist-aanpassingen weer
 - [Electron: Configuration Tips](https://docs.electron-services.com/advanced/tips-best-configuration)
 
 Laatst gecontroleerd: 6 november 2026.
+

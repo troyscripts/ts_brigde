@@ -1,10 +1,21 @@
 # Troy Scripts — ts_bridge
 
-**Versie 1.1.7** · FiveM · centrale ondersteuning voor Troy Scripts
+**Versie 1.1.8** · FiveM · centrale ondersteuning voor Troy Scripts
 
 Alle instellingen staan in `config/config.lua`; geheime webhook-URLs staan in `config/webhook_config.lua` (uitsluitend server-side). Kies `Locale = 'nl'` of `Locale = 'en'`. Het configschema is **0.1.1**.
 
 Lees [INSTALLATIE.md](docs/INSTALLATIE.md) voor installatie en migratie en [CHANGELOG.md](docs/CHANGELOG.md) voor de versiegeschiedenis.
+
+## Apex-bedrijfsrekeningen (1.1.8)
+
+`Server.SocietyResource = 'apex_banking'` laat societybetalingen via de bedrijfsrekening
+van Apex Banking lopen. De adapter is gecontroleerd tegen de aangeleverde versie 2.3.3.
+`'esx_addonaccount'` blijft ondersteund voor servers die ESX-societies gebruiken.
+Bestaande configs blijven geldig: configschema **0.1.1** verandert niet. Bij een update
+met behoud van de oude config moet je de provider zelf kiezen; er is geen automatische saldomigratie.
+Een gestopte provider geeft een fout: de bridge schakelt niet naar een andere rekening.
+
+Zie [APEX-SOCIETY-UPDATE.md](docs/APEX-SOCIETY-UPDATE.md) voor installatie en teststappen.
 
 ## Nieuwe veilige webhookdiagnose (1.1.7)
 
@@ -95,8 +106,8 @@ handen-omhoog-functie en animaties blijven in ts_hostage.
 
 Voor de keycard-aansluiting zijn inventory-, ESX-speler/rechten-, cash/bank- en
 societyfuncties toegevoegd. Zie **docs/KEYCARD-BANKING-BILLING.md** voor de volledige API.
-Persoonlijke bankmutaties gebruiken Apex Banking. Society-mutaties gebruiken alleen
-esx_addonaccount. Facturen aanmaken en opvragen gebruikt Apex Billing. Automatische
+Persoonlijke bankmutaties gebruiken Apex Banking. Society-mutaties gebruiken de ingestelde
+SocietyResource: apex_banking (standaard in dit pakket) of esx_addonaccount. Facturen aanmaken en opvragen gebruikt Apex Billing. Automatische
 factuurbetaling is nog niet aangesloten; zie de concrete Apex-beperking in die handleiding. QBCore en Qbox zijn niet geïmplementeerd.
 De bijbehorende scriptupdates vereisen deze bridgebuild. Start ts_bridge vóór beide scripts.
 Er is geen Fiveguard-adapter toegevoegd; geen anticheatinstellingen worden gewijzigd.
@@ -200,7 +211,7 @@ Deze automatische controles vervangen geen FiveM-testserver. Controleer na een h
 
 okokBanking is als ESX-bankaccountadapter toegevoegd. okokBilling heeft een voorbereide
 providerkeuze, maar vereist nog jouw resourcebestanden voor de daadwerkelijke serverkoppeling.
-Zie **docs/OKOK.md**. Apex blijft standaard ingesteld; society-geld blijft bij esx_addonaccount.
+Zie **docs/OKOK.md**. Bij okok met ESX-societies stel je SocietyResource expliciet in op esx_addonaccount.
 
 ## Status-API en locales
 
@@ -405,4 +416,5 @@ Sinds 1.1.4 zijn `ts_repairpoints.murder`, `.placed` en `.removed` opgenomen in 
 ## Openbare distributie
 
 ElectronAC en andere anti-cheatresources zijn geen dependency van dit script. Er hoeft geen Gemert RP-specifieke includeregel te worden toegevoegd. Gebruik de hierboven beschreven functionele dependencies en configureer de ondersteunde providers, jobs en locaties voor jouw eigen server. Deze onderhoudsupdate wijzigt het configschema niet.
+
 

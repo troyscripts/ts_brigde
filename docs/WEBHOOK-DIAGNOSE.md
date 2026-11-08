@@ -22,3 +22,4 @@ if central and central.issue then print('Centrale uitgifte-webhook ingesteld') e
 ```
 
 Gebruik nooit een echte webhook-URL in je publieke GitHub-config. Het centrale bestand `config/webhook_config.lua` blijft uitsluitend server-side en accepteert `''` voor een uitgeschakelde route. Laat de bestaande `Config.Version` op `0.1.1`.
+

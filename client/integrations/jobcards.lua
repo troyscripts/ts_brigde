@@ -9,3 +9,4 @@ exports('OpenJobCardDesk', function()
     exports[GetCurrentResourceName()]:Notify({title=TSL('jobcards_title'),description=TSL('jobcards_unavailable'),type='error'})
     return false
 end)
+

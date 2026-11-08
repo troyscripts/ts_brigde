@@ -56,3 +56,4 @@ exports('GetGloveboxId', function(raw)
     return 'glove' .. (GetConvarBool('inventory:trimplate', true) and raw:upper():match('^%s*(.-)%s*$') or raw)
 end)
 
+

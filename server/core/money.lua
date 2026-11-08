@@ -80,6 +80,11 @@ exports('RemoveMoney', function(id, account, amount, reason)
 end)
 
 local function fetch(name)
+    if TSBridgeServer.SocietyResource == 'apex_banking' then
+        local job = name:gsub('^society_', '')
+        local balance = exports['apex_banking']:GetBusinessBalance(job)
+        return { money = balance, apexJob = job }
+    end
     local account
     TriggerEvent('esx_addonaccount:getSharedAccount', name, function(value) account = value end)
     return account
@@ -119,6 +124,21 @@ local function changeSociety(key, amount, subtract)
         if subtract and before < amount then return failed('insufficient_funds', false, before) end
         local expected = before + (subtract and -amount or amount)
         if not B.Finite(expected) or expected > 9007199254740991 then return failed('invalid_balance') end
+        if value.account.apexJob then
+            -- Apex returns the resulting balance (including zero), not a boolean.
+            -- Never fall back to another ledger after a failed/uncertain mutation.
+            attempted = true
+            local balance, code
+            if subtract then
+                balance, code = exports['apex_banking']:RemoveBusinessMoney(value.account.apexJob, amount, 'Troy Scripts society debit')
+            else
+                balance, code = exports['apex_banking']:AddBusinessMoney(value.account.apexJob, amount, 'Troy Scripts society credit')
+            end
+            if balance == false then return failed(code or 'society_rejected', false, before) end
+            if not B.Finite(balance) or balance < 0 then return failed('invalid_society_result', true, before) end
+            after = balance
+            return { ok = true, uncertain = false, before = before, after = after, account = value.name }
+        end
         local method = subtract and 'removeMoney' or 'addMoney'
         if not B.Callable(value.account[method]) then return failed('method_unavailable') end
         attempted = true
@@ -138,4 +158,5 @@ end)
 exports('RemoveSocietyMoney', function(key, amount)
     return audit('societies', 'RemoveSocietyMoney', { {'Society', key}, {TSL('runtime_amount'), amount} }, changeSociety(key, amount, true))
 end)
+
 

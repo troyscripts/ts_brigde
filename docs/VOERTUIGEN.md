@@ -28,3 +28,4 @@ Uitbreiding: voeg een adaptertak/module in de bridge toe, houd bovenstaande cont
 
 Er is geen netwerkexport voor vrij uitgeven van kentekens of wijzigen van eigendom toegevoegd. Sleutelbeveiliging blijft bij het bestaande MrNewb-systeem.
 
+

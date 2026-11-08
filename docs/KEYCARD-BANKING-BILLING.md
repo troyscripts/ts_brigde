@@ -2,7 +2,7 @@
 
 # Voorbereiding keycard, banking en billing
 
-Huidige combinatie: bridge **1.1.4** met ts_keycard **1.3.1**. De bestaande hostage-API blijft behouden.
+Huidige combinatie: bridge **1.1.8** met ts_keycard **1.3.1**. De bestaande hostage-API blijft behouden.
 Keycard is aangesloten; Apex/okok-resources zelf zijn niet aangepast. Werkpasmenu en loketcontrole: zie [JOBCARDS.md](JOBCARDS.md).
 
 ## Gekozen koppelingen
@@ -11,22 +11,24 @@ Keycard is aangesloten; Apex/okok-resources zelf zijn niet aangepast. Werkpasmen
 | --- | --- |
 | Spelergegevens, rechten en contant geld | ESX |
 | Persoonlijk banksaldo en bankmutaties | Apex Banking: GetBalance, AddMoney, RemoveMoney |
-| Society-saldi en mutaties | Alleen esx_addonaccount via getSharedAccount-event |
+| Society-saldi en mutaties | apex_banking of esx_addonaccount, gekozen via SocietyResource |
 | Facturen aanmaken en opvragen | Apex Billing: Bill, GetInvoice |
 | Items en inventoryhooks | ox_inventory |
 
-De Apex-adapters zijn gebaseerd op je eerder aangeleverde apex_banking.zip en
-apex_billing.zip van 13 september 2026. Deze bestanden zijn alleen gelezen.
-Er worden geen Apex-bedrijfsrekeningexports aangeroepen vanuit de societyadapter.
-Een gestopte Apex-bank blokkeert een bankmutatie: de bridge schrijft niet alsnog
-via een tweede route af. Apex verzorgt zijn eigen transactielog en UI-refresh.
+De Apex-societyadapter is gecontroleerd tegen de aangeleverde Apex Banking 2.3.3.
+Bij `SocietyResource = 'apex_banking'` gebruikt de bridge GetBusinessBalance,
+AddBusinessMoney en RemoveBusinessMoney. Bij `esx_addonaccount` blijft het
+getSharedAccount-event in gebruik. Er is geen fallback tussen beide rekeningen.
+De factuuradapter is niet gewijzigd door deze update.
 
 Een directe bankbetaling is geen factuur. Een factuur wordt later betaald;
 CreateInvoice retourneert een factuurreferentie, geen betaalbewijs. GetInvoice(id)
 geeft de Apex-factuur terug (waaronder status), of nil plus foutcode bij een
 ongeldige aanvraag/providerfout. Alleen serverresources kunnen deze exports gebruiken.
 
-### Beperking in de aangeleverde Apex Billing
+### Historische beperking in de eerder aangeleverde Apex Billing
+
+Onderstaande bevinding betreft de eerder onderzochte billingversie; Apex Billing is niet opnieuw aangeleverd of gevalideerd bij deze bankingupdate.
 
 Apex gebruikt in ESX-modus esx_addonaccount voor society-ontvangsten, maar vraagt daar
 GetSharedAccount als export op. Onze eigen societyadapter gebruikt het callback-event.
@@ -76,7 +78,7 @@ controleren. Deze bridge voegt geen openbare net-events voor geld, items of fact
 Mutaties geven `{ok, code?, uncertain, before?, after?, account?}`. Controleer altijd
 `result.ok`; een Lua-table is ook bij ok=false truthy. Bedragen moeten positieve gehele
 getallen zijn. Te weinig saldo, ongeldige bedragen en ontbrekende resources worden geweigerd.
-Na de mutatie wordt het saldo gecontroleerd. Bij een providerfout na een mogelijke
+Bij ESX/persoonlijke mutaties wordt het saldo opnieuw gelezen; bij Apex-societymutaties wordt de numerieke retourwaarde gecontroleerd. Bij een providerfout na een mogelijke
 mutatie is `uncertain=true`: niet automatisch opnieuw afschrijven of terugbetalen.
 Controleer dan eerst de transactiestatus. De bridge herhaalt geldmutaties nooit automatisch.
 
@@ -95,13 +97,22 @@ en herstel van bekende fouten. Alleen alle drie los aanroepen is onvoldoende.
 Een lock voorkomt gelijktijdige bridge-aanroepen op hetzelfde saldo; externe scripts
 vallen niet onder die lock. Er is geen persistent transactiegrootboek toegevoegd.
 
-De societyadapter gebruikt esx_addonaccount en haalt na elke mutatie een nieuwe snapshot
-op. `SocietyAccounts.police = {'society_police', 'socity_police'}` gebruikt de standaardrekening
-eerst en daarna de oude spelling uit jouw kaartconfiguratie. Als beide rekeningen bestaan, wordt alleen de eerste gebruikt.
-Het zijn alternatieven, geen rekeningen die onderling worden gesynchroniseerd.
-Je kunt ook een exacte rekeningnaam doorgeven. Er worden geen rekeningen aangemaakt.
-Apex Billing gebruikt society_<job>. Gebruik dus society_police voor de toekomstige
-politie-factuurstroom; een oude socity_police-rekening wordt niet automatisch gemigreerd.
+Bij `SocietyResource = 'esx_addonaccount'` leest de adapter na een mutatie een nieuwe
+accountsnapshot. Rekeningaliases worden in opgegeven volgorde geprobeerd.
+Bij `SocietyResource = 'apex_banking'` wordt `society_` van de rekeningnaam verwijderd:
+`society_firefighter` wordt job `firefighter`. Apex geeft bij een geslaagde mutatie
+het nieuwe saldo als getal terug; ook 0 is succes. De bridge verpakt dat in het
+bestaande resultaatobject. Een expliciete weigering is een mislukte mutatie;
+een exception of ongeldige retourwaarde na aanroepen wordt als onzeker gemarkeerd.
+
+Apex 2.3.3 kan bij een saldo-opvraag een bedrijfsrekening voor een bekende job aanmaken.
+De saldo-export geeft ook 0 terug als geen rekening beschikbaar is; een nul-saldo
+bewijst dus niet dat de rekening bestaat. De mutatie-export beslist of de bijschrijving
+of afschrijving mogelijk is. Gebruik correcte jobnamen en de eerste alias als canonieke
+rekeningnaam; historische spelfoutaliases zijn geen Apex-jobnamen.
+
+Deze update migreert geen bestaande saldi, synchroniseert geen twee aparte rekeningen
+en wijzigt de betaalroute van Apex Billing niet.
 
 ## Server-API voor inventory
 
@@ -192,3 +203,4 @@ uitkomst van een asynchrone provider. `Provider='none'` schakelt facturen uit.
 
 
 Nieuwe afdelingen gebruiken hun eigen afhandeling in ts_keycard/server/departments.lua. Een ontbrekende society blokkeert betaalde uitgifte vóór afschrijving. Na een mislukte latere societybijschrijving wordt de transactiereferentie gelogd voor handmatige controle; dit is geen atomaire transactie. Jobcards van idcard blijven gratis.
+

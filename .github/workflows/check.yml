@@ -90,6 +90,8 @@ jobs:
           assert(Buffer.isBuffer(png) && png.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])), 'Invalid PNG render');
           console.log('Document upload module and PNG rendering OK');
           NODE
+      - name: Society money regression
+        run: lua5.4 tests/money_spec.lua
       - name: Webhook diagnose regression
         run: lua5.4 tests/diagnostics_spec.lua
       - name: Create complete ts_bridge installation ZIP
@@ -98,7 +100,7 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
 
-          package = Path('ts_bridge_1.1.7_compleet.zip')
+          package = Path('ts_bridge_1.1.8_compleet.zip')
           with ZipFile(package, 'w', ZIP_DEFLATED, compresslevel=9) as output:
               for path in sorted(Path('.').rglob('*')):
                   if not path.is_file():
@@ -111,7 +113,8 @@ jobs:
       - name: Publish complete ts_bridge ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: ts_bridge_1.1.7_compleet
-          path: ts_bridge_1.1.7_compleet.zip
+          name: ts_bridge_1.1.8_compleet
+          path: ts_bridge_1.1.8_compleet.zip
           if-no-files-found: error
           retention-days: 30
+

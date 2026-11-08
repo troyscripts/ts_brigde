@@ -37,3 +37,4 @@ output = {}
 commands.ts_bridge_check(1)
 assert(#output == 0, 'console-only command accessible to player')
 print('PASS webhook diagnostic counters/routes and no URL leaks')
+

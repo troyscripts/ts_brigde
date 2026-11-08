@@ -113,3 +113,4 @@ AddEventHandler('onClientResourceStop', function(name)
     if name == GetCurrentResourceName() then clear() end
 end)
 
+

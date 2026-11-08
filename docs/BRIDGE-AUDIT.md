@@ -25,3 +25,4 @@ Alle algemene bridge-instellingen blijven in config/config.lua; geheime webhook-
 ## Gedeelde werkpasloketten
 
 Zie [JOBCARDS.md](JOBCARDS.md) voor de optionele koppeling met ts_keycard 1.3.1 en 0r_idcard. Neem het JobCards-blok en de extra societyaliases uit de nieuwe config over voordat je het configschema op 0.1.0 zet. Deze update voegt geen harde idcard-dependency toe.
+

@@ -54,3 +54,4 @@ ts_bridge/
 ## Niet gewijzigd
 
 `config/config.lua` en `config/webhook_config.lua` hebben dezelfde inhoud en hetzelfde pad. De brandweer-SQL is uitsluitend **verplaatst**, en hoeft door deze onderhoudsupdate niet opnieuw te worden uitgevoerd.
+

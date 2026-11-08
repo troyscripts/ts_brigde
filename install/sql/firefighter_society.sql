@@ -16,3 +16,4 @@ COMMIT;
 SELECT name, label, shared FROM addon_account WHERE name = 'society_firefighter';
 SELECT account_name, money, owner FROM addon_account_data WHERE account_name = 'society_firefighter';
 
+

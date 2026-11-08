@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 author 'Troy Scripts'
 description 'Centrale ondersteuningsbridge voor Troy Scripts'
-version '1.1.7'
+version '1.1.8'
 shared_scripts {
     '@ox_lib/init.lua',
     'locales/locale.lua',
@@ -46,4 +46,5 @@ dependency 'ox_lib'
 
 ui_page 'web/alerts.html'
 files { 'web/alerts.html', 'web/alerts.css', 'web/alerts.js' }
+
 
